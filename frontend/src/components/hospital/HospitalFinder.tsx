@@ -93,45 +93,56 @@ const HospitalFinder = () => {
 
     return (
         <div className="space-y-6">
-            {/* Search Bar */}
-            <div className="flex gap-3">
-                <div className="relative flex-1">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-medical-muted" />
-                    <Input
-                        value={searchQuery}
-                        onChange={(e) => {
-                            setSearchQuery(e.target.value);
-                            handleSearch(e.target.value);
-                        }}
-                        placeholder="Search hospitals, clinics..."
-                        className="pl-9"
-                    />
+            {/* Search Console */}
+            <div className="space-y-4">
+                <div className="text-center">
+                    <p className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-700 mb-2">
+                        Live Location Search
+                    </p>
+                    <p className="text-sm text-medical-muted max-w-xl mx-auto">
+                        Search by name or use your location to surface nearby care options.
+                    </p>
                 </div>
-                <Button
-                    onClick={handleGetLocation}
-                    disabled={isLocating}
-                    className="bg-navy-900 hover:bg-navy-800 text-white shrink-0"
-                >
-                    {isLocating ? (
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                    ) : (
-                        <Navigation className="w-4 h-4" />
-                    )}
-                    <span className="ml-2 hidden sm:inline">Near Me</span>
-                </Button>
+
+                <div className="flex flex-col sm:flex-row gap-3">
+                    <div className="relative flex-1">
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-medical-muted" />
+                        <Input
+                            value={searchQuery}
+                            onChange={(e) => {
+                                setSearchQuery(e.target.value);
+                                handleSearch(e.target.value);
+                            }}
+                            placeholder="Search hospitals, clinics, pharmacies..."
+                            className="pl-10 h-14 rounded-2xl border-medical-border bg-white/70 text-navy-900 placeholder:text-slate-400 focus-visible:ring-emerald-500/20"
+                        />
+                    </div>
+                    <Button
+                        onClick={handleGetLocation}
+                        disabled={isLocating}
+                        className="h-14 px-7 rounded-2xl bg-navy-900 hover:bg-navy-950 text-white shrink-0 font-semibold shadow-navy"
+                    >
+                        {isLocating ? (
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                            <Navigation className="w-4 h-4" />
+                        )}
+                        <span className="ml-2 hidden sm:inline">Near Me</span>
+                    </Button>
+                </div>
             </div>
 
             {/* Filters */}
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
                 {filters.map((filter) => (
                     <button
                         key={filter.value}
                         onClick={() => setActiveFilter(filter.value)}
                         className={cn(
-                            "px-4 py-2 rounded-xl text-sm font-medium transition-all border",
+                            "px-4 py-2 rounded-full text-sm font-medium transition-all border",
                             activeFilter === filter.value
-                                ? "bg-navy-900 text-white border-navy-900"
-                                : "border-medical-border text-medical-muted hover:border-navy-900 hover:text-navy-900"
+                                ? "bg-navy-900 text-white border-navy-900 shadow-sm"
+                                : "border-medical-border text-medical-muted hover:border-navy-900 hover:text-navy-900 hover:bg-navy-50"
                         )}
                     >
                         {filter.label}
@@ -144,7 +155,7 @@ const HospitalFinder = () => {
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="flex items-start gap-3 p-4 bg-amber-50 border border-amber-100 rounded-xl"
+                    className="flex items-start gap-3 p-4 bg-amber-50 border border-amber-100 rounded-2xl"
                 >
                     <AlertCircle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
                     <div>
@@ -164,7 +175,7 @@ const HospitalFinder = () => {
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="flex items-center gap-2 p-4 bg-red-50 border border-red-100 rounded-xl text-sm text-red-600"
+                    className="flex items-center gap-2 p-4 bg-red-50 border border-red-100 rounded-2xl text-sm text-red-600"
                 >
                     <AlertCircle className="w-4 h-4 shrink-0" />
                     {error}
@@ -173,7 +184,7 @@ const HospitalFinder = () => {
 
             {/* Loading */}
             {isLoading && (
-                <div className="flex items-center justify-center py-12">
+                <div className="flex items-center justify-center py-14">
                     <div className="flex flex-col items-center gap-3">
                         <Loader2 className="w-8 h-8 animate-spin text-navy-900" />
                         <p className="text-sm text-medical-muted">
@@ -188,15 +199,15 @@ const HospitalFinder = () => {
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="flex flex-col items-center justify-center py-16 text-center"
+                    className="flex flex-col items-center justify-center py-20 text-center"
                 >
-                    <div className="w-16 h-16 rounded-2xl bg-navy-50 border border-navy-100 flex items-center justify-center mb-4">
+                    <div className="w-16 h-16 rounded-2xl bg-navy-50 border border-navy-100 flex items-center justify-center mb-5">
                         <Hospital className="w-8 h-8 text-navy-900" />
                     </div>
-                    <h3 className="font-heading font-semibold text-navy-900 mb-2">
+                    <h3 className="font-heading font-semibold text-navy-900 mb-2 text-xl">
                         Find Nearby Hospitals
                     </h3>
-                    <p className="text-medical-muted text-sm max-w-xs">
+                    <p className="text-medical-muted text-sm max-w-sm leading-relaxed">
                         Click "Near Me" to find hospitals and clinics near your current
                         location, or search by name above.
                     </p>
@@ -238,7 +249,7 @@ const HospitalFinder = () => {
                                 </div>
 
                                 {/* Hospital Info Row */}
-                                <div className="flex items-center gap-3 flex-wrap">
+                                <div className="flex items-center gap-3 flex-wrap pt-1">
                                     {/* Rating */}
                                     {hospital.rating && (
                                         <div className="flex items-center gap-1">
@@ -281,7 +292,7 @@ const HospitalFinder = () => {
                                 {/* Get Directions Button */}
                                 <button
                                     onClick={() => openInMaps(hospital)}
-                                    className="w-full flex items-center justify-center gap-2 py-2 rounded-xl border border-navy-900 text-navy-900 text-xs font-medium hover:bg-navy-50 transition-colors"
+                                    className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-navy-900 text-navy-900 text-xs font-medium hover:bg-navy-50 transition-colors"
                                 >
                                     <Navigation className="w-3.5 h-3.5" />
                                     Get Directions
@@ -294,7 +305,7 @@ const HospitalFinder = () => {
 
             {/* Results Count */}
             {!isLoading && hospitals.length > 0 && (
-                <p className="text-xs text-medical-muted text-center">
+                <p className="text-xs text-medical-muted text-center pt-1">
                     Showing {hospitals.length} results
                     {location && " near your location"}
                 </p>

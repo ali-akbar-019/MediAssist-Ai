@@ -113,15 +113,15 @@ const BodyMap = ({ selectedParts, onPartToggle, onPartRemove }: BodyMapProps) =>
                         Selected Areas ({selectedParts.length})
                     </span>
                     {selectedParts.length > 0 && (
-                        <button 
-                            onClick={() => {}} // Reset handled in parent
+                        <button
+                            onClick={() => { }} // Reset handled in parent
                             className="text-xs text-emerald-600 hover:text-emerald-700 font-medium"
                         >
                             Clear All
                         </button>
                     )}
                 </div>
-                
+
                 <div className="flex flex-wrap gap-2 min-h-[40px]">
                     <AnimatePresence>
                         {selectedParts.map((part) => (

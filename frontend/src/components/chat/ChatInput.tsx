@@ -87,7 +87,7 @@ const ChatInput = ({
             {/* Input Area — Luxury Glass Interface */}
             <div
                 className={cn(
-                    "flex items-end gap-4 p-4 rounded-[1.8rem] border transition-all duration-500",
+                    "flex items-center gap-4 p-4 rounded-[1.8rem] border transition-all duration-500 ",
                     disabled
                         ? "bg-white/10 border-white/10"
                         : "glass-panel border-white/60 focus-within:border-emerald-500/50 focus-within:shadow-[0_0_20px_rgba(16,185,129,0.1)]"

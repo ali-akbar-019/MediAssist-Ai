@@ -4,35 +4,49 @@ import HospitalFinderComponent from "../components/hospital/HospitalFinder";
 
 const HospitalFinder = () => {
     return (
-        <div className="page-enter">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10">
-                {/* Header */}
-                <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="text-center mb-10"
-                >
-                    <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-red-50 border border-red-100 mb-4">
-                        <MapPin className="w-7 h-7 text-red-500" />
-                    </div>
-                    <h1 className="text-3xl font-heading font-bold text-navy-900 mb-2">
-                        Find Nearby Hospitals
-                    </h1>
-                    <p className="text-medical-muted max-w-xl mx-auto">
-                        Locate hospitals, clinics, and pharmacies near you. Get directions
-                        and check opening hours instantly.
-                    </p>
-                </motion.div>
-
-                {/* Hospital Finder Component */}
+        <div className="medical-mesh min-h-screen pt-32 pb-24 page-enter overflow-x-hidden">
+            <div className="container mx-auto px-6 relative">
+                {/* Editorial Header */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 }}
-                    className="max-w-4xl mx-auto"
+                    className="text-center mb-14"
                 >
-                    <HospitalFinderComponent />
+                    <motion.div
+                        initial={{ scale: 0.8 }}
+                        animate={{ scale: 1 }}
+                        className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-navy-900 border border-emerald-500/20 mb-8 shadow-navy"
+                    >
+                        <MapPin className="w-8 h-8 text-emerald-400" />
+                    </motion.div>
+                    <h1 className="text-5xl md:text-7xl font-bold tracking-tighter text-navy-900 mb-6 leading-none">
+                        Hospital <span className="gradient-text-luxe italic">Finder.</span>
+                    </h1>
+                    <p className="text-xl text-slate-500 max-w-2xl mx-auto font-light leading-relaxed">
+                        Locate hospitals, clinics, and pharmacies nearby with the same clean,
+                        clinical interface used throughout the app.
+                    </p>
                 </motion.div>
+
+                <div className="max-w-5xl mx-auto relative">
+                    <div className="absolute -top-20 -left-20 w-64 h-64 bg-emerald-400/10 rounded-full blur-[100px] pointer-events-none" />
+                    <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-navy-400/5 rounded-full blur-[100px] pointer-events-none" />
+
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.1, duration: 0.7 }}
+                        className="glass-panel p-6 md:p-8 rounded-[3rem] shadow-luxe border-white/20 relative overflow-hidden"
+                    >
+                        <div className="absolute inset-0 pointer-events-none opacity-[0.03] overflow-hidden">
+                            <div className="w-full h-full border-y border-emerald-900 grid grid-cols-6 divide-x divide-emerald-900" />
+                        </div>
+
+                        <div className="relative z-10">
+                            <HospitalFinderComponent />
+                        </div>
+                    </motion.div>
+                </div>
             </div>
         </div>
     );

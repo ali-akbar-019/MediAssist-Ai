@@ -15,7 +15,7 @@ interface BodyPartPath {
 const bodyParts: BodyPartPath[] = [
     // --- Head Area ---
     { id: "occipital-back", name: "Back of Head (Occipital)", d: "M100,5 C85,5 75,18 75,35 C75,55 85,68 100,68 C115,68 125,55 125,35 C125,18 115,5 100,5 Z" },
-    
+
     // --- Neck ---
     { id: "neck-back", name: "Back of Neck", d: "M90,68 L110,68 L108,82 L92,82 Z" },
 
@@ -60,7 +60,11 @@ const BodyBack = ({ selectedParts, onPartSelect }: BodyBackProps) => {
             viewBox="0 0 200 570"
             className="w-full h-full drop-shadow-sm"
             xmlns="http://www.w3.org/2000/svg"
+            role="img"
+            aria-labelledby="bodyBackTitle bodyBackDesc"
         >
+            <title id="bodyBackTitle">Posterior human body map</title>
+            <desc id="bodyBackDesc">Interactive posterior view of a stylized human body for selecting regions.</desc>
             <defs>
                 <linearGradient id="bodyGradientBack" x1="0%" y1="0%" x2="0%" y2="100%">
                     <stop offset="0%" stopColor="#ffffff" />
@@ -79,6 +83,27 @@ const BodyBack = ({ selectedParts, onPartSelect }: BodyBackProps) => {
                 className="opacity-50"
             />
 
+            {/* Subtle posterior anatomical details (spine, scapula, sacrum, gluteal fold) */}
+            <g className="anatomy-details-back" fill="none" stroke="#065f46" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" opacity="0.18">
+                {/* Spine centerline */}
+                <path d="M100,90 L100,240" />
+
+                {/* Vertebrae markers */}
+                <circle cx="100" cy="110" r="1.2" />
+                <circle cx="100" cy="130" r="1.2" />
+                <circle cx="100" cy="150" r="1.2" />
+                <circle cx="100" cy="170" r="1.2" />
+                <circle cx="100" cy="190" r="1.2" />
+
+                {/* Scapula outlines (suggestive) */}
+                <path d="M70,110 C86,102 94,118 100,122" />
+                <path d="M130,110 C114,102 106,118 100,122" />
+
+                {/* Sacrum / gluteal fold */}
+                <path d="M90,240 C95,250 105,250 110,240" />
+                <path d="M75,270 C90,260 110,260 125,270" />
+            </g>
+
             {/* Interactive body parts */}
             {bodyParts.map((part) => (
                 <motion.path
@@ -89,7 +114,7 @@ const BodyBack = ({ selectedParts, onPartSelect }: BodyBackProps) => {
                     strokeWidth={isSelected(part.id) ? "1.5" : "0.5"}
                     strokeDasharray={isSelected(part.id) ? "0" : "2,2"}
                     className="cursor-pointer transition-all duration-300"
-                    whileHover={{ 
+                    whileHover={{
                         fill: isSelected(part.id) ? "#10b981" : "rgba(16, 185, 129, 0.15)",
                         strokeWidth: 1.5,
                         strokeDasharray: "0"
@@ -101,4 +126,4 @@ const BodyBack = ({ selectedParts, onPartSelect }: BodyBackProps) => {
     );
 };
 
-export default BodyBack;
+export default BodyBack;

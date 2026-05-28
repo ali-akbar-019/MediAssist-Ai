@@ -80,7 +80,11 @@ const BodyFront = ({ selectedParts, onPartSelect }: BodyFrontProps) => {
             viewBox="0 0 200 570"
             className="w-full h-full drop-shadow-sm"
             xmlns="http://www.w3.org/2000/svg"
+            role="img"
+            aria-labelledby="bodyFrontTitle bodyFrontDesc"
         >
+            <title id="bodyFrontTitle">Anterior human body map</title>
+            <desc id="bodyFrontDesc">Interactive anterior view of a stylized human body for selecting regions.</desc>
             <defs>
                 <linearGradient id="bodyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
                     <stop offset="0%" stopColor="#ffffff" />
@@ -99,6 +103,29 @@ const BodyFront = ({ selectedParts, onPartSelect }: BodyFrontProps) => {
                 className="opacity-50"
             />
 
+            {/* Subtle anatomical detail strokes (clavicle, ribs, sternum, navel, lungs/heart) */}
+            <g className="anatomy-details" fill="none" stroke="#065f46" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" opacity="0.18">
+                {/* Clavicles */}
+                <path d="M70,92 C80,86 92,84 100,88" />
+                <path d="M130,88 C108,84 120,86 130,92" />
+
+                {/* Sternum */}
+                <path d="M100,100 L100,148" />
+
+                {/* Ribs (stylized arcs) */}
+                <path d="M75,120 C90,112 110,112 125,120" />
+                <path d="M70,135 C90,128 110,128 130,135" />
+
+                {/* Lungs (suggestive shapes) */}
+                <path d="M82,110 C90,100 106,100 114,110 C106,128 90,128 82,110 Z" />
+
+                {/* Heart (small mark) */}
+                <path d="M98,128 C96,126 95,124 96,122 C98,120 102,120 104,122 C105,124 104,126 102,128 C100,130 99,129 98,128 Z" fill="#10b981" opacity="0.85" />
+
+                {/* Navel */}
+                <circle cx="100" cy="205" r="2" fill="#065f46" opacity="0.22" />
+            </g>
+
             {/* Interactive body parts */}
             {bodyParts.map((part) => (
                 <motion.path
@@ -109,7 +136,7 @@ const BodyFront = ({ selectedParts, onPartSelect }: BodyFrontProps) => {
                     strokeWidth={isSelected(part.id) ? "1.5" : "0.5"}
                     strokeDasharray={isSelected(part.id) ? "0" : "2,2"}
                     className="cursor-pointer transition-all duration-300"
-                    whileHover={{ 
+                    whileHover={{
                         fill: isSelected(part.id) ? "#10b981" : "rgba(16, 185, 129, 0.15)",
                         strokeWidth: 1.5,
                         strokeDasharray: "0"
@@ -121,4 +148,4 @@ const BodyFront = ({ selectedParts, onPartSelect }: BodyFrontProps) => {
     );
 };
 
-export default BodyFront;
+export default BodyFront;

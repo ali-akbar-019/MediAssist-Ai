@@ -4,7 +4,7 @@ import SymptomForm from "../components/symptom/SymptomForm";
 
 const Analyzer = () => {
     return (
-        <div className="medical-mesh min-h-screen pt-32 pb-24">
+        <div className="medical-mesh min-h-screen pt-32 pb-24 overflow-x-hidden">
             <div className="container mx-auto px-6 relative">
                 {/* Elite Header */}
                 <motion.div
@@ -12,7 +12,7 @@ const Analyzer = () => {
                     animate={{ opacity: 1, y: 0 }}
                     className="text-center mb-20"
                 >
-                    <motion.div 
+                    <motion.div
                         initial={{ scale: 0.8 }}
                         animate={{ scale: 1 }}
                         className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-navy-900 border border-emerald-500/20 mb-8 shadow-navy"
@@ -23,7 +23,7 @@ const Analyzer = () => {
                         Clinical <span className="gradient-text-luxe italic">Analyzer.</span>
                     </h1>
                     <p className="text-xl text-slate-500 max-w-2xl mx-auto font-light leading-relaxed">
-                        Precision diagnostics powered by elite medical intelligence. 
+                        Precision diagnostics powered by elite medical intelligence.
                         Select your indices and begin the analysis.
                     </p>
                 </motion.div>
@@ -42,9 +42,9 @@ const Analyzer = () => {
                     >
                         {/* Subtle Scanner Line Background */}
                         <div className="absolute inset-0 pointer-events-none opacity-[0.03] overflow-hidden">
-                            <div className="w-full h-full border-y-[1px] border-emerald-900 grid grid-cols-6 divide-x divide-emerald-900" />
+                            <div className="w-full h-full border-y border-emerald-900 grid grid-cols-6 divide-x divide-emerald-900" />
                         </div>
-                        
+
                         <div className="relative z-10">
                             <SymptomForm />
                         </div>

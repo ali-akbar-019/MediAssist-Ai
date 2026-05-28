@@ -142,7 +142,7 @@ const Footer = () => {
                                 <div className="p-2 rounded-lg bg-white/5">
                                     <MapPin className="w-4 h-4 text-emerald-400 shrink-0" />
                                 </div>
-                                <span className="pt-1">Premier Plaza, Gulberg <br /><span className="text-emerald-500/50 font-bold uppercase text-[10px]">Lahore, PK</span></span>
+                                <span className="pt-1">Premier Plaza, Gulberg <br /><span className="text-emerald-500/50 font-bold uppercase text-[10px]">Islamabad, PK</span></span>
                             </li>
                             <li className="flex items-center gap-4 text-emerald-100/60 text-sm font-light justify-center lg:justify-start">
                                 <div className="p-2 rounded-lg bg-white/5">
