@@ -1,9 +1,9 @@
 import { create } from "zustand";
-import type { Symptom, SymptomFormData, SelectedBodyPart, AIAnalysis } from "../types";
+import type { Symptom, SymptomFormData, SelectedBodyPart, AIAnalysis, BodySide } from "../types";
 
 interface SymptomStore {
     // Current analyzer state
-    selectedBodyPart: SelectedBodyPart | null;
+    selectedBodyParts: SelectedBodyPart[];
     formData: Partial<SymptomFormData>;
     currentStep: number;
     isAnalyzing: boolean;
@@ -16,7 +16,8 @@ interface SymptomStore {
     totalSymptoms: number;
 
     // Actions
-    setSelectedBodyPart: (bodyPart: SelectedBodyPart | null) => void;
+    toggleBodyPart: (bodyPart: SelectedBodyPart) => void;
+    removeBodyPart: (id: string) => void;
     updateFormData: (data: Partial<SymptomFormData>) => void;
     setCurrentStep: (step: number) => void;
     nextStep: () => void;
@@ -42,7 +43,7 @@ const initialFormData: Partial<SymptomFormData> = {
 
 export const useSymptomStore = create<SymptomStore>((set) => ({
     // Initial state
-    selectedBodyPart: null,
+    selectedBodyParts: [],
     formData: initialFormData,
     currentStep: 1,
     isAnalyzing: false,
@@ -54,16 +55,43 @@ export const useSymptomStore = create<SymptomStore>((set) => ({
     totalSymptoms: 0,
 
     // Analyzer actions
-    setSelectedBodyPart: (bodyPart) =>
-        set({
-            selectedBodyPart: bodyPart,
-            formData: bodyPart
-                ? {
-                    ...initialFormData,
-                    bodyPart: bodyPart.name,
-                    bodySide: bodyPart.side,
-                }
-                : initialFormData,
+    toggleBodyPart: (bodyPart) =>
+        set((state) => {
+            const isSelected = state.selectedBodyParts.some((p) => p.id === bodyPart.id);
+            const newParts = isSelected
+                ? state.selectedBodyParts.filter((p) => p.id !== bodyPart.id)
+                : [...state.selectedBodyParts, bodyPart];
+
+            const joinedNames = newParts.map((p) => p.name).join(", ");
+            const sides = Array.from(new Set(newParts.map((p) => p.side)));
+            const joinedSide = sides.length === 1 ? (sides[0] as BodySide) : "various";
+
+            return {
+                selectedBodyParts: newParts,
+                formData: {
+                    ...state.formData,
+                    bodyPart: joinedNames,
+                    bodyParts: newParts.map((p) => p.name),
+                    bodySide: joinedSide as any,
+                },
+            };
+        }),
+
+    removeBodyPart: (id) =>
+        set((state) => {
+            const newParts = state.selectedBodyParts.filter((p) => p.id !== id);
+            const joinedNames = newParts.map((p) => p.name).join(", ");
+            const sides = Array.from(new Set(newParts.map((p) => p.side)));
+            const joinedSide = sides.length === 1 ? (sides[0] as BodySide) : "various";
+
+            return {
+                selectedBodyParts: newParts,
+                formData: {
+                    ...state.formData,
+                    bodyPart: joinedNames,
+                    bodySide: joinedSide as any,
+                },
+            };
         }),
 
     updateFormData: (data) =>
@@ -93,7 +121,7 @@ export const useSymptomStore = create<SymptomStore>((set) => ({
 
     resetAnalyzer: () =>
         set({
-            selectedBodyPart: null,
+            selectedBodyParts: [],
             formData: initialFormData,
             currentStep: 1,
             isAnalyzing: false,
@@ -119,4 +147,4 @@ export const useSymptomStore = create<SymptomStore>((set) => ({
     setLoadingSymptoms: (loading) => set({ isLoadingSymptoms: loading }),
 
     setTotalSymptoms: (total) => set({ totalSymptoms: total }),
-}));
+}));

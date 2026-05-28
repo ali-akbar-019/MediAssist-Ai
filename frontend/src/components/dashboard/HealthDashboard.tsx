@@ -15,7 +15,7 @@ import { useSymptoms } from "../../hooks/useSymptoms";
 import HistoryCard from "./HistoryCard";
 import StatsChart from "./StatsChart";
 import { ROUTES } from "../../constants";
-import { getGreeting, formatRelativeTime } from "../../lib/utils";
+import { formatRelativeTime } from "../../lib/utils";
 
 const StatCard = ({
     icon: Icon,
@@ -33,19 +33,48 @@ const StatCard = ({
     <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay }}
-        className="medical-card p-5"
+        transition={{ delay, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        className="glass-panel p-6 group relative overflow-hidden"
     >
-        <div className="flex items-center justify-between mb-3">
-            <span className="text-sm text-medical-muted font-medium">{label}</span>
+        {/* Holographic Gradient Overlay */}
+        <div 
+            className="absolute -right-4 -top-4 w-24 h-24 blur-3xl opacity-0 group-hover:opacity-10 transition-opacity duration-700"
+            style={{ backgroundColor: color }}
+        />
+        
+        <div className="flex items-center justify-between mb-6">
+            <div className="flex flex-col">
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1">
+                    Metric Protocol
+                </span>
+                <span className="text-sm font-bold text-navy-900 leading-tight">
+                    {label}
+                </span>
+            </div>
             <div
-                className="w-9 h-9 rounded-xl flex items-center justify-center"
-                style={{ backgroundColor: `${color}15` }}
+                className="w-12 h-12 rounded-2xl flex items-center justify-center border transition-all duration-500 group-hover:scale-110 shadow-sm"
+                style={{ 
+                    backgroundColor: `${color}08`,
+                    borderColor: `${color}20`
+                }}
             >
-                <Icon className="w-5 h-5" style={{ color }} />
+                <Icon className="w-6 h-6" style={{ color }} />
             </div>
         </div>
-        <p className="text-3xl font-bold text-navy-900">{value}</p>
+
+        <div className="flex items-end justify-between relative z-10">
+            <p className="text-4xl font-black text-navy-900 tracking-tighter">
+                {value}
+            </p>
+            <div className="flex items-center gap-1 opacity-40">
+                <div className="w-1 h-3 rounded-full bg-slate-200" />
+                <div className="w-1 h-3 rounded-full bg-slate-200" />
+                <div className="w-1 h-3 rounded-full bg-emerald-500" />
+            </div>
+        </div>
+
+        {/* Tactical Border Bottom */}
+        <div className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-transparent via-slate-200 to-transparent w-full opacity-50" />
     </motion.div>
 );
 
@@ -68,49 +97,47 @@ const HealthDashboard = () => {
         handleGetStats();
     }, []);
 
-    const greeting = getGreeting();
-
     return (
-        <div className="space-y-8">
-            {/* Welcome Header */}
+        <div className="space-y-12">
+            {/* Command Actions Bar */}
             <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="flex items-start justify-between flex-wrap gap-4"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="flex items-center justify-between p-2 pl-8 pr-2 rounded-[2rem] glass-panel border-white/60 shadow-luxe"
             >
-                <div>
-                    <h1 className="text-2xl font-heading font-bold text-navy-900">
-                        {greeting}, {user?.name.split(" ")[0]}! 👋
-                    </h1>
-                    <p className="text-medical-muted mt-1">
-                        Here is your health overview and recent activity.
-                    </p>
+                <div className="flex items-center gap-4">
+                    <div className="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
+                    <span className="text-xs font-black uppercase tracking-[0.2em] text-navy-900">
+                        Operational Status: Clinical Optimal
+                    </span>
                 </div>
                 <Link
                     to={ROUTES.ANALYZER}
-                    className="flex items-center gap-2 px-4 py-2.5 bg-navy-900 text-white rounded-xl text-sm font-medium hover:bg-navy-800 transition-colors shadow-navy"
+                    className="flex items-center gap-3 px-8 py-4 bg-navy-900 text-white rounded-[1.4rem] text-sm font-black uppercase tracking-widest hover:bg-navy-950 transition-all shadow-navy group overflow-hidden relative"
                 >
-                    <Stethoscope className="w-4 h-4" />
-                    New Analysis
-                    <ArrowRight className="w-4 h-4" />
+                    <div className="absolute inset-0 bg-emerald-500 translate-y-full group-hover:translate-y-0 transition-transform duration-500 opacity-10" />
+                    <Stethoscope className="w-5 h-5 text-emerald-400" />
+                    Initiate New Analysis
+                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
             </motion.div>
 
-            {/* Stat Cards */}
+            {/* Stat Console */}
             {isLoadingStats ? (
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {[...Array(4)].map((_, i) => (
                         <div
                             key={i}
-                            className="medical-card p-5 animate-pulse"
+                            className="glass-panel p-6 h-40 animate-pulse relative overflow-hidden"
                         >
-                            <div className="h-4 bg-medical-surface rounded w-2/3 mb-3" />
-                            <div className="h-8 bg-medical-surface rounded w-1/3" />
+                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full animate-[shimmer_2s_infinite]" />
+                            <div className="h-2 bg-slate-100 rounded w-1/3 mb-4" />
+                            <div className="h-10 bg-slate-50 rounded w-1/2" />
                         </div>
                     ))}
                 </div>
             ) : (
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     <StatCard
                         icon={Activity}
                         label="Total Analyses"
@@ -155,53 +182,62 @@ const HealthDashboard = () => {
                 </div>
             )}
 
-            {/* Charts */}
-            {stats && !isLoadingStats && <StatsChart stats={stats} />}
+            {/* Charts Intelligence Zone */}
+            {stats && !isLoadingStats && (
+                <div className="relative group">
+                    <div className="absolute -inset-4 bg-emerald-500/5 blur-2xl rounded-[3rem] opacity-0 group-hover:opacity-100 transition-opacity duration-1000 -z-10" />
+                    <StatsChart stats={stats} />
+                </div>
+            )}
 
-            {/* Recent History */}
-            <div>
-                <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-lg font-heading font-semibold text-navy-900">
-                        Recent Analyses
-                    </h2>
-                    <Link
-                        to={ROUTES.ANALYZER}
-                        className="text-sm text-emerald-500 hover:text-emerald-600 font-medium flex items-center gap-1 transition-colors"
-                    >
-                        New Analysis
-                        <ArrowRight className="w-3.5 h-3.5" />
-                    </Link>
+            {/* Diagnostic Chronology */}
+            <div className="space-y-8">
+                <div className="flex items-center justify-between border-b border-navy-900/5 pb-4">
+                    <div className="flex flex-col">
+                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500 mb-1">
+                            Chronological Data
+                        </span>
+                        <h2 className="text-3xl font-black text-navy-900 tracking-tighter">
+                            DIAGNOSTIC HISTORY<span className="text-emerald-500">.</span>
+                        </h2>
+                    </div>
+                    <div className="group flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                        Total Records: {symptoms.length}
+                        <div className="w-8 h-[1px] bg-slate-200 group-hover:w-12 group-hover:bg-navy-900 transition-all" />
+                    </div>
                 </div>
 
                 {isLoadingSymptoms ? (
-                    <div className="flex items-center justify-center py-12">
-                        <Loader2 className="w-6 h-6 animate-spin text-navy-900" />
+                    <div className="flex flex-col items-center justify-center py-24 gap-4">
+                        <Loader2 className="w-10 h-10 animate-spin text-emerald-500" />
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                            Synchronizing Clinical Data...
+                        </span>
                     </div>
                 ) : symptoms.length === 0 ? (
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="flex flex-col items-center justify-center py-12 text-center medical-card"
+                        className="flex flex-col items-center justify-center py-20 text-center glass-panel"
                     >
-                        <div className="w-14 h-14 rounded-2xl bg-navy-50 flex items-center justify-center mb-4">
-                            <Stethoscope className="w-7 h-7 text-navy-900" />
+                        <div className="w-20 h-20 rounded-[2rem] bg-navy-900/5 flex items-center justify-center mb-6">
+                            <Stethoscope className="w-10 h-10 text-navy-900" />
                         </div>
-                        <h3 className="font-heading font-semibold text-navy-900 mb-2">
-                            No analyses yet
+                        <h3 className="text-xl font-black text-navy-900 tracking-tight mb-2">
+                            No active records identified
                         </h3>
-                        <p className="text-medical-muted text-sm mb-4 max-w-xs">
-                            Start by analyzing your symptoms using our interactive body map
-                            and AI-powered analysis.
+                        <p className="text-slate-500 text-sm mb-8 max-w-xs font-medium">
+                            Initiate your first analysis to populate the diagnostic matrix.
                         </p>
                         <Link
                             to={ROUTES.ANALYZER}
-                            className="px-4 py-2 bg-navy-900 text-white rounded-xl text-sm font-medium hover:bg-navy-800 transition-colors"
+                            className="px-8 py-3 bg-navy-900 text-white rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-navy-950 transition-all shadow-navy"
                         >
-                            Start Analysis
+                            Start Analysis Protocol
                         </Link>
                     </motion.div>
                 ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                         {symptoms.map((symptom, index) => (
                             <HistoryCard
                                 key={symptom._id}
@@ -216,38 +252,36 @@ const HealthDashboard = () => {
                 )}
             </div>
 
-            {/* Profile Info */}
+            {/* System Profiles */}
             {user && (
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="medical-card p-5"
-                >
-                    <h2 className="text-sm font-semibold text-navy-900 mb-4">
-                        Your Health Profile
-                    </h2>
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <div className="pt-8 border-t border-navy-900/5">
+                    <div className="flex items-center gap-4 mb-6">
+                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                        <h2 className="text-[10px] font-black tracking-[0.4em] text-navy-900 uppercase">
+                            Health Matrix Architecture
+                        </h2>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                         {[
-                            { label: "Age", value: user.age ?? "Not set" },
-                            { label: "Gender", value: user.gender ?? "Not set" },
-                            { label: "Blood Group", value: user.bloodGroup ?? "Not set" },
+                            { label: "Age Index", value: user.age ?? "N/A" },
+                            { label: "Gender Model", value: user.gender ?? "N/A" },
+                            { label: "Biological Type", value: user.bloodGroup ?? "N/A" },
                             {
-                                label: "Allergies",
-                                value:
-                                    user.allergies && user.allergies.length > 0
-                                        ? user.allergies.join(", ")
-                                        : "None",
+                                label: "Sensitivity Log",
+                                value: user.allergies?.length ? user.allergies.join(", ") : "None",
                             },
                         ].map((item) => (
-                            <div key={item.label} className="space-y-1">
-                                <p className="text-xs text-medical-muted">{item.label}</p>
-                                <p className="text-sm font-medium text-navy-900 capitalize">
+                            <div key={item.label} className="p-4 rounded-3xl border border-navy-900/5 bg-white/40">
+                                <p className="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-2">
+                                    {item.label}
+                                </p>
+                                <p className="text-sm font-black text-navy-900 capitalize tracking-tight">
                                     {item.value}
                                 </p>
                             </div>
                         ))}
                     </div>
-                </motion.div>
+                </div>
             )}
         </div>
     );

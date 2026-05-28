@@ -2,7 +2,7 @@ import type { SelectedBodyPart } from "../../types";
 import { motion } from "framer-motion";
 
 interface BodyFrontProps {
-    selectedPart: SelectedBodyPart | null;
+    selectedParts: SelectedBodyPart[];
     onPartSelect: (part: SelectedBodyPart) => void;
 }
 
@@ -13,114 +13,58 @@ interface BodyPartPath {
 }
 
 const bodyParts: BodyPartPath[] = [
-    {
-        id: "head-front",
-        name: "Head",
-        d: "M100,20 C75,20 55,40 55,65 C55,90 75,110 100,110 C125,110 145,90 145,65 C145,40 125,20 100,20 Z",
-    },
-    {
-        id: "neck-front",
-        name: "Neck",
-        d: "M85,110 L85,135 L115,135 L115,110 Z",
-    },
-    {
-        id: "left-shoulder-front",
-        name: "Left Shoulder",
-        d: "M115,135 C130,130 155,130 165,145 C170,155 165,170 155,175 L135,165 L115,155 Z",
-    },
-    {
-        id: "right-shoulder-front",
-        name: "Right Shoulder",
-        d: "M85,135 C70,130 45,130 35,145 C30,155 35,170 45,175 L65,165 L85,155 Z",
-    },
-    {
-        id: "chest-front",
-        name: "Chest",
-        d: "M85,135 L85,200 L115,200 L115,135 L115,155 L85,155 Z",
-    },
-    {
-        id: "left-arm-front",
-        name: "Left Arm",
-        d: "M155,175 C165,180 175,195 175,215 C175,230 170,245 160,250 L145,240 L140,210 L150,185 Z",
-    },
-    {
-        id: "right-arm-front",
-        name: "Right Arm",
-        d: "M45,175 C35,180 25,195 25,215 C25,230 30,245 40,250 L55,240 L60,210 L50,185 Z",
-    },
-    {
-        id: "left-forearm-front",
-        name: "Left Forearm",
-        d: "M160,250 C165,260 170,275 168,295 C166,310 158,320 150,322 L140,305 L138,275 L148,252 Z",
-    },
-    {
-        id: "right-forearm-front",
-        name: "Right Forearm",
-        d: "M40,250 C35,260 30,275 32,295 C34,310 42,320 50,322 L60,305 L62,275 L52,252 Z",
-    },
-    {
-        id: "left-hand-front",
-        name: "Left Hand",
-        d: "M148,322 C148,330 152,345 155,355 C158,362 162,365 160,370 C157,375 150,372 147,365 C145,372 138,375 136,368 C134,375 127,375 126,368 C124,373 118,372 118,365 C115,355 118,340 120,330 L135,322 Z",
-    },
-    {
-        id: "right-hand-front",
-        name: "Right Hand",
-        d: "M52,322 C52,330 48,345 45,355 C42,362 38,365 40,370 C43,375 50,372 53,365 C55,372 62,375 64,368 C66,375 73,375 74,368 C76,373 82,372 82,365 C85,355 82,340 80,330 L65,322 Z",
-    },
-    {
-        id: "abdomen-front",
-        name: "Abdomen",
-        d: "M85,200 L85,270 L115,270 L115,200 Z",
-    },
-    {
-        id: "pelvis-front",
-        name: "Pelvis",
-        d: "M75,270 C70,280 68,295 70,310 C75,325 90,332 100,332 C110,332 125,325 130,310 C132,295 130,280 125,270 Z",
-    },
-    {
-        id: "left-thigh-front",
-        name: "Left Thigh",
-        d: "M105,332 L110,332 L118,400 L105,408 L95,400 Z",
-    },
-    {
-        id: "right-thigh-front",
-        name: "Right Thigh",
-        d: "M95,332 L90,332 L82,400 L95,408 L105,400 Z",
-    },
-    {
-        id: "left-knee-front",
-        name: "Left Knee",
-        d: "M105,408 C112,408 118,415 118,425 C118,435 112,442 105,442 C98,442 92,435 92,425 C92,415 98,408 105,408 Z",
-    },
-    {
-        id: "right-knee-front",
-        name: "Right Knee",
-        d: "M95,408 C88,408 82,415 82,425 C82,435 88,442 95,442 C102,442 108,435 108,425 C108,415 102,408 95,408 Z",
-    },
-    {
-        id: "left-leg-front",
-        name: "Left Leg",
-        d: "M105,442 L110,442 L112,510 L98,510 L92,442 Z",
-    },
-    {
-        id: "right-leg-front",
-        name: "Right Leg",
-        d: "M95,442 L90,442 L88,510 L102,510 L108,442 Z",
-    },
-    {
-        id: "left-foot-front",
-        name: "Left Foot",
-        d: "M98,510 L112,510 L118,525 L118,535 C118,540 112,545 105,545 C98,545 92,542 90,537 L90,525 Z",
-    },
-    {
-        id: "right-foot-front",
-        name: "Right Foot",
-        d: "M102,510 L88,510 L82,525 L82,535 C82,540 88,545 95,545 C102,545 108,542 110,537 L110,525 Z",
-    },
+    // --- Head Area ---
+    { id: "forehead-front", name: "Forehead", d: "M85,5 C95,2 105,2 115,5 C115,12 85,12 85,5 Z" },
+    { id: "eye-right-front", name: "Right Eye", d: "M82,20 C85,18 90,18 93,20 C90,22 85,22 82,20 Z" },
+    { id: "eye-left-front", name: "Left Eye", d: "M107,20 C110,18 115,18 118,20 C115,22 110,22 107,20 Z" },
+    { id: "nose-front", name: "Nose", d: "M97,20 L103,20 L100,35 Z" },
+    { id: "mouth-front", name: "Mouth", d: "M92,45 C95,48 105,48 108,45 C105,42 95,42 92,45 Z" },
+    { id: "jaw-front", name: "Jaw/Chin", d: "M80,40 C80,60 100,68 120,40 C115,62 85,62 80,40 Z" },
+    { id: "ear-right-front", name: "Right Ear", d: "M75,25 C72,25 70,30 70,35 C70,40 72,45 75,45 Z" },
+    { id: "ear-left-front", name: "Left Ear", d: "M125,25 C128,25 130,30 130,35 C130,40 128,45 125,45 Z" },
+
+    // --- Neck ---
+    { id: "neck-front", name: "Neck", d: "M90,68 L110,68 L108,82 L92,82 Z" },
+
+    // --- Torso ---
+    { id: "shoulder-right-front", name: "Right Shoulder", d: "M40,110 C50,105 60,110 65,115 L50,135 C40,130 35,120 40,110 Z" },
+    { id: "shoulder-left-front", name: "Left Shoulder", d: "M160,110 C150,105 140,110 135,115 L150,135 C160,130 165,120 160,110 Z" },
+    { id: "chest-upper-right", name: "Right Upper Chest", d: "M65,115 C80,110 100,110 100,115 L100,150 L65,150 Z" },
+    { id: "chest-upper-left", name: "Left Upper Chest", d: "M135,115 C120,110 100,110 100,115 L100,150 L135,150 Z" },
+    { id: "chest-lower-right", name: "Right Lower Chest", d: "M65,150 L100,150 L100,190 L65,190 Z" },
+    { id: "chest-lower-left", name: "Left Lower Chest", d: "M135,150 L100,150 L100,190 L135,190 Z" },
+    { id: "abdomen-upper", name: "Upper Abdomen", d: "M70,190 L130,190 L130,230 L70,230 Z" },
+    { id: "abdomen-lower", name: "Lower Abdomen", d: "M70,230 L130,230 L130,270 L70,270 Z" },
+    { id: "pelvic-front", name: "Pelvic Region", d: "M70,270 C80,310 120,310 130,270 L70,270 Z" },
+
+    // --- Arms ---
+    { id: "arm-upper-right", name: "Right Upper Arm", d: "M50,135 L65,135 L62,185 L48,185 Z" },
+    { id: "arm-upper-left", name: "Left Upper Arm", d: "M150,135 L135,135 L138,185 L152,185 Z" },
+    { id: "elbow-right", name: "Right Elbow", d: "M48,185 L62,185 L62,205 L48,205 Z" },
+    { id: "elbow-left", name: "Left Elbow", d: "M152,185 L138,185 L138,205 L152,205 Z" },
+    { id: "forearm-right", name: "Right Forearm", d: "M48,205 L62,205 L60,260 L50,260 Z" },
+    { id: "forearm-left", name: "Left Forearm", d: "M152,205 L138,205 L140,260 L150,260 Z" },
+    { id: "wrist-right", name: "Right Wrist", d: "M50,260 L60,260 L60,275 L50,275 Z" },
+    { id: "wrist-left", name: "Left Wrist", d: "M150,260 L140,260 L140,275 L150,275 Z" },
+    { id: "hand-right", name: "Right Hand", d: "M45,275 C45,290 65,290 65,275 L45,275 Z" },
+    { id: "hand-left", name: "Left Hand", d: "M155,275 C155,290 135,290 135,275 L155,275 Z" },
+
+    // --- Legs ---
+    { id: "hip-right", name: "Right Hip", d: "M60,300 C60,320 75,330 85,320 L75,300 Z" },
+    { id: "hip-left", name: "Left Hip", d: "M140,300 C140,320 125,330 115,320 L125,300 Z" },
+    { id: "thigh-right", name: "Right Thigh", d: "M65,320 L95,320 L95,410 L68,410 Z" },
+    { id: "thigh-left", name: "Left Thigh", d: "M135,320 L105,320 L105,410 L132,410 Z" },
+    { id: "knee-right", name: "Right Knee", d: "M68,410 L95,410 L95,440 L70,440 Z" },
+    { id: "knee-left", name: "Left Knee", d: "M132,410 L105,410 L105,440 L130,440 Z" },
+    { id: "leg-lower-right", name: "Right Shin", d: "M70,440 L95,440 L95,520 L75,520 Z" },
+    { id: "leg-lower-left", name: "Left Shin", d: "M130,440 L105,440 L105,520 L125,520 Z" },
+    { id: "ankle-right", name: "Right Ankle", d: "M75,520 L95,520 L95,535 L76,535 Z" },
+    { id: "ankle-left", name: "Left Ankle", d: "M125,520 L105,520 L105,535 L124,535 Z" },
+    { id: "foot-right", name: "Right Foot", d: "M76,535 L95,535 L95,560 L60,560 Z" },
+    { id: "foot-left", name: "Left Foot", d: "M124,535 L105,535 L105,560 L140,560 Z" },
 ];
 
-const BodyFront = ({ selectedPart, onPartSelect }: BodyFrontProps) => {
+const BodyFront = ({ selectedParts, onPartSelect }: BodyFrontProps) => {
     const handlePartClick = (part: BodyPartPath) => {
         onPartSelect({
             id: part.id,
@@ -129,75 +73,52 @@ const BodyFront = ({ selectedPart, onPartSelect }: BodyFrontProps) => {
         });
     };
 
-    const isSelected = (partId: string) => selectedPart?.id === partId;
+    const isSelected = (partId: string) => selectedParts.some((p) => p.id === partId);
 
     return (
         <svg
             viewBox="0 0 200 570"
-            className="w-full h-full"
+            className="w-full h-full drop-shadow-sm"
             xmlns="http://www.w3.org/2000/svg"
         >
-            {/* Body outline background */}
-            <ellipse cx="100" cy="65" rx="48" ry="47" fill="#F1F5F9" stroke="#CBD5E1" strokeWidth="1" />
-            <rect x="84" y="110" width="32" height="28" fill="#F1F5F9" stroke="#CBD5E1" strokeWidth="1" />
-            <path d="M84,135 L60,145 L45,175 L55,240 L65,240 L75,175 L84,155 Z" fill="#F1F5F9" stroke="#CBD5E1" strokeWidth="1" />
-            <path d="M116,135 L140,145 L155,175 L145,240 L135,240 L125,175 L116,155 Z" fill="#F1F5F9" stroke="#CBD5E1" strokeWidth="1" />
-            <rect x="84" y="135" width="32" height="200" fill="#F1F5F9" stroke="#CBD5E1" strokeWidth="1" />
-            <path d="M84,330 L72,400 L72,450 L88,450 L92,400 L100,340 L108,400 L112,450 L128,450 L128,400 L116,330 Z" fill="#F1F5F9" stroke="#CBD5E1" strokeWidth="1" />
-            <rect x="72" y="450" width="16" height="65" fill="#F1F5F9" stroke="#CBD5E1" strokeWidth="1" />
-            <rect x="112" y="450" width="16" height="65" fill="#F1F5F9" stroke="#CBD5E1" strokeWidth="1" />
+            <defs>
+                <linearGradient id="bodyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#ffffff" />
+                    <stop offset="100%" stopColor="#f0fdf4" />
+                </linearGradient>
+            </defs>
+
+            {/* Detailed Body Outline Background */}
+            <path
+                d="M100,2 C80,2 70,18 70,35 C70,50 78,65 88,72 L88,85 L60,105 C40,105 30,120 30,150 L30,220 C30,240 35,260 50,270 L50,300 C45,340 55,420 65,420 L68,520 L60,540 L60,560 L140,560 L140,540 L132,520 L135,420 C145,420 155,340 150,300 L150,270 C165,260 170,240 170,220 L170,150 C170,120 160,105 140,105 L112,85 L112,72 C122,65 130,50 130,35 C130,18 120,2 100,2 Z"
+                fill="url(#bodyGradient)"
+                stroke="#10b981"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="opacity-50"
+            />
 
             {/* Interactive body parts */}
             {bodyParts.map((part) => (
                 <motion.path
                     key={part.id}
                     d={part.d}
-                    fill={isSelected(part.id) ? "#1E3A5F" : "transparent"}
-                    stroke={isSelected(part.id) ? "#1E3A5F" : "transparent"}
-                    strokeWidth="1"
-                    className="cursor-pointer"
-                    whileHover={{ fill: isSelected(part.id) ? "#1E3A5F" : "#1E3A5F33" }}
+                    fill={isSelected(part.id) ? "#10b981" : "transparent"}
+                    stroke={isSelected(part.id) ? "#065f46" : "#059669"}
+                    strokeWidth={isSelected(part.id) ? "1.5" : "0.5"}
+                    strokeDasharray={isSelected(part.id) ? "0" : "2,2"}
+                    className="cursor-pointer transition-all duration-300"
+                    whileHover={{ 
+                        fill: isSelected(part.id) ? "#10b981" : "rgba(16, 185, 129, 0.15)",
+                        strokeWidth: 1.5,
+                        strokeDasharray: "0"
+                    }}
                     onClick={() => handlePartClick(part)}
                 />
             ))}
-
-            {/* Labels for selected part */}
-            {selectedPart?.side === "front" && (
-                <motion.g
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                >
-                    {bodyParts
-                        .filter((p) => p.id === selectedPart.id)
-                        .map((part) => {
-                            const pathEl = document.createElementNS(
-                                "http://www.w3.org/2000/svg",
-                                "path"
-                            );
-                            pathEl.setAttribute("d", part.d);
-                            const bbox = pathEl.getBBox?.() ?? { x: 100, y: 100, width: 0, height: 0 };
-                            const cx = bbox.x + bbox.width / 2;
-                            const cy = bbox.y + bbox.height / 2;
-                            return (
-                                <text
-                                    key={part.id}
-                                    x={cx}
-                                    y={cy}
-                                    textAnchor="middle"
-                                    dominantBaseline="middle"
-                                    fill="white"
-                                    fontSize="7"
-                                    fontWeight="600"
-                                    className="pointer-events-none select-none"
-                                >
-                                    {part.name}
-                                </text>
-                            );
-                        })}
-                </motion.g>
-            )}
         </svg>
     );
 };
 
-export default BodyFront;
+export default BodyFront;

@@ -115,8 +115,8 @@ export const GENDER_OPTIONS = [
 // Navigation Items
 export const NAV_ITEMS = [
     { label: "Home", href: ROUTES.HOME, icon: "Home" },
-    { label: "Symptom Analyzer", href: ROUTES.ANALYZER, icon: "Stethoscope" },
-    { label: "AI Doctor Chat", href: ROUTES.CHAT, icon: "MessageCircle" },
+    { label: "Analyzer", href: ROUTES.ANALYZER, icon: "Stethoscope" },
+    { label: "AI Chat", href: ROUTES.CHAT, icon: "MessageCircle" },
     { label: "Dashboard", href: ROUTES.DASHBOARD, icon: "LayoutDashboard" },
     { label: "Medicine Info", href: ROUTES.MEDICINE, icon: "Pill" },
     { label: "Find Hospitals", href: ROUTES.HOSPITALS, icon: "MapPin" },

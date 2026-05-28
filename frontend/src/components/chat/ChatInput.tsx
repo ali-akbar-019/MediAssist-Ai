@@ -61,22 +61,22 @@ const ChatInput = ({
     };
 
     return (
-        <div className="space-y-3">
-            {/* Quick Suggestions */}
+        <div className="space-y-4">
+            {/* Quick Suggestions — Elite Chips */}
             {showSuggestions && (
                 <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="flex flex-wrap gap-2"
+                    className="flex flex-wrap gap-2 px-2"
                 >
-                    <span className="text-xs text-medical-muted self-center">
-                        Quick:
+                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 self-center mr-2">
+                        Common Signal:
                     </span>
                     {QUICK_SUGGESTIONS.map((suggestion) => (
                         <button
                             key={suggestion}
                             onClick={() => handleSuggestionClick(suggestion)}
-                            className="px-3 py-1 rounded-full text-xs font-medium border border-medical-border text-medical-muted hover:border-navy-900 hover:text-navy-900 hover:bg-navy-50 transition-all"
+                            className="px-4 py-1.5 rounded-full text-[11px] font-bold border border-white/60 bg-white/40 text-slate-500 hover:border-emerald-500/50 hover:text-emerald-600 hover:bg-white transiton-all duration-300"
                         >
                             {suggestion}
                         </button>
@@ -84,16 +84,16 @@ const ChatInput = ({
                 </motion.div>
             )}
 
-            {/* Input Area */}
+            {/* Input Area — Luxury Glass Interface */}
             <div
                 className={cn(
-                    "flex items-end gap-3 p-3 rounded-2xl border transition-all",
+                    "flex items-end gap-4 p-4 rounded-[1.8rem] border transition-all duration-500",
                     disabled
-                        ? "bg-medical-surface border-medical-border"
-                        : "bg-white border-medical-border focus-within:border-navy-900 focus-within:ring-2 focus-within:ring-navy-100"
+                        ? "bg-white/10 border-white/10"
+                        : "glass-panel border-white/60 focus-within:border-emerald-500/50 focus-within:shadow-[0_0_20px_rgba(16,185,129,0.1)]"
                 )}
             >
-                {/* Textarea */}
+                {/* Textarea — Precision Input */}
                 <textarea
                     ref={textareaRef}
                     value={message}
@@ -104,57 +104,54 @@ const ChatInput = ({
                     disabled={disabled || isSending}
                     rows={1}
                     className={cn(
-                        "flex-1 resize-none bg-transparent text-sm text-medical-text placeholder:text-medical-muted",
+                        "flex-1 resize-none bg-transparent text-sm text-navy-900 placeholder:text-slate-400",
                         "focus:outline-none disabled:opacity-50",
-                        "min-h-[24px] max-h-[120px]"
+                        "min-h-[24px] max-h-[120px] pt-1 font-medium"
                     )}
                 />
 
-                {/* Action Buttons */}
+                {/* Tactical Actions */}
                 <div className="flex items-center gap-2 shrink-0">
-                    {/* Mic Button */}
                     <button
                         disabled={disabled || isSending}
-                        className="p-2 rounded-xl text-medical-muted hover:text-navy-900 hover:bg-medical-surface transition-colors disabled:opacity-40"
-                        title="Voice input (coming soon)"
+                        className="p-2.5 rounded-2xl text-slate-400 hover:text-emerald-600 hover:bg-emerald-50/50 transition-all duration-300 disabled:opacity-40"
+                        title="Voice Analysis"
                     >
-                        <Mic className="w-4 h-4" />
+                        <Mic className="w-5 h-5" />
                     </button>
 
-                    {/* Send Button */}
                     <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={handleSend}
                         disabled={!message.trim() || isSending || disabled}
                         className={cn(
-                            "w-9 h-9 rounded-xl flex items-center justify-center transition-all",
+                            "w-11 h-11 rounded-2xl flex items-center justify-center transition-all duration-500",
                             message.trim() && !isSending && !disabled
-                                ? "bg-navy-900 text-white hover:bg-navy-800 shadow-navy"
-                                : "bg-medical-surface text-medical-muted cursor-not-allowed"
+                                ? "bg-navy-900 text-white hover:bg-navy-950 shadow-navy"
+                                : "bg-white/40 text-slate-300 cursor-not-allowed border border-white/60"
                         )}
                     >
                         {isSending ? (
-                            <Loader2 className="w-4 h-4 animate-spin" />
+                            <Loader2 className="w-5 h-5 animate-spin" />
                         ) : (
-                            <Send className="w-4 h-4" />
+                            <Send className="w-5 h-5" />
                         )}
                     </motion.button>
                 </div>
             </div>
 
-            {/* Helper Text */}
-            <p className="text-xs text-medical-muted text-center">
-                Press{" "}
-                <kbd className="px-1.5 py-0.5 rounded bg-medical-surface border border-medical-border text-xs font-mono">
-                    Enter
-                </kbd>{" "}
-                to send,{" "}
-                <kbd className="px-1.5 py-0.5 rounded bg-medical-surface border border-medical-border text-xs font-mono">
-                    Shift + Enter
-                </kbd>{" "}
-                for new line
-            </p>
+            {/* Signal Protocol Info */}
+            <div className="flex items-center justify-center gap-4 py-1">
+                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest flex items-center gap-2">
+                    <span className="w-1 h-1 rounded-full bg-emerald-500" />
+                    Protocol: Secure Signal Area
+                </p>
+                <div className="w-1 h-1 rounded-full bg-slate-200" />
+                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">
+                    Press <span className="text-navy-900">Return</span> to Transmit
+                </p>
+            </div>
         </div>
     );
 };

@@ -27,39 +27,30 @@ const SEVERITY_COLORS = {
 };
 
 const StatsChart = ({ stats }: StatsChartProps) => {
-    // Format severity data for pie chart
     const severityData = stats.severityStats.map((item) => ({
         name: capitalize(item._id ?? "unknown"),
         value: item.count,
-        color:
-            SEVERITY_COLORS[item._id as keyof typeof SEVERITY_COLORS] ?? "#94A3B8",
+        color: SEVERITY_COLORS[item._id as keyof typeof SEVERITY_COLORS] ?? "#CBD5E1",
     }));
 
-    // Format body part data for bar chart
     const bodyPartData = stats.bodyPartStats.map((item) => ({
         name: item._id,
         count: item.count,
     }));
 
-    const CustomTooltip = ({
-        active,
-        payload,
-        label,
-    }: {
-        active?: boolean;
-        payload?: Array<{ value: number; name: string }>;
-        label?: string;
-    }) => {
+    const CustomTooltip = ({ active, payload, label }: any) => {
         if (active && payload && payload.length) {
             return (
-                <div className="bg-white border border-medical-border rounded-xl px-3 py-2 shadow-card">
-                    <p className="text-xs font-medium text-navy-900">{label}</p>
-                    <p className="text-sm font-bold text-navy-900">
-                        {payload[0].value}{" "}
-                        <span className="text-xs font-normal text-medical-muted">
-                            {payload[0].value === 1 ? "case" : "cases"}
-                        </span>
+                <div className="glass-panel p-3 border-white/60 shadow-luxe backdrop-blur-xl">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">
+                        Diagnostic Data
                     </p>
+                    <div className="flex items-center gap-3">
+                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                        <p className="text-sm font-black text-navy-900 tracking-tight">
+                            {label || payload[0].name}: <span className="text-emerald-600">{payload[0].value}</span>
+                        </p>
+                    </div>
                 </div>
             );
         }
@@ -67,117 +58,133 @@ const StatsChart = ({ stats }: StatsChartProps) => {
     };
 
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Severity Distribution — Pie Chart */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Severity Distribution — Elite Pulse */}
             <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="medical-card p-5"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="glass-panel p-8 relative overflow-hidden"
             >
-                <h3 className="text-sm font-semibold text-navy-900 mb-4">
-                    Severity Distribution
-                </h3>
+                <div className="flex flex-col mb-8">
+                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500 mb-1">
+                        Statistical Analysis
+                    </span>
+                    <h3 className="text-xl font-black text-navy-900 tracking-tighter">
+                        SEVERITY MATRIX<span className="text-emerald-500">.</span>
+                    </h3>
+                </div>
+
                 {severityData.length === 0 ? (
-                    <div className="flex items-center justify-center h-48 text-medical-muted text-sm">
-                        No data available
+                    <div className="flex items-center justify-center h-[280px] text-[10px] font-bold uppercase tracking-widest text-slate-300">
+                        Zero Data Points Identified
                     </div>
                 ) : (
-                    <ResponsiveContainer width="100%" height={220}>
-                        <PieChart>
-                            <Pie
-                                data={severityData}
-                                cx="50%"
-                                cy="50%"
-                                innerRadius={55}
-                                outerRadius={85}
-                                paddingAngle={3}
-                                dataKey="value"
-                            >
-                                {severityData.map((entry, index) => (
-                                    <Cell key={`cell-${index}`} fill={entry.color} />
-                                ))}
-                            </Pie>
-                            <Tooltip
-                                content={({ active, payload }) => {
-                                    if (active && payload && payload.length) {
-                                        const data = payload[0].payload as {
-                                            name: string;
-                                            value: number;
-                                            color: string;
-                                        };
-                                        return (
-                                            <div className="bg-white border border-medical-border rounded-xl px-3 py-2 shadow-card">
-                                                <p className="text-xs font-medium text-navy-900">
-                                                    {data.name}
-                                                </p>
-                                                <p className="text-sm font-bold text-navy-900">
-                                                    {data.value}{" "}
-                                                    <span className="text-xs font-normal text-medical-muted">
-                                                        {data.value === 1 ? "case" : "cases"}
+                    <div className="h-[280px]">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <PieChart>
+                                <Pie
+                                    data={severityData}
+                                    cx="50%"
+                                    cy="50%"
+                                    innerRadius={70}
+                                    outerRadius={100}
+                                    paddingAngle={5}
+                                    dataKey="value"
+                                    stroke="none"
+                                >
+                                    {severityData.map((entry, index) => (
+                                        <Cell key={`cell-${index}`} fill={entry.color} opacity={0.9} />
+                                    ))}
+                                </Pie>
+                                <Tooltip content={<CustomTooltip />} />
+                                <Legend
+                                    verticalAlign="bottom"
+                                    height={36}
+                                    content={({ payload }) => (
+                                        <div className="flex justify-center gap-6 mt-4">
+                                            {payload?.map((entry: any, index: number) => (
+                                                <div key={index} className="flex items-center gap-2">
+                                                    <div 
+                                                        className="w-2 h-2 rounded-full" 
+                                                        style={{ backgroundColor: entry.color }}
+                                                    />
+                                                    <span className="text-[10px] font-black uppercase tracking-tighter text-slate-500">
+                                                        {entry.value}
                                                     </span>
-                                                </p>
-                                            </div>
-                                        );
-                                    }
-                                    return null;
-                                }}
-                            />
-                            <Legend
-                                formatter={(value) => (
-                                    <span className="text-xs text-medical-muted">{value}</span>
-                                )}
-                            />
-                        </PieChart>
-                    </ResponsiveContainer>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                />
+                            </PieChart>
+                        </ResponsiveContainer>
+                    </div>
                 )}
             </motion.div>
 
-            {/* Body Part Frequency — Bar Chart */}
+            {/* Body Part Frequency — Tactical Bar */}
             <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.1 }}
-                className="medical-card p-5"
+                className="glass-panel p-8"
             >
-                <h3 className="text-sm font-semibold text-navy-900 mb-4">
-                    Most Affected Body Parts
-                </h3>
+                <div className="flex flex-col mb-8">
+                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500 mb-1">
+                        Anatomical Trends
+                    </span>
+                    <h3 className="text-xl font-black text-navy-900 tracking-tighter">
+                        HOTSPOT FREQUENCY<span className="text-emerald-500">.</span>
+                    </h3>
+                </div>
+
                 {bodyPartData.length === 0 ? (
-                    <div className="flex items-center justify-center h-48 text-medical-muted text-sm">
-                        No data available
+                    <div className="flex items-center justify-center h-[280px] text-[10px] font-bold uppercase tracking-widest text-slate-300">
+                        Zero Data Points Identified
                     </div>
                 ) : (
-                    <ResponsiveContainer width="100%" height={220}>
-                        <BarChart
-                            data={bodyPartData}
-                            margin={{ top: 5, right: 10, left: -20, bottom: 5 }}
-                        >
-                            <CartesianGrid
-                                strokeDasharray="3 3"
-                                stroke="#E2E8F0"
-                                vertical={false}
-                            />
-                            <XAxis
-                                dataKey="name"
-                                tick={{ fontSize: 11, fill: "#64748B" }}
-                                axisLine={false}
-                                tickLine={false}
-                            />
-                            <YAxis
-                                tick={{ fontSize: 11, fill: "#64748B" }}
-                                axisLine={false}
-                                tickLine={false}
-                                allowDecimals={false}
-                            />
-                            <Tooltip content={<CustomTooltip />} />
-                            <Bar
-                                dataKey="count"
-                                fill="#1E3A5F"
-                                radius={[6, 6, 0, 0]}
-                                maxBarSize={48}
-                            />
-                        </BarChart>
-                    </ResponsiveContainer>
+                    <div className="h-[280px]">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <BarChart
+                                data={bodyPartData}
+                                margin={{ top: 20, right: 30, left: -20, bottom: 0 }}
+                            >
+                                <CartesianGrid
+                                    strokeDasharray="4 4"
+                                    stroke="#F1F5F9"
+                                    vertical={false}
+                                />
+                                <XAxis
+                                    dataKey="name"
+                                    tick={{ fontSize: 10, fontWeight: 900, fill: "#94A3B8" }}
+                                    axisLine={false}
+                                    tickLine={false}
+                                    dy={10}
+                                />
+                                <YAxis
+                                    tick={{ fontSize: 10, fontWeight: 900, fill: "#94A3B8" }}
+                                    axisLine={false}
+                                    tickLine={false}
+                                    allowDecimals={false}
+                                />
+                                <Tooltip content={<CustomTooltip />} cursor={{ fill: 'transparent' }} />
+                                <Bar
+                                    dataKey="count"
+                                    fill="#1E3A5F"
+                                    radius={[8, 8, 0, 0]}
+                                    maxBarSize={40}
+                                >
+                                    {bodyPartData.map((_, index) => (
+                                        <Cell 
+                                            key={`cell-${index}`} 
+                                            fill={index === 0 ? "#10B981" : "#1E3A5F"} 
+                                            fillOpacity={0.9}
+                                        />
+                                    ))}
+                                </Bar>
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </div>
                 )}
             </motion.div>
         </div>

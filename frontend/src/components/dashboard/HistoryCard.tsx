@@ -27,114 +27,121 @@ const HistoryCard = ({
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.05 }}
-            className="medical-card p-4 space-y-3"
+            transition={{ 
+                duration: 0.8, 
+                delay: index * 0.08,
+                ease: [0.16, 1, 0.3, 1]
+            }}
+            className="glass-panel p-6 space-y-5 group hover:border-emerald-500/30 transition-all duration-500"
         >
-            {/* Header */}
-            <div className="flex items-start justify-between gap-3">
-                <div className="flex items-start gap-3">
-                    {/* Body Part Icon */}
-                    <div className="w-10 h-10 rounded-xl bg-navy-50 border border-navy-100 flex items-center justify-center shrink-0">
-                        <MapPin className="w-5 h-5 text-navy-900" />
+            {/* Tactical Header */}
+            <div className="flex items-start justify-between">
+                <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-2xl bg-navy-900 border border-white/10 flex items-center justify-center shrink-0 shadow-navy overflow-hidden relative">
+                        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-emerald-500 opacity-20" />
+                        <MapPin className="w-6 h-6 text-white" />
                     </div>
-
                     <div>
-                        <h3 className="text-sm font-semibold text-navy-900">
+                        <span className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1 block">
+                            Diagnostic File
+                        </span>
+                        <h3 className="text-base font-black text-navy-900 tracking-tight uppercase">
                             {symptom.bodyPart}
                         </h3>
-                        <div className="flex items-center gap-1.5 mt-0.5">
-                            <Clock className="w-3 h-3 text-medical-muted" />
-                            <span className="text-xs text-medical-muted">
-                                {formatRelativeTime(symptom.createdAt)}
-                            </span>
-                        </div>
                     </div>
                 </div>
 
-                {/* Severity Badge */}
                 {severityInfo && (
-                    <span
-                        className={cn(
-                            "px-2.5 py-1 rounded-full text-xs font-medium capitalize shrink-0",
-                            `severity-${symptom.aiAnalysis?.severity}`
-                        )}
-                    >
+                    <div className={cn(
+                        "px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border",
+                        symptom.aiAnalysis?.severity === "mild" ? "bg-emerald-50 border-emerald-200 text-emerald-600" :
+                        symptom.aiAnalysis?.severity === "moderate" ? "bg-amber-50 border-amber-200 text-amber-600" :
+                        "bg-rose-50 border-rose-200 text-rose-600 shadow-[0_0_15px_rgba(225,29,72,0.2)]"
+                    )}>
                         {severityInfo.label}
-                    </span>
+                    </div>
                 )}
             </div>
 
-            {/* Symptoms List */}
-            <div className="flex flex-wrap gap-1.5">
-                {symptom.symptoms.slice(0, 4).map((s) => (
+            {/* Physiological Data Tags */}
+            <div className="flex flex-wrap gap-2">
+                {symptom.symptoms.slice(0, 3).map((s) => (
                     <span
                         key={s}
-                        className="px-2 py-0.5 rounded-full bg-medical-surface border border-medical-border text-xs text-medical-muted"
+                        className="px-3 py-1 rounded-lg bg-navy-900/5 border border-navy-900/5 text-[10px] font-bold text-navy-900 uppercase tracking-tighter"
                     >
                         {s}
                     </span>
                 ))}
-                {symptom.symptoms.length > 4 && (
-                    <span className="px-2 py-0.5 rounded-full bg-medical-surface border border-medical-border text-xs text-medical-muted">
-                        +{symptom.symptoms.length - 4} more
+                {symptom.symptoms.length > 3 && (
+                    <span className="px-3 py-1 rounded-lg bg-navy-900/5 border border-navy-900/5 text-[10px] font-bold text-slate-400">
+                        +{symptom.symptoms.length - 3} MORE
                     </span>
                 )}
             </div>
 
-            {/* Pain Details */}
-            <div className="grid grid-cols-3 gap-2">
-                <div className="text-center p-2 rounded-lg bg-medical-surface">
-                    <p className="text-xs text-medical-muted">Pain Type</p>
-                    <p className="text-xs font-medium text-navy-900 capitalize mt-0.5">
-                        {symptom.painType}
-                    </p>
-                </div>
-                <div className="text-center p-2 rounded-lg bg-medical-surface">
-                    <p className="text-xs text-medical-muted">Severity</p>
-                    <p className="text-xs font-medium text-navy-900 mt-0.5">
-                        {symptom.severity}/10
-                    </p>
-                </div>
-                <div className="text-center p-2 rounded-lg bg-medical-surface">
-                    <p className="text-xs text-medical-muted">Duration</p>
-                    <p className="text-xs font-medium text-navy-900 mt-0.5">
-                        {symptom.duration} {symptom.durationUnit}
-                    </p>
-                </div>
+            {/* Metric Matrix */}
+            <div className="grid grid-cols-3 gap-3">
+                {[
+                    { label: "Type", value: symptom.painType },
+                    { label: "Intensity", value: `${symptom.severity}/10` },
+                    { label: "Span", value: `${symptom.duration}${symptom.durationUnit[0]}` }
+                ].map((stat) => (
+                    <div key={stat.label} className="p-2.5 rounded-[1.2rem] bg-navy-900/5 flex flex-col items-center justify-center border border-transparent hover:border-navy-900/10 transition-colors">
+                        <span className="text-[8px] font-black uppercase tracking-widest text-slate-400 mb-1">{stat.label}</span>
+                        <span className="text-[11px] font-black text-navy-900 uppercase">{stat.value}</span>
+                    </div>
+                ))}
             </div>
 
-            {/* AI Analysis Preview */}
+            {/* AI Insight Bridge */}
             {symptom.aiAnalysis && (
-                <div className="p-3 rounded-xl bg-medical-surface border border-medical-border">
-                    <p className="text-xs font-medium text-navy-900 mb-1">
-                        Top Possible Condition
+                <div className="p-4 rounded-2xl bg-white/40 border border-white/60 relative overflow-hidden">
+                    <div className="absolute right-0 top-0 p-2 opacity-5">
+                        <FileText className="w-8 h-8" />
+                    </div>
+                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">
+                        AI Synthesis
                     </p>
-                    <p className="text-xs text-medical-muted">
-                        {symptom.aiAnalysis.possibleConditions[0]?.name ?? "N/A"}
+                    <p className="text-xs font-bold text-navy-900 leading-tight">
+                        {symptom.aiAnalysis.possibleConditions[0]?.name ?? "Inconclusive Record"}
                     </p>
                 </div>
             )}
 
-            {/* Actions */}
-            <div className="flex items-center gap-2 pt-1">
+            {/* Action Protocols */}
+            <div className="flex items-center gap-3 pt-2">
                 <button
                     onClick={() => onDownloadReport(symptom._id)}
                     disabled={isGeneratingReport}
-                    className="flex-1 flex items-center justify-center gap-2 py-2 rounded-xl border border-navy-900 text-navy-900 text-xs font-medium hover:bg-navy-50 transition-colors disabled:opacity-50"
+                    className="flex-1 flex items-center justify-center gap-3 py-3 rounded-2xl bg-navy-900 text-white text-[10px] font-black uppercase tracking-[0.2em] hover:bg-navy-950 transition-all shadow-navy group shrink-0"
                 >
                     {isGeneratingReport ? (
-                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        <Loader2 className="w-4 h-4 animate-spin" />
                     ) : (
-                        <FileText className="w-3.5 h-3.5" />
+                        <FileText className="w-4 h-4 text-emerald-400" />
                     )}
-                    Download Report
+                    Report
                 </button>
                 <button
                     onClick={() => onDelete(symptom._id)}
-                    className="p-2 rounded-xl border border-medical-border text-medical-muted hover:border-red-300 hover:text-red-500 hover:bg-red-50 transition-colors"
+                    className="w-12 h-12 rounded-2xl border border-navy-900/10 text-slate-300 hover:text-rose-500 hover:bg-rose-50 hover:border-rose-200 transition-all flex items-center justify-center shrink-0 group"
                 >
-                    <Trash2 className="w-3.5 h-3.5" />
+                    <Trash2 className="w-5 h-5 group-hover:scale-110 transition-transform" />
                 </button>
+            </div>
+
+            {/* Chrono Footer */}
+            <div className="flex items-center justify-between pt-1 opacity-40">
+                <div className="flex gap-1">
+                    {[...Array(3)].map((_, i) => (
+                        <div key={i} className="w-1 h-1 rounded-full bg-slate-300" />
+                    ))}
+                </div>
+                <div className="flex items-center gap-2">
+                    <Clock className="w-3 h-3" />
+                    <span className="text-[10px] font-black tracking-tighter uppercase">{formatRelativeTime(symptom.createdAt)}</span>
+                </div>
             </div>
         </motion.div>
     );

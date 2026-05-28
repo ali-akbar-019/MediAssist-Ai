@@ -97,7 +97,8 @@ export interface Symptom {
 
 export interface SymptomFormData {
     bodyPart: string;
-    bodySide: BodySide;
+    bodyParts: string[]; // For detailed tracking if needed
+    bodySide: BodySide | "various";
     symptoms: string[];
     painType: PainType;
     severity: number;

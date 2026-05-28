@@ -1,35 +1,40 @@
 import { motion } from "framer-motion";
-import { LayoutDashboard } from "lucide-react";
 import HealthDashboard from "../components/dashboard/HealthDashboard";
 
 const Dashboard = () => {
     return (
-        <div className="page-enter">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-10">
-                {/* Header */}
-                <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="flex items-center gap-3 mb-8"
-                >
-                    <div className="w-11 h-11 rounded-2xl bg-navy-50 border border-navy-100 flex items-center justify-center">
-                        <LayoutDashboard className="w-6 h-6 text-navy-900" />
-                    </div>
-                    <div>
-                        <h1 className="text-2xl font-heading font-bold text-navy-900">
-                            Health Dashboard
-                        </h1>
-                        <p className="text-sm text-medical-muted">
-                            Track your health history and insights
-                        </p>
-                    </div>
-                </motion.div>
-
-                {/* Dashboard Content */}
+        <div className="medical-mesh min-h-screen pt-32 pb-24">
+            <div className="container mx-auto px-6 relative">
+                {/* Elite Editorial Header */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 }}
+                    className="text-center mb-16"
+                >
+                    <motion.div 
+                        initial={{ scale: 0.8 }}
+                        animate={{ scale: 1 }}
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-navy-900/5 border border-navy-900/10 mb-6"
+                    >
+                        <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-navy-900">
+                            Health Intelligence System v4.0
+                        </span>
+                    </motion.div>
+                    
+                    <h1 className="text-6xl md:text-8xl font-black text-navy-900 tracking-tighter mb-4">
+                        COMMAND<span className="text-emerald-500">.</span>
+                    </h1>
+                    <p className="text-lg text-slate-500 max-w-2xl mx-auto font-medium tracking-tight">
+                        Real-time physiological synthesis and diagnostic history. Your health architecture, visualized through clinical-grade AI.
+                    </p>
+                </motion.div>
+
+                {/* Dashboard Intelligence Console */}
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.98 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.2 }}
                 >
                     <HealthDashboard />
                 </motion.div>

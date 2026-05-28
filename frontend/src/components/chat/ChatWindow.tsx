@@ -7,6 +7,7 @@ import {
     MessageCircle,
     Loader2,
     Clock,
+    AlertTriangle,
 } from "lucide-react";
 import ChatMessage from "./ChatMessage";
 import ChatInput from "./ChatInput";
@@ -18,7 +19,6 @@ import { cn } from "../../lib/utils";
 const ChatWindow = () => {
     const {
         sessions,
-        currentSession,
         messages,
         isLoading,
         isSending,
@@ -38,7 +38,7 @@ const ChatWindow = () => {
     }, []);
 
     useEffect(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }, [messages]);
 
     const handleNewChat = async () => {
@@ -72,32 +72,34 @@ const ChatWindow = () => {
     };
 
     return (
-        <div className="flex h-[calc(100vh-8rem)] rounded-2xl border border-medical-border overflow-hidden shadow-card">
+        <div className="flex h-[850px] glass-panel rounded-[2.5rem] border-white/20 overflow-hidden shadow-luxe relative">
             {/* Sidebar — Session List */}
-            <div className="w-72 border-r border-medical-border bg-medical-surface flex flex-col shrink-0 hidden md:flex">
+            <div className="w-80 border-r border-white/10 bg-white/20 backdrop-blur-md flex flex-col shrink-0 hidden md:flex">
                 {/* Sidebar Header */}
-                <div className="p-4 border-b border-medical-border">
+                <div className="p-6 border-b border-white/10">
                     <Button
                         onClick={handleNewChat}
-                        className="w-full bg-navy-900 hover:bg-navy-800 text-white"
+                        className="w-full h-14 rounded-2xl bg-navy-900 hover:bg-navy-950 text-white font-black text-[11px] uppercase tracking-[0.2em] shadow-navy transition-all active:scale-95"
                         disabled={isLoading}
                     >
                         <Plus className="w-4 h-4 mr-2" />
-                        New Conversation
+                        Initiate Signal
                     </Button>
                 </div>
 
                 {/* Session List */}
-                <div className="flex-1 overflow-y-auto p-2 space-y-1">
+                <div className="flex-1 overflow-y-auto p-4 space-y-2">
                     {isLoading && sessions.length === 0 ? (
-                        <div className="flex items-center justify-center py-8">
-                            <Loader2 className="w-5 h-5 animate-spin text-medical-muted" />
+                        <div className="flex items-center justify-center py-12">
+                            <Loader2 className="w-6 h-6 animate-spin text-emerald-500/50" />
                         </div>
                     ) : sessions.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center py-8 px-4 text-center">
-                            <MessageCircle className="w-8 h-8 text-medical-muted mb-2" />
-                            <p className="text-sm text-medical-muted">
-                                No conversations yet. Start a new chat!
+                        <div className="flex flex-col items-center justify-center py-12 px-6 text-center">
+                            <div className="w-12 h-12 rounded-2xl bg-white/40 flex items-center justify-center mb-4">
+                                <MessageCircle className="w-6 h-6 text-slate-400" />
+                            </div>
+                            <p className="text-[11px] font-black uppercase tracking-widest text-slate-400">
+                                Quiet Signal
                             </p>
                         </div>
                     ) : (
@@ -107,34 +109,34 @@ const ChatWindow = () => {
                                 initial={{ opacity: 0, x: -10 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 className={cn(
-                                    "group flex items-start justify-between p-3 rounded-xl cursor-pointer transition-all",
+                                    "group flex items-start justify-between p-4 rounded-2xl cursor-pointer transition-all duration-500 border",
                                     currentSessionId === session.sessionId
-                                        ? "bg-navy-900 text-white"
-                                        : "hover:bg-white text-medical-text"
+                                        ? "bg-navy-900 border-navy-900 text-white shadow-navy scale-[1.02]"
+                                        : "bg-white/40 border-white/60 hover:border-emerald-500/50 text-slate-600 hover:bg-white"
                                 )}
                                 onClick={() => handleSelectSession(session.sessionId)}
                             >
                                 <div className="flex-1 min-w-0">
                                     <p
                                         className={cn(
-                                            "text-sm font-medium truncate",
+                                            "text-xs font-black tracking-tight truncate",
                                             currentSessionId === session.sessionId
                                                 ? "text-white"
-                                                : "text-medical-text"
+                                                : "text-navy-900"
                                         )}
                                     >
                                         {truncate(session.title, 30)}
                                     </p>
                                     <div
                                         className={cn(
-                                            "flex items-center gap-1 mt-1",
+                                            "flex items-center gap-1.5 mt-1",
                                             currentSessionId === session.sessionId
-                                                ? "text-navy-200"
-                                                : "text-medical-muted"
+                                                ? "text-emerald-400/80"
+                                                : "text-slate-400"
                                         )}
                                     >
                                         <Clock className="w-3 h-3" />
-                                        <span className="text-xs">
+                                        <span className="text-[10px] font-bold uppercase tracking-tighter">
                                             {formatRelativeTime(session.updatedAt)}
                                         </span>
                                     </div>
@@ -147,7 +149,7 @@ const ChatWindow = () => {
                                         handleDelete(session.sessionId);
                                     }}
                                     className={cn(
-                                        "p-1 rounded-lg opacity-0 group-hover:opacity-100 transition-all",
+                                        "p-2 rounded-xl opacity-0 group-hover:opacity-100 transition-all active:scale-90",
                                         currentSessionId === session.sessionId
                                             ? "hover:bg-white/20 text-white"
                                             : "hover:bg-red-50 text-red-400"
@@ -162,20 +164,20 @@ const ChatWindow = () => {
             </div>
 
             {/* Main Chat Area */}
-            <div className="flex-1 flex flex-col bg-white min-w-0">
+            <div className="flex-1 flex flex-col bg-white/30 min-w-0 backdrop-blur-sm">
                 {/* Chat Header */}
-                <div className="flex items-center gap-3 p-4 border-b border-medical-border shrink-0">
-                    <div className="w-9 h-9 rounded-xl bg-emerald-500 flex items-center justify-center">
+                <div className="flex items-center gap-4 p-5 border-b border-white/10 bg-white/40 shrink-0">
+                    <div className="w-10 h-10 rounded-2xl bg-emerald-500 flex items-center justify-center shadow-[0_0_15px_rgba(16,185,129,0.3)]">
                         <Stethoscope className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                        <h2 className="font-heading font-semibold text-navy-900 text-sm">
-                            MediAssist AI Doctor
+                        <h2 className="text-[13px] font-black tracking-tight text-navy-900 uppercase">
+                            Clinical Intelligence Unit
                         </h2>
-                        <div className="flex items-center gap-1.5">
-                            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                            <span className="text-xs text-medical-muted">
-                                Online — Ready to help
+                        <div className="flex items-center gap-2 mt-0.5">
+                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                            <span className="text-[9px] font-black uppercase tracking-[0.2em] text-emerald-600">
+                                Neural Signal Active
                             </span>
                         </div>
                     </div>
@@ -183,52 +185,58 @@ const ChatWindow = () => {
                     {/* Mobile New Chat */}
                     <Button
                         onClick={handleNewChat}
-                        size="sm"
-                        variant="outline"
-                        className="ml-auto md:hidden border-medical-border"
+                        size="icon"
+                        variant="ghost"
+                        className="ml-auto md:hidden w-10 h-10 rounded-xl bg-navy-900 text-white"
                     >
                         <Plus className="w-4 h-4" />
                     </Button>
                 </div>
 
                 {/* Messages Area */}
-                <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                    {/* Welcome Message */}
+                <div className="flex-1 overflow-y-auto p-6 space-y-6">
+                    {/* Welcome HUD */}
                     {messages.length === 0 && !isLoading && (
                         <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="flex flex-col items-center justify-center h-full gap-4 text-center py-8"
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            className="flex flex-col items-center justify-center h-full gap-8 text-center py-12"
                         >
                             <motion.div
-                                animate={{ float: [0, -10, 0] }}
-                                transition={{ duration: 3, repeat: Infinity }}
-                                className="w-16 h-16 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center"
+                                animate={{ 
+                                    y: [0, -15, 0],
+                                    rotate: [0, 5, -5, 0]
+                                }}
+                                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                                className="w-24 h-24 rounded-3xl bg-navy-900 border border-emerald-500/30 flex items-center justify-center shadow-navy relative group"
                             >
-                                <Stethoscope className="w-8 h-8 text-emerald-500" />
+                                <div className="absolute inset-0 bg-emerald-500/10 rounded-3xl animate-pulse blur-xl" />
+                                <Stethoscope className="w-10 h-10 text-emerald-400 relative z-10" />
                             </motion.div>
-                            <div>
-                                <h3 className="font-heading font-semibold text-navy-900 text-lg">
-                                    Hello! I am MediAssist AI
+                            
+                            <div className="space-y-3">
+                                <h3 className="text-3xl font-black text-navy-900 tracking-tighter">
+                                    Initiating <span className="italic">Analysis.</span>
                                 </h3>
-                                <p className="text-medical-muted text-sm mt-1 max-w-sm">
-                                    I am here to help you understand your symptoms and provide
-                                    general health guidance. How can I help you today?
+                                <p className="text-[11px] font-black uppercase tracking-[0.3em] text-emerald-600 animate-pulse">
+                                    Awaiting Clinical Signal
                                 </p>
                             </div>
-                            <div className="grid grid-cols-2 gap-2 w-full max-w-sm">
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-xl px-4">
                                 {[
-                                    "I have a headache",
-                                    "Stomach pain advice",
-                                    "Fever symptoms",
-                                    "Back pain help",
+                                    "Persistent migraine analysis",
+                                    "Acute inflammatory response",
+                                    "Cardiovascular stress indices",
+                                    "Digestive signal evaluation",
                                 ].map((suggestion) => (
                                     <button
                                         key={suggestion}
                                         onClick={() => handleSend(suggestion)}
-                                        className="px-3 py-2 rounded-xl text-xs font-medium border border-medical-border text-medical-muted hover:border-navy-900 hover:text-navy-900 hover:bg-navy-50 transition-all text-left"
+                                        className="group p-4 rounded-2xl bg-white/40 border border-white/60 text-left transition-all duration-500 hover:border-emerald-500/50 hover:bg-white hover:shadow-luxe"
                                     >
-                                        {suggestion}
+                                        <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 group-hover:text-emerald-600 mb-1">Inquiry</p>
+                                        <p className="text-sm font-bold text-navy-900 tracking-tight">{suggestion}</p>
                                     </button>
                                 ))}
                             </div>
@@ -249,25 +257,28 @@ const ChatWindow = () => {
                     {/* Sending Indicator */}
                     {isSending && (
                         <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            className="flex items-center gap-3"
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            className="flex items-center gap-4"
                         >
-                            <div className="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center shrink-0">
-                                <Stethoscope className="w-4 h-4 text-white" />
+                            <div className="w-10 h-10 rounded-2xl bg-navy-900 flex items-center justify-center shrink-0 shadow-navy">
+                                <Stethoscope className="w-5 h-5 text-emerald-400" />
                             </div>
-                            <div className="bg-medical-surface border border-medical-border px-4 py-3 rounded-2xl rounded-tl-sm">
-                                <div className="flex items-center gap-1">
+                            <div className="glass-panel border-white/60 px-5 py-4 rounded-3xl rounded-tl-sm">
+                                <div className="flex items-center gap-1.5">
                                     {[0, 1, 2].map((i) => (
                                         <motion.div
                                             key={i}
-                                            animate={{ y: [0, -4, 0] }}
-                                            transition={{
-                                                duration: 0.6,
-                                                repeat: Infinity,
-                                                delay: i * 0.15,
+                                            animate={{ 
+                                                scale: [1, 1.5, 1],
+                                                opacity: [0.3, 1, 0.3]
                                             }}
-                                            className="w-1.5 h-1.5 rounded-full bg-medical-muted"
+                                            transition={{
+                                                duration: 1,
+                                                repeat: Infinity,
+                                                delay: i * 0.2,
+                                            }}
+                                            className="w-1.5 h-1.5 rounded-full bg-emerald-500"
                                         />
                                     ))}
                                 </div>
@@ -278,12 +289,12 @@ const ChatWindow = () => {
                     {/* Error Message */}
                     {error && (
                         <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            className="flex items-center gap-2 p-3 bg-red-50 border border-red-100 rounded-xl text-sm text-red-600"
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            className="flex items-center gap-3 p-4 bg-red-500 text-white rounded-2xl text-[11px] font-black uppercase tracking-widest shadow-xl max-w-md mx-auto"
                         >
-                            <span>⚠️</span>
-                            <span>{error}</span>
+                            <AlertTriangle className="w-4 h-4" />
+                            <span>Signal Interrupted: {error}</span>
                         </motion.div>
                     )}
 
@@ -291,15 +302,14 @@ const ChatWindow = () => {
                 </div>
 
                 {/* Input Area */}
-                <div className="p-4 border-t border-medical-border shrink-0">
+                <div className="p-6 bg-white/40 border-t border-white/10 backdrop-blur-md shrink-0">
                     <ChatInput
                         onSend={handleSend}
                         isSending={isSending}
                         disabled={false}
                     />
-                    <p className="text-xs text-medical-muted text-center mt-2">
-                        MediAssist AI is not a substitute for professional medical advice.
-                        Always consult a qualified healthcare professional.
+                    <p className="text-[9px] text-slate-400 font-black uppercase tracking-[0.2em] text-center mt-4 opacity-60">
+                        Operational Guideline: AI Signal requires clinical verification for acute diagnostics.
                     </p>
                 </div>
             </div>
