@@ -13,6 +13,7 @@ import symptomRoutes from "./routes/symptomRoutes";
 import chatRoutes from "./routes/chatRoutes";
 import reportRoutes from "./routes/reportRoutes";
 import hospitalRoutes from "./routes/hospitalRoutes";
+import medicineRoutes from "./routes/medicineRoutes";
 
 // Connect to MongoDB
 connectDB();
@@ -71,6 +72,7 @@ app.use("/api/symptoms", symptomRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/reports", reportRoutes);
 app.use("/api/hospitals", hospitalRoutes);
+app.use("/api/medicine", medicineRoutes);
 
 // Error handling middleware
 app.use(notFound);

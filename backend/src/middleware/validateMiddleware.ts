@@ -133,3 +133,13 @@ export const chatValidation: ValidationChain[] = [
         .notEmpty()
         .withMessage("Session ID is required"),
 ];
+
+// Medicine info validations
+export const medicineValidation: ValidationChain[] = [
+    body("medicineName")
+        .trim()
+        .notEmpty()
+        .withMessage("Medicine name is required")
+        .isLength({ max: 100 })
+        .withMessage("Medicine name cannot exceed 100 characters"),
+];
