@@ -20,7 +20,7 @@ ALLOWED_ORIGINS = os.getenv(
 async def lifespan(app: FastAPI):
     """Startup and shutdown events"""
     print(f"✅ {APP_NAME} v{APP_VERSION} starting up...")
-    print(f"🤖 Gemini Model: {os.getenv('GEMINI_MODEL', 'gemini-1.5-flash')}")
+    print(f"🤖 Gemini Model: {os.getenv('GEMINI_MODEL', 'gemini-2.5-flash-lite')}")
     print(f"🌐 Allowed Origins: {ALLOWED_ORIGINS}")
     yield
     print(f"⛔ {APP_NAME} shutting down...")
