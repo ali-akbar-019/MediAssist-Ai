@@ -7,6 +7,8 @@ import {
     Loader2,
     Activity,
     Shield,
+    CheckCircle,
+    AlertTriangle,
 } from "lucide-react";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
@@ -497,6 +499,70 @@ const SymptomForm = () => {
                                                 </p>
                                             </motion.div>
                                         ))}
+                                    </div>
+                                </div>
+
+                                {/* Clinical Guidance */}
+                                <div className="space-y-4">
+                                    <h4 className="text-[10px] uppercase tracking-[0.2em] font-black text-navy-400 ml-1">
+                                        Clinical Guidance
+                                    </h4>
+
+                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                                        {/* Recommendation */}
+                                        <div className="p-6 rounded-[2rem] bg-white/55 border border-white/70 shadow-soft">
+                                            <div className="flex items-center gap-2 mb-3">
+                                                <div className="w-8 h-8 rounded-xl bg-navy-900 flex items-center justify-center shrink-0">
+                                                    <Shield className="w-4 h-4 text-emerald-400" />
+                                                </div>
+                                                <h4 className="text-sm font-black text-navy-900 tracking-tight">
+                                                    Recommendation
+                                                </h4>
+                                            </div>
+                                            <p className="text-sm text-slate-600 leading-relaxed">
+                                                {analysisResult.recommendation}
+                                            </p>
+                                        </div>
+
+                                        {/* Home Remedies */}
+                                        <div className="p-6 rounded-[2rem] bg-emerald-50 border border-emerald-100 shadow-soft">
+                                            <div className="flex items-center gap-2 mb-3">
+                                                <div className="w-8 h-8 rounded-xl bg-emerald-500 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+                                                    <CheckCircle className="w-4 h-4 text-white" />
+                                                </div>
+                                                <h4 className="text-sm font-black text-emerald-800 tracking-tight">
+                                                    Home Remedies
+                                                </h4>
+                                            </div>
+                                            <ul className="space-y-3">
+                                                {analysisResult.homeRemedies.map((remedy, index) => (
+                                                    <li
+                                                        key={index}
+                                                        className="flex items-start gap-3 text-sm text-slate-700 leading-relaxed"
+                                                    >
+                                                        <span className="mt-1 h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0" />
+                                                        <span>{remedy}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    {/* When to See a Doctor */}
+                                    <div className="p-6 rounded-[2rem] bg-amber-50 border border-amber-100 shadow-soft">
+                                        <div className="flex items-start gap-3">
+                                            <div className="w-9 h-9 rounded-xl bg-amber-500 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(245,158,11,0.15)]">
+                                                <AlertTriangle className="w-4 h-4 text-white" />
+                                            </div>
+                                            <div className="min-w-0">
+                                                <h4 className="text-sm font-black text-amber-800 tracking-tight mb-1">
+                                                    When to See a Doctor
+                                                </h4>
+                                                <p className="text-sm text-amber-900/90 leading-relaxed">
+                                                    {analysisResult.whenToSeeDoctor}
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 

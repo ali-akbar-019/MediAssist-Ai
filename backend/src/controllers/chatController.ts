@@ -4,6 +4,17 @@ import { AuthRequest } from "../middleware/authMiddleware";
 import { sendChatMessage } from "../services/aiService";
 import { generateSessionId, paginate, successResponse } from "../utils/helpers";
 
+const buildSessionTitle = (message: string): string => {
+    const normalizedMessage = message.trim().replace(/\s+/g, " ");
+    if (!normalizedMessage) {
+        return "New Conversation";
+    }
+
+    return normalizedMessage.length > 50
+        ? `${normalizedMessage.substring(0, 50)}...`
+        : normalizedMessage;
+};
+
 // @desc    Send message to AI doctor
 // @route   POST /api/chat/message
 // @access  Private
@@ -25,7 +36,7 @@ export const sendMessage = async (
             chatSession = await ChatHistory.create({
                 user: user._id,
                 sessionId,
-                title: message.substring(0, 50) + (message.length > 50 ? "..." : ""),
+                title: buildSessionTitle(message),
                 messages: [],
             });
         }
@@ -36,6 +47,10 @@ export const sendMessage = async (
             content: message,
             timestamp: new Date(),
         });
+
+        if (chatSession.title === "New Conversation") {
+            chatSession.title = buildSessionTitle(message);
+        }
 
         // Prepare conversation history for AI
         const conversationHistory = chatSession.messages.map((msg) => ({

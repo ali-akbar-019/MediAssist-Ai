@@ -33,6 +33,26 @@ const ChatWindow = () => {
     const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
+    const getSessionTitle = (session: (typeof sessions)[number]) => {
+        if (session.title && session.title !== "New Conversation") {
+            return session.title;
+        }
+
+        const firstUserMessage = session.messages?.find(
+            (message) => message.role === "user" && message.content.trim()
+        );
+        const fallbackText = firstUserMessage?.content ?? session.messages?.[0]?.content ?? "New Conversation";
+
+        const normalizedTitle = fallbackText.trim().replace(/\s+/g, " ");
+        if (!normalizedTitle) {
+            return "New Conversation";
+        }
+
+        return normalizedTitle.length > 30
+            ? `${normalizedTitle.substring(0, 30)}...`
+            : normalizedTitle;
+    };
+
     useEffect(() => {
         handleGetSessions();
     }, []);
@@ -125,7 +145,7 @@ const ChatWindow = () => {
                                                 : "text-navy-900"
                                         )}
                                     >
-                                        {truncate(session.title, 30)}
+                                        {truncate(getSessionTitle(session), 30)}
                                     </p>
                                     <div
                                         className={cn(
@@ -203,7 +223,7 @@ const ChatWindow = () => {
                             className="flex flex-col items-center justify-center h-full gap-8 text-center py-12"
                         >
                             <motion.div
-                                animate={{ 
+                                animate={{
                                     y: [0, -15, 0],
                                     rotate: [0, 5, -5, 0]
                                 }}
@@ -213,7 +233,7 @@ const ChatWindow = () => {
                                 <div className="absolute inset-0 bg-emerald-500/10 rounded-3xl animate-pulse blur-xl" />
                                 <Stethoscope className="w-10 h-10 text-emerald-400 relative z-10" />
                             </motion.div>
-                            
+
                             <div className="space-y-3">
                                 <h3 className="text-3xl font-black text-navy-900 tracking-tighter">
                                     Initiating <span className="italic">Analysis.</span>
@@ -269,7 +289,7 @@ const ChatWindow = () => {
                                     {[0, 1, 2].map((i) => (
                                         <motion.div
                                             key={i}
-                                            animate={{ 
+                                            animate={{
                                                 scale: [1, 1.5, 1],
                                                 opacity: [0.3, 1, 0.3]
                                             }}
