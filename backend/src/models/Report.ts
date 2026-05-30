@@ -30,6 +30,12 @@ export interface IReport extends Document {
         severity: "mild" | "moderate" | "severe" | "emergency";
         recommendation: string;
         homeRemedies: string[];
+        medicinesToConsider?: Array<{
+            name: string;
+            type: "OTC" | "Prescription";
+            reason: string;
+            howToUse: string;
+        }>;
         whenToSeeDoctor: string;
         specialistType?: string;
     };
@@ -120,6 +126,17 @@ const ReportSchema = new Schema<IReport>(
                 required: [true, "Recommendation is required"],
             },
             homeRemedies: [{ type: String }],
+            medicinesToConsider: {
+                type: [
+                    {
+                        name: { type: String },
+                        type: { type: String, enum: ["OTC", "Prescription"] },
+                        reason: { type: String },
+                        howToUse: { type: String },
+                    },
+                ],
+                default: [],
+            },
             whenToSeeDoctor: {
                 type: String,
                 required: [true, "When to see doctor is required"],

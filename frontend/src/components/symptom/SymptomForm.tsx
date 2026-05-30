@@ -9,6 +9,7 @@ import {
     Shield,
     CheckCircle,
     AlertTriangle,
+    Pill,
 } from "lucide-react";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
@@ -57,7 +58,7 @@ const SymptomForm = () => {
     } = useSymptomStore();
 
     const { handleCreateSymptom, analysisResult } = useSymptoms();
-
+    // console.log("ai analysis result: ", analysisResult);
     const [symptomInput, setSymptomInput] = useState("");
     const [emergencyVisible, setEmergencyVisible] = useState(false);
     const [emergencyTrigger, setEmergencyTrigger] = useState("");
@@ -121,7 +122,7 @@ const SymptomForm = () => {
             {/* Clinical Analytics Step Indicator */}
             <div className="relative pt-4">
                 <div className="flex items-center justify-between relative z-10">
-                    {STEPS.map((step, index) => {
+                    {STEPS.map((step) => {
                         const isCompleted = currentStep > step.number;
                         const isCurrent = currentStep === step.number;
 
@@ -546,8 +547,36 @@ const SymptomForm = () => {
                                                 ))}
                                             </ul>
                                         </div>
-                                    </div>
 
+                                    </div>
+                                    {/* Medicines to Consider */}
+                                    <div className="p-6 rounded-[2rem] bg-blue-50 border border-blue-100 shadow-soft mt-4">
+                                        <div className="flex items-center gap-2 mb-3">
+                                            <div className="w-8 h-8 rounded-xl bg-blue-500 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(59,130,246,0.2)]">
+                                                <Pill className="w-4 h-4 text-white" />
+                                            </div>
+                                            <h4 className="text-sm font-black text-blue-800 tracking-tight">
+                                                Medicines to Consider
+                                            </h4>
+                                        </div>
+                                        <ul className="space-y-3">
+                                            {analysisResult.medicinesToConsider?.map((medicine, index) => (
+                                                <li
+                                                    key={index}
+                                                    className="flex items-start gap-3 text-sm text-slate-700 leading-relaxed"
+                                                >
+                                                    <span className="mt-1 h-1.5 w-1.5 rounded-full bg-blue-500 shrink-0" />
+                                                    <span>
+                                                        <strong>{medicine.name}</strong> ({medicine.type})
+                                                        <br />
+                                                        {medicine.reason}
+                                                        <br />
+                                                        <em>{medicine.howToUse}</em>
+                                                    </span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
                                     {/* When to See a Doctor */}
                                     <div className="p-6 rounded-[2rem] bg-amber-50 border border-amber-100 shadow-soft">
                                         <div className="flex items-start gap-3">

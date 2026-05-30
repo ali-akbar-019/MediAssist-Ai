@@ -43,6 +43,12 @@ export const createSymptom = async (
             allergies: user.allergies,
         });
 
+        const normalizedAiAnalysis = {
+            ...aiAnalysis,
+            medicinesToConsider: aiAnalysis.medicinesToConsider ?? [],
+        };
+        // console.log("Normalized AI Analysis: ", normalizedAiAnalysis);
+
         // Save symptom with AI analysis
         const symptom = await Symptom.create({
             user: user._id,
@@ -55,7 +61,7 @@ export const createSymptom = async (
             durationUnit,
             worseAt,
             additionalNotes,
-            aiAnalysis,
+            aiAnalysis: normalizedAiAnalysis,
         });
 
         res.status(201).json(

@@ -21,6 +21,12 @@ export interface ISymptom extends Document {
         severity: "mild" | "moderate" | "severe" | "emergency";
         recommendation: string;
         homeRemedies: string[];
+        medicinesToConsider?: Array<{
+            name: string;
+            type: "OTC" | "Prescription";
+            reason: string;
+            howToUse: string;
+        }>;
         whenToSeeDoctor: string;
         specialistType?: string;
     };
@@ -99,6 +105,17 @@ const SymptomSchema = new Schema<ISymptom>(
             },
             recommendation: { type: String },
             homeRemedies: [{ type: String }],
+            medicinesToConsider: {
+                type: [
+                    {
+                        name: { type: String },
+                        type: { type: String, enum: ["OTC", "Prescription"] },
+                        reason: { type: String },
+                        howToUse: { type: String },
+                    },
+                ],
+                default: [],
+            },
             whenToSeeDoctor: { type: String },
             specialistType: { type: String },
         },

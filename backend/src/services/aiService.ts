@@ -24,11 +24,19 @@ interface PossibleCondition {
     description: string;
 }
 
+interface MedicineToConsider {
+    name: string;
+    type: "OTC" | "Prescription";
+    reason: string;
+    howToUse: string;
+}
+
 interface SymptomAnalysisResponse {
     possibleConditions: PossibleCondition[];
     severity: "mild" | "moderate" | "severe" | "emergency";
     recommendation: string;
     homeRemedies: string[];
+    medicinesToConsider?: MedicineToConsider[];
     whenToSeeDoctor: string;
     specialistType?: string;
 }

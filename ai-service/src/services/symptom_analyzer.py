@@ -56,6 +56,14 @@ Respond with this exact JSON structure:
         "Home remedy 2",
         "Home remedy 3"
     ],
+    "medicinesToConsider": [
+        {{
+            "name": "Medicine name",
+            "type": "OTC",
+            "reason": "Why this medicine might be helpful based on the symptoms",
+            "howToUse": "General guidance on how to use this medicine (e.g., dosage, frequency)"
+        }}
+    ],
     "whenToSeeDoctor": "Clear guidance on when to seek medical attention",
     "specialistType": "Type of specialist to see if needed (optional)"
 }}
@@ -65,6 +73,8 @@ Rules:
 - severity must be exactly one of: mild, moderate, severe, emergency
 - probability must be exactly one of: high, medium, low
 - homeRemedies must have 2-5 items
+- medicinesToConsider should be an empty array if no safe medicine recommendation is appropriate
+- Each medicinesToConsider item must include name, type, reason, and howToUse
 - Be specific and medically accurate
 - Consider patient age, gender, and chronic conditions
 - If severity is emergency, make that very clear in recommendation

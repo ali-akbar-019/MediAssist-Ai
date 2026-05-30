@@ -8,6 +8,7 @@ import {
     AlertTriangle,
     ChevronDown,
     ChevronUp,
+    Pill,
 } from "lucide-react";
 import type { Report } from "../../types";
 import { getSeverityInfo, getProbabilityInfo, formatDate } from "../../lib/utils";
@@ -248,6 +249,36 @@ const ReportGenerator = ({ report }: ReportGeneratorProps) => {
                                     ))}
                                 </ul>
                             </div>
+                            {/* Medicines to Consider */}
+                            {report.aiAnalysis.medicinesToConsider && report.aiAnalysis.medicinesToConsider.length > 0 && (
+                                <div className="p-6 rounded-[2rem] bg-blue-50 border border-blue-100 shadow-soft mt-4">
+                                    <div className="flex items-center gap-2 mb-3">
+                                        <div className="w-8 h-8 rounded-xl bg-blue-500 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(59,130,246,0.2)]">
+                                            <Pill className="w-4 h-4 text-white" />
+                                        </div>
+                                        <h4 className="text-sm font-black text-blue-800 tracking-tight">
+                                            Medicines to Consider
+                                        </h4>
+                                    </div>
+                                    <ul className="space-y-3">
+                                        {report.aiAnalysis.medicinesToConsider.map((medicine, index) => (
+                                            <li
+                                                key={index}
+                                                className="flex items-start gap-3 text-sm text-slate-700 leading-relaxed"
+                                            >
+                                                <span className="mt-1 h-1.5 w-1.5 rounded-full bg-blue-500 shrink-0" />
+                                                <span>
+                                                    <strong>{medicine.name}</strong> ({medicine.type})
+                                                    <br />
+                                                    {medicine.reason}
+                                                    <br />
+                                                    <em>{medicine.howToUse}</em>
+                                                </span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
 
                             {/* When to See Doctor */}
                             <div className="p-4 rounded-xl bg-amber-50 border border-amber-100">

@@ -14,13 +14,46 @@ def parse_ai_json_response(response_text: str) -> dict[str, Any]:
     """Safely parse JSON from AI response"""
     try:
         cleaned = clean_json_response(response_text)
-        return json.loads(cleaned)
+        parsed = json.loads(cleaned)
+
+        # Ensure medicinesToConsider exists and is normalized.
+        medicines = parsed.get("medicinesToConsider", [])
+        if isinstance(medicines, dict):
+            medicines = [medicines]
+        if isinstance(medicines, list):
+            parsed["medicinesToConsider"] = [
+                {
+                    **medicine,
+                    "howToUse": medicine.get("howToUse", ""),
+                }
+                for medicine in medicines
+                if isinstance(medicine, dict)
+            ]
+        else:
+            parsed["medicinesToConsider"] = []
+        
+        return parsed
     except json.JSONDecodeError:
         # Try to extract JSON from response
         json_match = re.search(r"\{.*\}", response_text, re.DOTALL)
         if json_match:
             try:
-                return json.loads(json_match.group())
+                parsed = json.loads(json_match.group())
+                medicines = parsed.get("medicinesToConsider", [])
+                if isinstance(medicines, dict):
+                    medicines = [medicines]
+                if isinstance(medicines, list):
+                    parsed["medicinesToConsider"] = [
+                        {
+                            **medicine,
+                            "howToUse": medicine.get("howToUse", ""),
+                        }
+                        for medicine in medicines
+                        if isinstance(medicine, dict)
+                    ]
+                else:
+                    parsed["medicinesToConsider"] = []
+                return parsed
             except json.JSONDecodeError:
                 pass
         raise ValueError("Could not parse AI response as JSON")

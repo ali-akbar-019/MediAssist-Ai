@@ -237,6 +237,23 @@ export const downloadReportAsPDF = (report: Report): void => {
         yPos += 6;
     });
     yPos += 4;
+    // Medicines to Consider
+    if (report.aiAnalysis.medicinesToConsider && report.aiAnalysis.medicinesToConsider.length > 0) {
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(30, 58, 95);
+        doc.setFontSize(11);
+        doc.text("Medicines to Consider:", 14, yPos);
+        yPos += 6;
+
+        doc.setFont("helvetica", "normal");
+        doc.setTextColor(60, 60, 60);
+        doc.setFontSize(10);
+        report.aiAnalysis.medicinesToConsider.forEach((medicine) => {
+            doc.text(`• ${medicine.name} (${medicine.type})`, 18, yPos);
+            yPos += 6;
+        });
+        yPos += 4;
+    }
 
     // When to See Doctor
     doc.setFont("helvetica", "bold");

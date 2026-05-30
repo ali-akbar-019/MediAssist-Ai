@@ -76,6 +76,12 @@ export interface AIAnalysis {
     homeRemedies: string[];
     whenToSeeDoctor: string;
     specialistType?: string;
+    medicinesToConsider?: Array<{
+        name: string;
+        type: "OTC" | "Prescription";
+        reason: string;
+        howToUse: string;
+    }>;
 }
 
 export interface Symptom {

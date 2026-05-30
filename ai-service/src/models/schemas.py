@@ -97,11 +97,22 @@ class PossibleCondition(BaseModel):
     description: str
 
 
+class MedicineToConsider(BaseModel):
+    name: str
+    type: str  # OTC or Prescription
+    reason: str
+    howToUse: str = Field(
+        default="",
+        description="General guidance on how to use this medicine",
+    )
+
+
 class SymptomAnalysisResponse(BaseModel):
     possibleConditions: List[PossibleCondition]
     severity: SeverityLevel
     recommendation: str
     homeRemedies: List[str]
+    medicinesToConsider: List[MedicineToConsider] = Field(default_factory=list)
     whenToSeeDoctor: str
     specialistType: Optional[str] = None
 
