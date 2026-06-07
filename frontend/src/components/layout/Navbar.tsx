@@ -13,6 +13,7 @@ import {
     LogOut,
     User,
     ChevronDown,
+    Clock,
 } from "lucide-react";
 import { useAuthStore } from "../../store/authStore";
 import { useAuth } from "../../hooks/useAuth";
@@ -34,6 +35,7 @@ const iconMap = {
     LayoutDashboard,
     Pill,
     MapPin,
+    Clock,
 };
 
 const Navbar = () => {
@@ -83,7 +85,7 @@ const Navbar = () => {
 
                     {/* Desktop Navigation - Elite Link Style */}
                     <div className="hidden lg:flex items-center gap-1">
-                        {NAV_ITEMS.map((item) => {
+                        {NAV_ITEMS.filter(item => ["Home", "Dashboard", "Timeline"].includes(item.label)).map((item) => {
                             const Icon = iconMap[item.icon as keyof typeof iconMap];
                             const active = isActive(item.href);
                             return (
@@ -110,6 +112,72 @@ const Navbar = () => {
                                 </Link>
                             );
                         })}
+
+                        {/* Services Dropdown */}
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <button className={cn(
+                                    "relative flex items-center gap-2.5 px-5 py-2.5 rounded-2xl text-[13px] font-bold transition-all duration-500 group text-slate-500 hover:text-navy-900",
+                                    NAV_ITEMS.filter(item => !["Home", "Dashboard", "Timeline"].includes(item.label)).some(item => isActive(item.href)) && "text-emerald-900"
+                                )}>
+                                    <div className="flex items-center gap-2">
+                                        <div className="grid grid-cols-2 gap-0.5 group-hover:rotate-180 transition-transform duration-700">
+                                            <div className="w-1.5 h-1.5 rounded-[3px] bg-emerald-500" />
+                                            <div className="w-1.5 h-1.5 rounded-[3px] bg-emerald-400/50" />
+                                            <div className="w-1.5 h-1.5 rounded-[3px] bg-emerald-400/50" />
+                                            <div className="w-1.5 h-1.5 rounded-[3px] bg-emerald-500" />
+                                        </div>
+                                        <span>Health Services</span>
+                                        <ChevronDown className="w-3.5 h-3.5 text-slate-400 transition-transform group-data-[state=open]:rotate-180" />
+                                    </div>
+                                    {NAV_ITEMS.filter(item => !["Home", "Dashboard", "Timeline"].includes(item.label)).some(item => isActive(item.href)) && (
+                                        <motion.div
+                                            layoutId="nav-active"
+                                            className="absolute inset-0 bg-emerald-50 rounded-2xl -z-10 border border-emerald-100/50 shadow-sm"
+                                        />
+                                    )}
+                                </button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="start" className="w-72 p-3 rounded-[2rem] glass-panel border-white/20 shadow-luxe mt-4 ring-1 ring-black/5 animate-in fade-in zoom-in-95 duration-300">
+                                <div className="px-3 py-2 mb-2">
+                                    <p className="text-[10px] uppercase tracking-widest font-black text-slate-400 leading-none">Diagnostic Suite</p>
+                                </div>
+                                <div className="grid gap-1.5">
+                                    {NAV_ITEMS.filter(item => !["Home", "Dashboard", "Timeline"].includes(item.label)).map((item) => {
+                                        const Icon = iconMap[item.icon as keyof typeof iconMap];
+                                        const active = isActive(item.href);
+                                        return (
+                                            <DropdownMenuItem
+                                                key={item.href}
+                                                onClick={() => navigate(item.href)}
+                                                className={cn(
+                                                    "rounded-2xl flex items-center gap-4 focus:bg-emerald-50/50 cursor-pointer p-3 transition-all group/item",
+                                                    active && "bg-emerald-50"
+                                                )}
+                                            >
+                                                <div className={cn(
+                                                    "w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-500",
+                                                    active ? "bg-emerald-100 text-emerald-600" : "bg-slate-100/50 text-slate-500 group-hover/item:bg-emerald-100 group-hover/item:text-emerald-600"
+                                                )}>
+                                                    {Icon && <Icon className="w-5 h-5" />}
+                                                </div>
+                                                <div className="flex flex-col">
+                                                    <span className={cn(
+                                                        "text-sm font-black leading-none mb-1",
+                                                        active ? "text-navy-900" : "text-slate-600 group-hover/item:text-navy-900"
+                                                    )}>{item.label}</span>
+                                                    <span className="text-[10px] text-slate-400 font-medium leading-none">
+                                                        {item.label === "Symptom Analyzer" ? "AI-powered diagnostics" : 
+                                                         item.label === "AI Doctor Chat" ? "Real-time AI consultation" :
+                                                         item.label === "Medicine Info" ? "Drug database & usage" : "Interactive care locator"}
+                                                    </span>
+                                                </div>
+                                            </DropdownMenuItem>
+                                        );
+                                    })}
+                                </div>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </div>
 
                     {/* Desktop Auth - Premium Dropdown */}
@@ -212,27 +280,70 @@ const Navbar = () => {
                             exit={{ opacity: 0, height: 0 }}
                             className="lg:hidden border-t border-emerald-100/50 bg-white/40 backdrop-blur-3xl overflow-hidden"
                         >
-                            <div className="p-8 space-y-3">
-                                {NAV_ITEMS.map((item) => {
-                                    const Icon = iconMap[item.icon as keyof typeof iconMap];
-                                    const active = isActive(item.href);
-                                    return (
-                                        <Link
-                                            key={item.href}
-                                            to={item.href}
-                                            onClick={() => setIsMobileMenuOpen(false)}
-                                            className={cn(
-                                                "flex items-center gap-5 px-6 py-5 rounded-[2rem] text-lg font-bold transition-all",
-                                                active
-                                                    ? "bg-navy-900 text-white shadow-navy"
-                                                    : "text-slate-500 hover:bg-emerald-50 hover:text-navy-900"
-                                            )}
-                                        >
-                                            {Icon && <Icon className="w-6 h-6" />}
-                                            {item.label}
-                                        </Link>
-                                    );
-                                })}
+                            <div className="p-8 space-y-8">
+                                {/* Primary Actions */}
+                                <div className="space-y-3">
+                                    <p className="px-6 text-[10px] uppercase font-black tracking-[0.2em] text-slate-400">Navigation</p>
+                                    {NAV_ITEMS.filter(item => ["Home", "Dashboard", "Timeline"].includes(item.label)).map((item) => {
+                                        const Icon = iconMap[item.icon as keyof typeof iconMap];
+                                        const active = isActive(item.href);
+                                        return (
+                                            <Link
+                                                key={item.href}
+                                                to={item.href}
+                                                onClick={() => setIsMobileMenuOpen(false)}
+                                                className={cn(
+                                                    "flex items-center gap-5 px-6 py-5 rounded-[2rem] text-lg font-bold transition-all",
+                                                    active
+                                                        ? "bg-navy-900 text-white shadow-navy"
+                                                        : "text-slate-500 hover:bg-emerald-50 hover:text-navy-900"
+                                                )}
+                                            >
+                                                {Icon && <Icon className="w-6 h-6" />}
+                                                {item.label}
+                                            </Link>
+                                        );
+                                    })}
+                                </div>
+
+                                {/* Health Services */}
+                                <div className="space-y-3">
+                                    <p className="px-6 text-[10px] uppercase font-black tracking-[0.2em] text-slate-400">Health Services</p>
+                                    <div className="grid grid-cols-1 gap-2">
+                                        {NAV_ITEMS.filter(item => !["Home", "Dashboard", "Timeline"].includes(item.label)).map((item) => {
+                                            const Icon = iconMap[item.icon as keyof typeof iconMap];
+                                            const active = isActive(item.href);
+                                            return (
+                                                <Link
+                                                    key={item.href}
+                                                    to={item.href}
+                                                    onClick={() => setIsMobileMenuOpen(false)}
+                                                    className={cn(
+                                                        "flex items-center gap-5 px-6 py-4 rounded-[1.5rem] transition-all",
+                                                        active
+                                                            ? "bg-emerald-50 text-emerald-900 border border-emerald-100"
+                                                            : "text-slate-600 hover:bg-emerald-50/50"
+                                                    )}
+                                                >
+                                                    <div className={cn(
+                                                        "w-12 h-12 rounded-2xl flex items-center justify-center",
+                                                        active ? "bg-emerald-200/50 text-emerald-600" : "bg-white/80 text-slate-400 shadow-sm"
+                                                    )}>
+                                                        {Icon && <Icon className="w-6 h-6" />}
+                                                    </div>
+                                                    <div>
+                                                        <p className="font-bold text-base leading-tight">{item.label}</p>
+                                                        <p className="text-[11px] text-slate-400 font-medium">
+                                                            {item.label === "Symptom Analyzer" ? "AI Diagnostics" : 
+                                                            item.label === "AI Doctor Chat" ? "Consultant" :
+                                                            item.label === "Medicine Info" ? "Drug Info" : "Care Locator"}
+                                                        </p>
+                                                    </div>
+                                                </Link>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
 
                                 <div className="pt-8 mt-6 border-t border-emerald-100/50">
                                     {isAuthenticated && user ? (

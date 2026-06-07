@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Clock, Loader2 } from "lucide-react";
+import { Clock, Activity } from "lucide-react";
 import { cn } from "../../lib/utils";
 import type { TimelineEntry as TimelineEntryType } from "../../types";
 import TimelineEntry from "./TimelineEntry";
@@ -23,15 +23,14 @@ const TimelineView = ({
 }: TimelineViewProps) => {
     if (isLoading) {
         return (
-            <div className="flex flex-col items-center justify-center py-20 gap-3">
-                <Loader2
-                    size={32}
-                    className="animate-spin"
-                    style={{ color: "var(--color-navy-900)" }}
-                />
-                <p className="text-sm" style={{ color: "var(--color-medical-muted)" }}>
-                    Loading your health timeline...
-                </p>
+            <div className="flex flex-col items-center justify-center py-40 gap-4">
+                <div className="relative">
+                    <div className="w-12 h-12 rounded-2xl border-[3px] border-emerald-500/10 border-t-emerald-500 animate-spin" />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                        <Activity size={16} className="text-emerald-500 animate-pulse" />
+                    </div>
+                </div>
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Synchronizing Timeline</p>
             </div>
         );
     }
@@ -39,49 +38,38 @@ const TimelineView = ({
     if (entries.length === 0) {
         return (
             <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className={cn(
-                    "flex flex-col items-center justify-center py-20",
-                    "rounded-2xl border border-dashed"
-                )}
-                style={{ borderColor: "var(--color-medical-border)" }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="glass-panel p-20 rounded-[3rem] border-white/20 shadow-luxe ring-1 ring-black/5 flex flex-col items-center text-center"
             >
-                <div
-                    className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4"
-                    style={{ backgroundColor: "var(--color-medical-surface)" }}
-                >
-                    <Clock size={28} style={{ color: "var(--color-medical-muted)" }} />
+                <div className="w-20 h-20 rounded-3xl bg-slate-50 flex items-center justify-center mb-8 shadow-inner">
+                    <Clock size={32} className="text-slate-300" />
                 </div>
-                <h3 className="font-semibold text-lg mb-2" style={{ color: "var(--color-navy-900)" }}>
-                    No entries found
-                </h3>
-                <p className="text-sm text-center max-w-xs" style={{ color: "var(--color-medical-muted)" }}>
-                    Your symptom analyses will appear here as a timeline once you start using the analyzer.
+                <h3 className="text-2xl font-black text-navy-900 mb-3 tracking-tight">Diagnostic Archive Empty</h3>
+                <p className="text-sm text-slate-500 max-w-xs font-medium leading-relaxed mb-8">
+                    Your longitudinal health data will manifest here once you begin your analysis journey.
                 </p>
+                <button className="px-8 py-3.5 bg-navy-900 text-white rounded-2xl text-xs font-black uppercase tracking-widest shadow-navy hover:scale-105 transition-transform">
+                    Initiate First Analysis
+                </button>
             </motion.div>
         );
     }
 
     return (
-        <div className="space-y-6">
-            {/* Entry Count */}
-            <div className="flex items-center justify-between">
-                <p className="text-sm" style={{ color: "var(--color-medical-muted)" }}>
-                    Showing{" "}
-                    <span className="font-semibold" style={{ color: "var(--color-navy-900)" }}>
-                        {entries.length}
-                    </span>{" "}
-                    of{" "}
-                    <span className="font-semibold" style={{ color: "var(--color-navy-900)" }}>
-                        {total}
-                    </span>{" "}
-                    entries
-                </p>
+        <div className="space-y-8">
+            {/* List Header */}
+            <div className="flex items-center justify-between px-2">
+                <div className="flex items-center gap-3">
+                    <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+                    <p className="text-[10px] font-black text-navy-900 uppercase tracking-[0.2em]">
+                        Showing {entries.length} of {total} Diagnostic Events
+                    </p>
+                </div>
             </div>
 
-            {/* Timeline Entries */}
-            <div className="relative">
+            {/* entries list */}
+            <div className="space-y-4">
                 {entries.map((entry, index) => (
                     <TimelineEntry
                         key={entry._id}
@@ -92,26 +80,18 @@ const TimelineView = ({
                 ))}
             </div>
 
-            {/* Pagination */}
+            {/* Elite Pagination */}
             {totalPages > 1 && (
-                <div className="flex items-center justify-center gap-2 pt-4">
+                <div className="flex items-center justify-center gap-4 pt-10">
                     <button
                         onClick={() => onPageChange(page - 1)}
                         disabled={page === 1}
-                        className={cn(
-                            "px-4 py-2 text-sm font-medium rounded-xl border",
-                            "transition-all duration-200",
-                            "disabled:opacity-40 disabled:cursor-not-allowed"
-                        )}
-                        style={{
-                            borderColor: "var(--color-medical-border)",
-                            color: "var(--color-medical-muted)",
-                        }}
+                        className="px-6 py-3 rounded-2xl border border-slate-100 bg-white shadow-sm text-xs font-black uppercase tracking-widest text-slate-400 hover:text-navy-900 hover:border-slate-200 disabled:opacity-30 disabled:hover:text-slate-400 disabled:hover:border-slate-100 transition-all font-inter"
                     >
                         Previous
                     </button>
 
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-2 p-1.5 bg-slate-100/50 rounded-[1.5rem] border border-slate-200/30">
                         {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
                             const pageNum =
                                 totalPages <= 5
@@ -122,23 +102,17 @@ const TimelineView = ({
                                             ? totalPages - 4 + i
                                             : page - 2 + i;
 
+                            const active = page === pageNum;
                             return (
                                 <button
                                     key={pageNum}
                                     onClick={() => onPageChange(pageNum)}
                                     className={cn(
-                                        "w-8 h-8 text-sm font-medium rounded-lg transition-all"
+                                        "w-10 h-10 rounded-[1.1rem] text-sm font-black transition-all",
+                                        active
+                                            ? "bg-navy-900 text-white shadow-navy"
+                                            : "text-slate-400 hover:text-navy-900 hover:bg-white"
                                     )}
-                                    style={{
-                                        backgroundColor:
-                                            page === pageNum
-                                                ? "var(--color-navy-900)"
-                                                : "transparent",
-                                        color:
-                                            page === pageNum
-                                                ? "white"
-                                                : "var(--color-medical-muted)",
-                                    }}
                                 >
                                     {pageNum}
                                 </button>
@@ -149,15 +123,7 @@ const TimelineView = ({
                     <button
                         onClick={() => onPageChange(page + 1)}
                         disabled={page === totalPages}
-                        className={cn(
-                            "px-4 py-2 text-sm font-medium rounded-xl border",
-                            "transition-all duration-200",
-                            "disabled:opacity-40 disabled:cursor-not-allowed"
-                        )}
-                        style={{
-                            borderColor: "var(--color-medical-border)",
-                            color: "var(--color-medical-muted)",
-                        }}
+                        className="px-6 py-3 rounded-2xl border border-slate-100 bg-white shadow-sm text-xs font-black uppercase tracking-widest text-slate-400 hover:text-navy-900 hover:border-slate-200 disabled:opacity-30 disabled:hover:text-slate-400 disabled:hover:border-slate-100 transition-all"
                     >
                         Next
                     </button>

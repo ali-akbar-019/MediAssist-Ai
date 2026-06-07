@@ -18,7 +18,8 @@ export const ROUTES = {
     ANALYZER: "/analyzer",
     CHAT: "/chat",
     DASHBOARD: "/dashboard",
-    TIMELINE: "/timeline",        // NEW
+    TIMELINE: "/timeline",
+    REPORTS: "/reports",
     MEDICINE: "/medicine",
     HOSPITALS: "/hospitals",
     NOT_FOUND: "*",

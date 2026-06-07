@@ -19,6 +19,15 @@ export const formatDate = (dateString: string): string => {
   });
 };
 
+// Format date short (e.g., "Jan 23")
+export const formatDateShort = (dateString: string): string => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+  });
+};
+
 
 // Format date with time
 export const formatDateTime = (dateString: string): string => {

@@ -17,18 +17,44 @@ export const getTimeline = async (
 
         const severity = req.query["severity"] as string | undefined;
         const bodyPart = req.query["bodyPart"] as string | undefined;
+        const search = req.query["search"] as string | undefined;
         const startDate = req.query["startDate"] as string | undefined;
         const endDate = req.query["endDate"] as string | undefined;
         const sortOrder = (req.query["sortOrder"] as string) || "desc";
 
         // Build query
-        const query: Record<string, unknown> = { user: req.user?._id };
+        const query: any = { user: req.user?._id };
 
-        if (severity) {
-            query["aiAnalysis.severity"] = severity;
+        const searchStr = search?.trim();
+        if (searchStr) {
+            query["$or"] = [
+                { bodyPart: { $regex: searchStr, $options: "i" } },
+                { symptoms: { $regex: searchStr, $options: "i" } },
+                { additionalNotes: { $regex: searchStr, $options: "i" } },
+            ];
         }
 
-        if (bodyPart) {
+        if (severity && severity !== "all") {
+            // Map category to numeric range for consistent filtering
+            switch (severity.toLowerCase()) {
+                case "mild":
+                    query["severity"] = { $gte: 1, $lte: 3 };
+                    break;
+                case "moderate":
+                    query["severity"] = { $gte: 4, $lte: 5 };
+                    break;
+                case "severe":
+                    query["severity"] = { $gte: 6, $lte: 8 };
+                    break;
+                case "emergency":
+                    query["severity"] = { $gte: 9, $lte: 10 };
+                    break;
+                default:
+                    query["aiAnalysis.severity"] = severity;
+            }
+        }
+
+        if (bodyPart && bodyPart !== "all") {
             query["bodyPart"] = { $regex: bodyPart, $options: "i" };
         }
 

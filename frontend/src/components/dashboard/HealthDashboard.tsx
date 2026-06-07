@@ -14,6 +14,7 @@ import { useAuthStore } from "../../store/authStore";
 import { useSymptoms } from "../../hooks/useSymptoms";
 import HistoryCard from "./HistoryCard";
 import StatsChart from "./StatsChart";
+import VitalityIntelligence from "./VitalityIntelligence";
 import { ROUTES } from "../../constants";
 import { formatRelativeTime } from "../../lib/utils";
 
@@ -121,6 +122,9 @@ const HealthDashboard = () => {
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
             </motion.div>
+
+            {/* WOW Factor: System Vitality Intelligence */}
+            <VitalityIntelligence recentEntries={symptoms} />
 
             {/* Stat Console */}
             {isLoadingStats ? (
@@ -237,17 +241,34 @@ const HealthDashboard = () => {
                         </Link>
                     </motion.div>
                 ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                        {symptoms.map((symptom, index) => (
-                            <HistoryCard
-                                key={symptom._id}
-                                symptom={symptom}
-                                index={index}
-                                onDelete={handleDeleteSymptom}
-                                onDownloadReport={handleDownloadReport}
-                                isGeneratingReport={isGeneratingReport}
-                            />
-                        ))}
+                    <div className="space-y-10">
+                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                            {symptoms.map((symptom, index) => (
+                                <HistoryCard
+                                    key={symptom._id}
+                                    symptom={symptom}
+                                    index={index}
+                                    onDelete={handleDeleteSymptom}
+                                    onDownloadReport={handleDownloadReport}
+                                    isGeneratingReport={isGeneratingReport}
+                                />
+                            ))}
+                        </div>
+                        
+                        <div className="flex justify-center pt-4">
+                            <Link 
+                                to={ROUTES.REPORTS}
+                                className="group flex items-center gap-4 px-10 py-4 rounded-2xl bg-white border border-slate-100 text-[11px] font-black uppercase tracking-[0.2em] text-navy-900 hover:border-emerald-500 hover:bg-emerald-50/30 transition-all shadow-sm"
+                            >
+                                <span className="relative">
+                                    Expand Clinical History
+                                    <div className="absolute -bottom-1 left-0 w-0 h-[1px] bg-emerald-500 group-hover:w-full transition-all duration-500" />
+                                </span>
+                                <div className="w-8 h-8 rounded-xl bg-slate-50 flex items-center justify-center group-hover:bg-emerald-500 group-hover:text-white transition-all">
+                                    <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
+                                </div>
+                            </Link>
+                        </div>
                     </div>
                 )}
             </div>

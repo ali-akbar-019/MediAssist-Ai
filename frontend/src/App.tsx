@@ -11,6 +11,7 @@ import Chat from "./pages/Chat";
 import Dashboard from "./pages/Dashboard";
 import MedicineInfo from "./pages/MedicineInfo";
 import HospitalFinder from "./pages/HospitalFinder";
+import Reports from "./pages/Reports";
 import NotFound from "./pages/NotFound";
 
 // Layout
@@ -117,6 +118,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <TimelinePage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path={ROUTES.REPORTS}
+                element={
+                  <ProtectedRoute>
+                    <Reports />
                   </ProtectedRoute>
                 }
               />

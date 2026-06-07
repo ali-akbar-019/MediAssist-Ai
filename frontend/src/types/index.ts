@@ -302,6 +302,8 @@ export type TimelineFilter = {
     startDate?: string;
     endDate?: string;
     sortOrder?: "asc" | "desc";
+    search?: string;
+    view?: TimelineView;
 };
 
 export type TimelineView = "list" | "calendar";
