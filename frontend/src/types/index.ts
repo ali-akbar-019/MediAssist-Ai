@@ -260,3 +260,48 @@ export interface Toast {
     title: string;
     description?: string;
 }
+
+
+export interface TimelineEntry {
+    _id: string;
+    user: string;
+    bodyPart: string;
+    bodySide: "front" | "back";
+    symptoms: string[];
+    painType: string;
+    severity: number;
+    duration: string;
+    durationUnit: string;
+    worseAt: string;
+    additionalNotes?: string;
+    aiAnalysis?: AIAnalysis;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface TimelineStats {
+    totalEntries: number;
+    averageSeverity: number;
+    mostAffectedPart: string;
+    severityTrend: Array<{
+        date: string;
+        severity: number;
+        bodyPart: string;
+    }>;
+    severityDistribution: {
+        mild: number;
+        moderate: number;
+        severe: number;
+        emergency: number;
+    };
+}
+
+export type TimelineFilter = {
+    severity?: SeverityLevel;
+    bodyPart?: string;
+    startDate?: string;
+    endDate?: string;
+    sortOrder?: "asc" | "desc";
+};
+
+export type TimelineView = "list" | "calendar";

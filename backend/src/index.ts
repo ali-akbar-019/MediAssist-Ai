@@ -14,7 +14,7 @@ import chatRoutes from "./routes/chatRoutes";
 import reportRoutes from "./routes/reportRoutes";
 import hospitalRoutes from "./routes/hospitalRoutes";
 import medicineRoutes from "./routes/medicineRoutes";
-
+import timelineRoutes from "./routes/timelineRoutes";
 // Connect to MongoDB
 connectDB();
 
@@ -73,6 +73,7 @@ app.use("/api/chat", chatRoutes);
 app.use("/api/reports", reportRoutes);
 app.use("/api/hospitals", hospitalRoutes);
 app.use("/api/medicine", medicineRoutes);
+app.use("/api/timeline", timelineRoutes);
 
 // Error handling middleware
 app.use(notFound);

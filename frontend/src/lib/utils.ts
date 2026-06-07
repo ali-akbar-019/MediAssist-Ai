@@ -8,6 +8,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+
 // Format date
 export const formatDate = (dateString: string): string => {
   const date = new Date(dateString);
@@ -17,6 +18,7 @@ export const formatDate = (dateString: string): string => {
     day: "numeric",
   });
 };
+
 
 // Format date with time
 export const formatDateTime = (dateString: string): string => {
@@ -48,8 +50,22 @@ export const formatRelativeTime = (dateString: string): string => {
 };
 
 // Get severity info
-export const getSeverityInfo = (severity: SeverityLevel) => {
-  return SEVERITY_LABELS[severity];
+export const getSeverityInfo = (severity: SeverityLevel | string) => {
+  const info = {
+    mild: { color: "#10B981", label: "Mild" },
+    moderate: { color: "#F59E0B", label: "Moderate" },
+    severe: { color: "#EF4444", label: "Severe" },
+    emergency: { color: "#7C3AED", label: "Emergency" },
+  };
+
+  // fallback to existing SEVERITY_LABELS if available
+  const fallback = typeof SEVERITY_LABELS !== "undefined"
+    ? SEVERITY_LABELS[severity as SeverityLevel]
+    : null;
+
+  return info[severity as keyof typeof info] ??
+    fallback ??
+    { color: "#64748B", label: "Unknown" };
 };
 
 // Get severity from score

@@ -22,6 +22,7 @@ import { useAuthStore } from "./store/authStore";
 import { Navigate } from "react-router-dom";
 import type { ReactNode } from "react";
 import { Toaster } from "sonner";
+import TimelinePage from "./pages/Timeline";
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -108,6 +109,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <HospitalFinder />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path={ROUTES.TIMELINE}
+                element={
+                  <ProtectedRoute>
+                    <TimelinePage />
                   </ProtectedRoute>
                 }
               />

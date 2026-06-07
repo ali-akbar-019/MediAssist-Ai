@@ -18,6 +18,7 @@ export const ROUTES = {
     ANALYZER: "/analyzer",
     CHAT: "/chat",
     DASHBOARD: "/dashboard",
+    TIMELINE: "/timeline",        // NEW
     MEDICINE: "/medicine",
     HOSPITALS: "/hospitals",
     NOT_FOUND: "*",
@@ -114,12 +115,13 @@ export const GENDER_OPTIONS = [
 
 // Navigation Items
 export const NAV_ITEMS = [
-    { label: "Home", href: ROUTES.HOME, icon: "Home" },
-    { label: "Analyzer", href: ROUTES.ANALYZER, icon: "Stethoscope" },
-    { label: "AI Chat", href: ROUTES.CHAT, icon: "MessageCircle" },
-    { label: "Dashboard", href: ROUTES.DASHBOARD, icon: "LayoutDashboard" },
-    { label: "Medicine Info", href: ROUTES.MEDICINE, icon: "Pill" },
-    { label: "Find Hospitals", href: ROUTES.HOSPITALS, icon: "MapPin" },
+    { label: "Home", href: "/", icon: "Home" },
+    { label: "Symptom Analyzer", href: "/analyzer", icon: "Stethoscope" },
+    { label: "AI Doctor Chat", href: "/chat", icon: "MessageCircle" },
+    { label: "Dashboard", href: "/dashboard", icon: "LayoutDashboard" },
+    { label: "Timeline", href: "/timeline", icon: "Clock" },        // NEW
+    { label: "Medicine Info", href: "/medicine", icon: "Pill" },
+    { label: "Find Hospitals", href: "/hospitals", icon: "MapPin" },
 ] as const;
 
 // Emergency Symptoms — trigger emergency alert
