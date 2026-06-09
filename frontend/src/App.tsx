@@ -25,6 +25,7 @@ import type { ReactNode } from "react";
 import { Toaster } from "sonner";
 import TimelinePage from "./pages/Timeline";
 import Emergency from "./pages/Emergency";
+import OCR from "./pages/OCR";
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -135,6 +136,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <Emergency />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path={ROUTES.OCR}
+                element={
+                  <ProtectedRoute>
+                    <OCR />
                   </ProtectedRoute>
                 }
               />

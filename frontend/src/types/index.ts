@@ -344,3 +344,44 @@ export interface EmergencyState {
         lng: number;
     };
 }
+
+
+export type OCRDocumentType = "prescription" | "lab_report" | "medical_report" | "other";
+
+export interface ExtractedMedicine {
+    name: string;
+    dosage?: string;
+    frequency?: string;
+    duration?: string;
+    instructions?: string;
+}
+
+export interface LabValue {
+    test: string;
+    value: string;
+    unit?: string;
+    normalRange?: string;
+    status: "normal" | "high" | "low" | "critical";
+    interpretation?: string;
+}
+
+export interface OCRResult {
+    _id: string;
+    user: string;
+    documentType: OCRDocumentType;
+    fileName: string;
+    fileUrl?: string;
+    rawText: string;
+    summary: string;
+    simplifiedExplanation: string;
+    extractedMedicines: ExtractedMedicine[];
+    labValues: LabValue[];
+    importantNotes: string[];
+    warnings: string[];
+    followUpActions: string[];
+    doctorName?: string;
+    patientName?: string;
+    date?: string;
+    createdAt: string;
+    updatedAt?: string;
+}

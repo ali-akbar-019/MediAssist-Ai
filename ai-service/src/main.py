@@ -2,9 +2,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from dotenv import load_dotenv
-import os
+from src.routes import symptom_routes, chat_routes, medicine_routes, ocr_routes
 
-from src.routes import symptom_routes, chat_routes, medicine_routes
+import os
 
 load_dotenv()
 
@@ -47,7 +47,7 @@ app.add_middleware(
 app.include_router(symptom_routes.router)
 app.include_router(chat_routes.router)
 app.include_router(medicine_routes.router)
-
+app.include_router(ocr_routes.router)
 
 # Health check
 @app.get("/health", tags=["Health"])

@@ -15,6 +15,7 @@ import {
     ChevronDown,
     Clock,
     AlertTriangle,
+    ScanLine,
 } from "lucide-react";
 import { useAuthStore } from "../../store/authStore";
 import { useAuth } from "../../hooks/useAuth";
@@ -37,7 +38,8 @@ const iconMap = {
     Pill,
     MapPin,
     Clock,
-    AlertTriangle
+    AlertTriangle,
+    ScanLine,
 };
 
 const Navbar = () => {

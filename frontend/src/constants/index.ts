@@ -23,6 +23,7 @@ export const ROUTES = {
     MEDICINE: "/medicine",
     HOSPITALS: "/hospitals",
     EMERGENCY: "/emergency",
+    OCR: "/ocr",
     NOT_FOUND: "*",
 } as const;
 
@@ -125,6 +126,7 @@ export const NAV_ITEMS = [
     { label: "Medicine Info", href: "/medicine", icon: "Pill" },
     { label: "Find Hospitals", href: "/hospitals", icon: "MapPin" },
     { label: "Emergency", href: "/emergency", icon: "AlertTriangle" },
+    { label: "Scan Document", href: "/ocr", icon: "ScanLine" },
 ] as const;
 
 // Emergency Symptoms — trigger emergency alert

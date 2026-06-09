@@ -16,7 +16,7 @@ import hospitalRoutes from "./routes/hospitalRoutes";
 import medicineRoutes from "./routes/medicineRoutes";
 import timelineRoutes from "./routes/timelineRoutes";
 import emergencyRoutes from "./routes/emergencyRoutes";
-
+import ocrRoutes from "./routes/ocrRoutes";
 // Connect to MongoDB
 connectDB();
 
@@ -77,7 +77,7 @@ app.use("/api/hospitals", hospitalRoutes);
 app.use("/api/medicine", medicineRoutes);
 app.use("/api/timeline", timelineRoutes);
 app.use("/api/emergency", emergencyRoutes);
-
+app.use("/api/ocr", ocrRoutes);
 // Error handling middleware
 app.use(notFound);
 app.use(errorHandler);
