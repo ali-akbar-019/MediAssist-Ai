@@ -4,6 +4,23 @@ import EmergencyLog from "../models/EmergencyLog";
 import type { AuthRequest } from "../middleware/authMiddleware";
 import { successResponse } from "../utils/helpers";
 
+type EmergencyContactPayload = {
+    name: string;
+    phone: string;
+    relation: string;
+};
+
+const normalizeEmergencyContacts = (
+    contacts: EmergencyContactPayload[]
+): EmergencyContactPayload[] =>
+    contacts
+        .map((contact) => ({
+            name: contact.name.trim(),
+            phone: contact.phone.trim(),
+            relation: contact.relation.trim(),
+        }))
+        .filter((contact) => contact.name && contact.phone && contact.relation);
+
 // @desc    Get emergency contacts
 // @route   GET /api/emergency/contacts
 // @access  Private
@@ -12,10 +29,14 @@ export const getEmergencyContacts = async (
     res: Response
 ): Promise<void> => {
     try {
-        const user = await User.findById(req.user?._id).select("emergencyContact");
-        const contacts = user?.emergencyContact
-            ? [user.emergencyContact]
-            : [];
+        const user = await User.findById(req.user?._id).select(
+            "emergencyContact emergencyContacts"
+        );
+        const contacts = user?.emergencyContacts?.length
+            ? user.emergencyContacts
+            : user?.emergencyContact
+                ? [user.emergencyContact]
+                : [];
 
         res
             .status(200)
@@ -36,21 +57,41 @@ export const saveEmergencyContacts = async (
 ): Promise<void> => {
     try {
         const { contacts } = req.body as {
-            contacts: Array<{ name: string; phone: string; relation: string }>;
+            contacts: EmergencyContactPayload[];
         };
 
-        // Save first contact as emergency contact in user model
-        // For multiple contacts we store in emergencyContacts array
-        const updateData: Record<string, unknown> = {};
-        if (contacts.length > 0) {
-            updateData["emergencyContact"] = contacts[0];
-        }
+        const normalizedContacts = normalizeEmergencyContacts(contacts ?? []);
 
-        await User.findByIdAndUpdate(req.user?._id, updateData, { new: true });
+        const updateData =
+            normalizedContacts.length > 0
+                ? {
+                    $set: {
+                        emergencyContacts: normalizedContacts,
+                        emergencyContact: normalizedContacts[0],
+                    },
+                }
+                : {
+                    $set: {
+                        emergencyContacts: [],
+                    },
+                    $unset: {
+                        emergencyContact: "",
+                    },
+                };
+
+        await User.findByIdAndUpdate(req.user?._id, updateData, {
+            new: true,
+            runValidators: true,
+        });
 
         res
             .status(200)
-            .json(successResponse(contacts, "Contacts saved successfully"));
+            .json(
+                successResponse(
+                    normalizedContacts,
+                    "Contacts saved successfully"
+                )
+            );
     } catch (error) {
         if (error instanceof Error) {
             res.status(500).json({ success: false, message: error.message });

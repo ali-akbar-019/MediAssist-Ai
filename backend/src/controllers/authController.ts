@@ -45,7 +45,12 @@ export const register = async (req: Request, res: Response): Promise<void> => {
                     age: user.age,
                     gender: user.gender,
                     bloodGroup: user.bloodGroup,
+                    allergies: user.allergies,
+                    chronicConditions: user.chronicConditions,
+                    emergencyContact: user.emergencyContact,
+                    emergencyContacts: user.emergencyContacts,
                     createdAt: user.createdAt,
+                    updatedAt: user.updatedAt,
                 },
             },
         });
@@ -104,7 +109,9 @@ export const login = async (req: Request, res: Response): Promise<void> => {
                     allergies: user.allergies,
                     chronicConditions: user.chronicConditions,
                     emergencyContact: user.emergencyContact,
+                    emergencyContacts: user.emergencyContacts,
                     createdAt: user.createdAt,
+                    updatedAt: user.updatedAt,
                 },
             },
         });
@@ -167,19 +174,43 @@ export const updateProfile = async (
             allergies,
             chronicConditions,
             emergencyContact,
+            emergencyContacts,
         } = req.body;
 
-        const user = await User.findByIdAndUpdate(
-            req.user?._id,
-            {
+        const primaryEmergencyContact =
+            emergencyContacts?.length > 0
+                ? emergencyContacts[0]
+                : emergencyContact;
+
+        const updateData: {
+            $set: Record<string, unknown>;
+            $unset?: Record<string, string>;
+        } = {
+            $set: {
                 name,
                 age,
                 gender,
                 bloodGroup,
                 allergies,
                 chronicConditions,
-                emergencyContact,
             },
+        };
+
+        if (emergencyContacts !== undefined) {
+            updateData.$set.emergencyContacts = emergencyContacts;
+            if (primaryEmergencyContact) {
+                updateData.$set.emergencyContact = primaryEmergencyContact;
+            } else {
+                updateData.$unset = { emergencyContact: "" };
+            }
+        } else if (primaryEmergencyContact) {
+            updateData.$set.emergencyContact = primaryEmergencyContact;
+            updateData.$set.emergencyContacts = [primaryEmergencyContact];
+        }
+
+        const user = await User.findByIdAndUpdate(
+            req.user?._id,
+            updateData,
             { new: true, runValidators: true }
         );
 

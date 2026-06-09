@@ -13,6 +13,11 @@ export interface User {
         phone: string;
         relation: string;
     };
+    emergencyContacts?: Array<{
+        name: string;
+        phone: string;
+        relation: string;
+    }>;
     createdAt: string;
     updatedAt: string;
 }

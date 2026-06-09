@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Trash2, Phone, User, Heart, Save, Loader2 } from "lucide-react";
 import type { EmergencyContact } from "../../types";
@@ -29,6 +29,11 @@ const EmergencyContacts = ({
     const [localContacts, setLocalContacts] =
         useState<EmergencyContact[]>(contacts);
     const [isDirty, setIsDirty] = useState(false);
+
+    useEffect(() => {
+        setLocalContacts(contacts);
+        setIsDirty(false);
+    }, [contacts]);
 
     const addContact = () => {
         setLocalContacts((prev) => [

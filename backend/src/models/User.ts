@@ -16,6 +16,11 @@ export interface IUser extends Document {
         phone: string;
         relation: string;
     };
+    emergencyContacts?: Array<{
+        name: string;
+        phone: string;
+        relation: string;
+    }>;
     createdAt: Date;
     updatedAt: Date;
     comparePassword(candidatePassword: string): Promise<boolean>;
@@ -86,6 +91,22 @@ const UserSchema = new Schema<IUser>(
                 trim: true,
             },
         },
+        emergencyContacts: [
+            {
+                name: {
+                    type: String,
+                    trim: true,
+                },
+                phone: {
+                    type: String,
+                    trim: true,
+                },
+                relation: {
+                    type: String,
+                    trim: true,
+                },
+            },
+        ],
     },
     {
         timestamps: true,
