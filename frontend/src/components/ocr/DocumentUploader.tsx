@@ -127,7 +127,7 @@ const DocumentUploader = ({
                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4 px-2">
                     Classification Registry
                 </p>
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                     {DOCUMENT_TYPES.map((type) => {
                         const Icon = type.icon;
                         const isSelected = selectedType === type.value;
@@ -137,8 +137,8 @@ const DocumentUploader = ({
                                 onClick={() => setSelectedType(type.value)}
                                 className={cn(
                                     "flex flex-col items-center text-center gap-3 p-4 rounded-2xl border transition-all duration-300",
-                                    isSelected 
-                                        ? "bg-navy-900 border-navy-900 shadow-lg scale-[1.02]" 
+                                    isSelected
+                                        ? "bg-navy-900 border-navy-900 shadow-lg scale-[1.02]"
                                         : "bg-white/50 border-slate-100 hover:border-emerald-200"
                                 )}
                             >

@@ -39,15 +39,15 @@ const OCRResultView = ({ result, onReset, onDelete }: OCRResultViewProps) => {
         >
             {/* Result Header */}
             <div
-                className="flex items-start justify-between gap-4 p-8 rounded-[2.5rem] shadow-luxe border border-white/10"
+                className="flex flex-col xl:flex-row xl:items-start justify-between gap-5 p-5 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] shadow-luxe border border-white/10"
                 style={{ backgroundColor: "var(--color-navy-900)" }}
             >
-                <div className="flex items-start gap-5">
+                <div className="flex items-start gap-4 sm:gap-5 min-w-0">
                     <div
-                        className="w-14 h-14 rounded-2xl flex items-center justify-center text-emerald-400 shrink-0"
+                        className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center text-emerald-400 shrink-0"
                         style={{ backgroundColor: "rgba(16,185,129,0.1)" }}
                     >
-                        <docConfig.icon size={28} />
+                        <docConfig.icon size={24} className="sm:w-7 sm:h-7" />
                     </div>
                     <div>
                         <div className="flex items-center gap-2 mb-1">
@@ -56,12 +56,12 @@ const OCRResultView = ({ result, onReset, onDelete }: OCRResultViewProps) => {
                             </span>
                         </div>
                         <h2
-                            className="font-heading font-black text-2xl leading-none tracking-tight"
+                            className="font-heading font-black text-xl sm:text-2xl leading-none tracking-tight"
                             style={{ color: "white" }}
                         >
                             {docConfig.label} <span className="text-emerald-500 font-light italic">Insights.</span>
                         </h2>
-                        <div className="flex items-center gap-4 mt-3">
+                        <div className="flex flex-wrap items-center gap-3 sm:gap-4 mt-3">
                             <p
                                 className="text-[10px] font-bold flex items-center gap-2"
                                 style={{ color: "rgba(255,255,255,0.4)" }}
@@ -80,11 +80,11 @@ const OCRResultView = ({ result, onReset, onDelete }: OCRResultViewProps) => {
                     </div>
                 </div>
 
-                <div className="flex items-center gap-3 shrink-0">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0 w-full xl:w-auto">
                     <button
                         onClick={() => setShowRawText((p) => !p)}
                         className={cn(
-                            "flex items-center gap-1.5 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all duration-300",
+                            "flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all duration-300 w-full sm:w-auto",
                             showRawText ? "bg-white/20 text-white" : "bg-white/5 text-white/60 hover:bg-white/10"
                         )}
                     >
@@ -93,7 +93,7 @@ const OCRResultView = ({ result, onReset, onDelete }: OCRResultViewProps) => {
                     </button>
                     <button
                         onClick={onReset}
-                        className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider bg-emerald-500 text-navy-900 shadow-lg shadow-emerald-500/20 hover:scale-105 transition-all duration-300"
+                        className="flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider bg-emerald-500 text-navy-900 shadow-lg shadow-emerald-500/20 hover:scale-105 transition-all duration-300 w-full sm:w-auto"
                     >
                         <RotateCcw size={14} />
                         New Registry
@@ -101,7 +101,7 @@ const OCRResultView = ({ result, onReset, onDelete }: OCRResultViewProps) => {
                     {onDelete && (
                         <button
                             onClick={() => onDelete(result._id)}
-                            className="p-2 rounded-xl bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white transition-all duration-300"
+                            className="p-2 rounded-xl bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white transition-all duration-300 self-center sm:self-auto"
                         >
                             <Trash2 size={16} />
                         </button>

@@ -81,17 +81,15 @@ const OCRPage = () => {
     };
 
     return (
-        <div
-            className="medical-mesh min-h-screen pt-32 pb-24"
-        >
+        <div className="medical-mesh min-h-screen pt-24 sm:pt-28 pb-16 sm:pb-24">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
                 {/* Header */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="text-center mb-16"
+                    className="text-center mb-10 sm:mb-16"
                 >
-                    <motion.div 
+                    <motion.div
                         initial={{ scale: 0.8 }}
                         animate={{ scale: 1 }}
                         className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/5 border border-emerald-500/10 mb-6"
@@ -101,19 +99,19 @@ const OCRPage = () => {
                             Vision Intelligence Terminal v2.1
                         </span>
                     </motion.div>
-                    
-                    <h1 className="text-5xl md:text-7xl font-black text-navy-900 tracking-tighter mb-4 uppercase">
+
+                    <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-navy-900 tracking-tighter mb-4 uppercase">
                         ANALYZE<span className="text-emerald-500">.</span>
                     </h1>
-                    <p className="text-lg text-slate-500 max-w-2xl mx-auto font-medium tracking-tight">
+                    <p className="text-sm sm:text-lg text-slate-500 max-w-2xl mx-auto font-medium tracking-tight">
                         Upload prescriptions & clinical reports for instantaneous AI synthesis. Decrypting complexity with medical precision.
                     </p>
                 </motion.div>
 
                 {/* Tab Switcher */}
-                <div className="flex justify-center mb-12">
+                <div className="flex justify-center mb-8 sm:mb-12">
                     <div
-                        className="flex items-center gap-1 p-1.5 rounded-[1.5rem] bg-white/50 backdrop-blur-md border shadow-sm"
+                        className="flex flex-col sm:flex-row items-stretch sm:items-center gap-1 p-2 sm:p-1.5 rounded-[1.5rem] bg-white/50 backdrop-blur-md border shadow-sm w-full sm:w-auto"
                         style={{ borderColor: "rgba(0,0,0,0.05)" }}
                     >
                         {[
@@ -126,7 +124,7 @@ const OCRPage = () => {
                                     key={tab.id}
                                     onClick={() => setActiveTab(tab.id as "scan" | "history")}
                                     className={cn(
-                                        "flex items-center gap-2 px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.15em]",
+                                        "flex items-center justify-center gap-2 px-4 sm:px-6 py-3 sm:py-2.5 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-[0.15em]",
                                         "transition-all duration-300"
                                     )}
                                     style={{
@@ -172,12 +170,13 @@ const OCRPage = () => {
                                     onReset={handleReset}
                                     onDelete={handleDelete}
                                 />
-                            ) : (                                <div
-                                    className="glass-panel p-10 rounded-[3rem] border-white/20 shadow-luxe"
+                            ) : (
+                                <div
+                                    className="glass-panel p-5 sm:p-10 rounded-[2rem] sm:rounded-[3rem] border-white/20 shadow-luxe"
                                 >
                                     {/* Info Banner */}
                                     <div
-                                        className="flex items-start gap-4 p-5 rounded-[1.5rem] mb-10 bg-emerald-500/5 border border-emerald-500/10"
+                                        className="flex flex-col sm:flex-row items-start gap-4 p-4 sm:p-5 rounded-[1.5rem] mb-8 sm:mb-10 bg-emerald-500/5 border border-emerald-500/10"
                                     >
                                         <div className="w-10 h-10 rounded-xl bg-navy-900 flex items-center justify-center shrink-0 shadow-sm">
                                             <ScanLine

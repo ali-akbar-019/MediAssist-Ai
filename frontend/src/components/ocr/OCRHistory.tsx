@@ -68,7 +68,7 @@ const OCRHistory = ({
                             exit={{ opacity: 0, x: 10 }}
                             transition={{ delay: index * 0.04 }}
                             className={cn(
-                                "flex items-center gap-3 p-3 rounded-xl border cursor-pointer",
+                                "flex flex-col sm:flex-row sm:items-center gap-3 p-3 rounded-xl border cursor-pointer",
                                 "hover:shadow-md transition-all"
                             )}
                             style={{ borderColor: "var(--color-medical-border)", backgroundColor: "white" }}
@@ -93,7 +93,7 @@ const OCRHistory = ({
                                 </div>
                             </div>
 
-                            <div className="flex items-center gap-1 shrink-0">
+                            <div className="flex items-center gap-1 shrink-0 self-end sm:self-auto">
                                 <button
                                     onClick={(e) => {
                                         e.stopPropagation();

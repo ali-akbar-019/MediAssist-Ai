@@ -75,8 +75,8 @@ const EmergencyContacts = ({
     return (
         <div className="space-y-6">
             {/* Header */}
-            <div className="flex items-center justify-between pb-2">
-                <div className="flex items-center gap-3">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2">
+                <div className="flex items-center gap-3 min-w-0">
                     <div className="w-8 h-8 rounded-lg bg-red-500/10 flex items-center justify-center">
                         <Heart size={16} className="text-red-500" />
                     </div>
@@ -93,7 +93,7 @@ const EmergencyContacts = ({
                     onClick={addContact}
                     disabled={localContacts.length >= 5}
                     className={cn(
-                        "flex items-center gap-1.5 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest",
+                        "flex items-center justify-center gap-1.5 w-full sm:w-auto px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest",
                         "border-2 transition-all transition-all duration-300",
                         "disabled:opacity-40 disabled:cursor-not-allowed hover:bg-navy-900 hover:text-white"
                     )}
@@ -113,7 +113,7 @@ const EmergencyContacts = ({
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="flex flex-col items-center justify-center py-16 rounded-[2rem] border-2 border-dashed bg-white/20"
+                        className="flex flex-col items-center justify-center py-12 sm:py-16 rounded-[2rem] border-2 border-dashed bg-white/20"
                         style={{ borderColor: "rgba(0,0,0,0.05)" }}
                     >
                         <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center mb-4">
@@ -138,7 +138,7 @@ const EmergencyContacts = ({
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, scale: 0.95 }}
                                 className={cn(
-                                    "relative p-8 rounded-[2.5rem] border bg-white/40 backdrop-blur-md transition-all duration-500 overflow-hidden",
+                                    "relative p-5 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] border bg-white/40 backdrop-blur-md transition-all duration-500 overflow-hidden",
                                     deletingIndex === index ? "ring-2 ring-red-500/50" : "border-slate-100/50 hover:border-navy-900/10 hover:shadow-xl hover:shadow-navy-900/5"
                                 )}
                             >
@@ -156,7 +156,7 @@ const EmergencyContacts = ({
                                             </div>
                                             <h4 className="text-xl font-black text-white tracking-tighter uppercase mb-2">Delete Protocol?</h4>
                                             <p className="text-sm text-white/60 mb-8 font-medium">Removing this contact will disable their emergency notifications immediately.</p>
-                                            <div className="flex gap-3 w-full max-w-xs">
+                                            <div className="flex flex-col sm:flex-row gap-3 w-full max-w-xs">
                                                 <button
                                                     onClick={() => setDeletingIndex(null)}
                                                     className="flex-1 py-3 rounded-xl bg-white/10 text-white text-[10px] font-black uppercase tracking-widest hover:bg-white/20 transition-all"
@@ -174,8 +174,8 @@ const EmergencyContacts = ({
                                     )}
                                 </AnimatePresence>
 
-                                <div className="flex items-center justify-between mb-8">
-                                    <div className="flex items-center gap-4">
+                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+                                    <div className="flex items-center gap-4 min-w-0">
                                         <div className="w-10 h-10 rounded-xl bg-navy-900 flex items-center justify-center text-xs font-black text-white shadow-lg">
                                             0{index + 1}
                                         </div>
@@ -196,7 +196,7 @@ const EmergencyContacts = ({
                                     </button>
                                 </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                                     {/* Name */}
                                     <div className="space-y-2">
                                         <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-1">

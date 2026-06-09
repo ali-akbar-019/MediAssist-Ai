@@ -55,7 +55,7 @@ const Navbar = () => {
     const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
 
     return (
-        <div className="fixed top-0 left-0 right-0 z-50 pointer-events-none px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+        <div className="fixed top-0 left-0 right-0 z-50 pointer-events-none px-3 sm:px-6 lg:px-8 py-4 sm:py-6">
             <nav className="container mx-auto pointer-events-auto glass-panel rounded-3xl border-white/20 overflow-hidden shadow-[0_20px_50px_rgba(6,78,59,0.15)] ring-1 ring-white/10 relative pb-[2px]">
                 {/* Subtle Top Shine */}
                 <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/40 to-transparent" />
@@ -299,9 +299,9 @@ const Navbar = () => {
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: "auto" }}
                             exit={{ opacity: 0, height: 0 }}
-                            className="lg:hidden border-t border-emerald-100/50 bg-white/40 backdrop-blur-3xl overflow-hidden"
+                            className="lg:hidden border-t border-emerald-100/50 bg-white/40 backdrop-blur-3xl overflow-hidden max-h-[calc(100dvh-6.5rem)]"
                         >
-                            <div className="p-8 space-y-8">
+                            <div className="max-h-[calc(100dvh-7.5rem)] overflow-y-auto overscroll-contain p-5 sm:p-8 space-y-6 sm:space-y-8">
                                 {/* Primary Actions */}
                                 <div className="space-y-3">
                                     <p className="px-6 text-[10px] uppercase font-black tracking-[0.2em] text-slate-400">Navigation</p>
@@ -314,7 +314,7 @@ const Navbar = () => {
                                                 to={item.href}
                                                 onClick={() => setIsMobileMenuOpen(false)}
                                                 className={cn(
-                                                    "flex items-center gap-5 px-6 py-5 rounded-[2rem] text-lg font-bold transition-all",
+                                                    "flex items-center gap-4 px-5 sm:px-6 py-4 sm:py-5 rounded-[2rem] text-base sm:text-lg font-bold transition-all",
                                                     active
                                                         ? "bg-navy-900 text-white shadow-navy"
                                                         : "text-slate-500 hover:bg-emerald-50 hover:text-navy-900"
@@ -340,20 +340,20 @@ const Navbar = () => {
                                                     to={item.href}
                                                     onClick={() => setIsMobileMenuOpen(false)}
                                                     className={cn(
-                                                        "flex items-center gap-5 px-6 py-4 rounded-[1.5rem] transition-all",
+                                                        "flex items-center gap-4 px-5 sm:px-6 py-4 rounded-[1.5rem] transition-all",
                                                         active
                                                             ? "bg-emerald-50 text-emerald-900 border border-emerald-100"
                                                             : "text-slate-600 hover:bg-emerald-50/50"
                                                     )}
                                                 >
                                                     <div className={cn(
-                                                        "w-12 h-12 rounded-2xl flex items-center justify-center",
+                                                        "w-11 h-11 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center shrink-0",
                                                         active ? "bg-emerald-200/50 text-emerald-600" : "bg-white/80 text-slate-400 shadow-sm"
                                                     )}>
-                                                        {Icon && <Icon className="w-6 h-6" />}
+                                                        {Icon && <Icon className="w-5 h-5 sm:w-6 sm:h-6" />}
                                                     </div>
                                                     <div>
-                                                        <p className="font-bold text-base leading-tight">{item.label}</p>
+                                                        <p className="font-bold text-sm sm:text-base leading-tight">{item.label}</p>
                                                         <p className="text-[11px] text-slate-400 font-medium">
                                                             {item.label === "Symptom Analyzer" ? "AI Diagnostics" :
                                                                 item.label === "AI Doctor Chat" ? "Consultant" :
@@ -399,7 +399,7 @@ const Navbar = () => {
                                     ) : (
                                         <div className="grid grid-cols-1 gap-4">
                                             <Button
-                                                className="h-18 rounded-[2rem] bg-navy-900 text-white font-black text-lg shadow-navy"
+                                                className="h-14 sm:h-18 rounded-[2rem] bg-navy-900 text-white font-black text-sm sm:text-lg shadow-navy"
                                                 onClick={() => {
                                                     navigate(ROUTES.REGISTER);
                                                     setIsMobileMenuOpen(false);
@@ -409,7 +409,7 @@ const Navbar = () => {
                                             </Button>
                                             <Button
                                                 variant="ghost"
-                                                className="h-18 rounded-[2rem] font-bold text-slate-500"
+                                                className="h-14 sm:h-18 rounded-[2rem] font-bold text-sm sm:text-base text-slate-500"
                                                 onClick={() => {
                                                     navigate(ROUTES.LOGIN);
                                                     setIsMobileMenuOpen(false);
