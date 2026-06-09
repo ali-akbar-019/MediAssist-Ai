@@ -14,6 +14,7 @@ import {
     User,
     ChevronDown,
     Clock,
+    AlertTriangle,
 } from "lucide-react";
 import { useAuthStore } from "../../store/authStore";
 import { useAuth } from "../../hooks/useAuth";
@@ -36,6 +37,7 @@ const iconMap = {
     Pill,
     MapPin,
     Clock,
+    AlertTriangle
 };
 
 const Navbar = () => {
@@ -167,9 +169,9 @@ const Navbar = () => {
                                                         active ? "text-navy-900" : "text-slate-600 group-hover/item:text-navy-900"
                                                     )}>{item.label}</span>
                                                     <span className="text-[10px] text-slate-400 font-medium leading-none">
-                                                        {item.label === "Symptom Analyzer" ? "AI-powered diagnostics" : 
-                                                         item.label === "AI Doctor Chat" ? "Real-time AI consultation" :
-                                                         item.label === "Medicine Info" ? "Drug database & usage" : "Interactive care locator"}
+                                                        {item.label === "Symptom Analyzer" ? "AI-powered diagnostics" :
+                                                            item.label === "AI Doctor Chat" ? "Real-time AI consultation" :
+                                                                item.label === "Medicine Info" ? "Drug database & usage" : "Interactive care locator"}
                                                     </span>
                                                 </div>
                                             </DropdownMenuItem>
@@ -334,9 +336,9 @@ const Navbar = () => {
                                                     <div>
                                                         <p className="font-bold text-base leading-tight">{item.label}</p>
                                                         <p className="text-[11px] text-slate-400 font-medium">
-                                                            {item.label === "Symptom Analyzer" ? "AI Diagnostics" : 
-                                                            item.label === "AI Doctor Chat" ? "Consultant" :
-                                                            item.label === "Medicine Info" ? "Drug Info" : "Care Locator"}
+                                                            {item.label === "Symptom Analyzer" ? "AI Diagnostics" :
+                                                                item.label === "AI Doctor Chat" ? "Consultant" :
+                                                                    item.label === "Medicine Info" ? "Drug Info" : "Care Locator"}
                                                         </p>
                                                     </div>
                                                 </Link>

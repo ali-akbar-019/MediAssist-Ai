@@ -22,6 +22,7 @@ export const ROUTES = {
     REPORTS: "/reports",
     MEDICINE: "/medicine",
     HOSPITALS: "/hospitals",
+    EMERGENCY: "/emergency",
     NOT_FOUND: "*",
 } as const;
 
@@ -123,6 +124,7 @@ export const NAV_ITEMS = [
     { label: "Timeline", href: "/timeline", icon: "Clock" },        // NEW
     { label: "Medicine Info", href: "/medicine", icon: "Pill" },
     { label: "Find Hospitals", href: "/hospitals", icon: "MapPin" },
+    { label: "Emergency", href: "/emergency", icon: "AlertTriangle" },
 ] as const;
 
 // Emergency Symptoms — trigger emergency alert

@@ -24,6 +24,7 @@ import { Navigate } from "react-router-dom";
 import type { ReactNode } from "react";
 import { Toaster } from "sonner";
 import TimelinePage from "./pages/Timeline";
+import Emergency from "./pages/Emergency";
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -126,6 +127,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <Reports />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path={ROUTES.EMERGENCY}
+                element={
+                  <ProtectedRoute>
+                    <Emergency />
                   </ProtectedRoute>
                 }
               />

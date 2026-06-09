@@ -307,3 +307,35 @@ export type TimelineFilter = {
 };
 
 export type TimelineView = "list" | "calendar";
+
+
+
+export interface EmergencyContact {
+    name: string;
+    phone: string;
+    relation: string;
+}
+
+export interface EmergencyLog {
+    _id: string;
+    user: string;
+    symptoms: string[];
+    location?: {
+        lat: number;
+        lng: number;
+        address?: string;
+    };
+    contactsNotified: string[];
+    resolvedAt?: string;
+    createdAt: string;
+}
+
+export interface EmergencyState {
+    isActive: boolean;
+    activatedAt?: string;
+    symptoms: string[];
+    location?: {
+        lat: number;
+        lng: number;
+    };
+}
