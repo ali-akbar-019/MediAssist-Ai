@@ -24,6 +24,9 @@ export const ROUTES = {
     HOSPITALS: "/hospitals",
     EMERGENCY: "/emergency",
     OCR: "/ocr",
+    ADMIN_DASHBOARD: "/admin/dashboard",
+    ADMIN_USERS: "/admin/users",
+    ADMIN_AI: "/admin/ai",
     NOT_FOUND: "*",
 } as const;
 

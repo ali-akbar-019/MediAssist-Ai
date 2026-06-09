@@ -21,6 +21,7 @@ export interface IUser extends Document {
         phone: string;
         relation: string;
     }>;
+    role: "user" | "admin";
     createdAt: Date;
     updatedAt: Date;
     comparePassword(candidatePassword: string): Promise<boolean>;
@@ -107,6 +108,11 @@ const UserSchema = new Schema<IUser>(
                 },
             },
         ],
+        role: {
+            type: String,
+            enum: ["user", "admin"],
+            default: "user",
+        },
     },
     {
         timestamps: true,

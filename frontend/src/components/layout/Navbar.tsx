@@ -16,6 +16,7 @@ import {
     Clock,
     AlertTriangle,
     ScanLine,
+    ShieldCheck,
 } from "lucide-react";
 import { useAuthStore } from "../../store/authStore";
 import { useAuth } from "../../hooks/useAuth";
@@ -226,6 +227,22 @@ const Navbar = () => {
                                             <span className="text-[11px] text-slate-400 font-medium">Access diagnostic records</span>
                                         </div>
                                     </DropdownMenuItem>
+
+                                    {user.role === "admin" && (
+                                        <DropdownMenuItem
+                                            onClick={() => navigate(ROUTES.ADMIN_DASHBOARD)}
+                                            className="rounded-2xl flex items-center gap-4 focus:bg-red-50 cursor-pointer p-4 transition-all"
+                                        >
+                                            <div className="w-10 h-10 rounded-xl bg-red-100/50 flex items-center justify-center">
+                                                <ShieldCheck className="w-5 h-5 text-red-600" />
+                                            </div>
+                                            <div className="flex flex-col">
+                                                <span className="text-sm font-black text-navy-900 leading-none mb-1">Command Center</span>
+                                                <span className="text-[11px] text-red-400 font-medium">Admin & System Ops</span>
+                                            </div>
+                                        </DropdownMenuItem>
+                                    )}
+
                                     <DropdownMenuSeparator className="my-2 bg-slate-100" />
                                     <DropdownMenuItem
                                         onClick={handleLogout}

@@ -18,6 +18,7 @@ export interface User {
         phone: string;
         relation: string;
     }>;
+    role: "user" | "admin";
     createdAt: string;
     updatedAt: string;
 }
