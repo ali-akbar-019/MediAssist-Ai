@@ -3,7 +3,10 @@ import {
     Clock,
     FileText,
     RotateCcw,
-    Trash2
+    Trash2,
+    Pill,
+    Microscope,
+    Building2,
 } from "lucide-react";
 import { useState } from "react";
 import { cn, formatRelativeTime } from "../../lib/utils";
@@ -17,11 +20,11 @@ interface OCRResultViewProps {
     onDelete?: (id: string) => void;
 }
 
-const DOC_TYPE_LABELS = {
-    prescription: { label: "Prescription", icon: "💊", color: "#1E3A5F" },
-    lab_report: { label: "Lab Report", icon: "🧪", color: "#059669" },
-    medical_report: { label: "Medical Report", icon: "🏥", color: "#7C3AED" },
-    other: { label: "Document", icon: "📄", color: "#D97706" },
+const DOC_TYPE_LABELS: Record<string, { label: string; icon: any; color: string }> = {
+    prescription: { label: "Prescription", icon: Pill, color: "#1E3A5F" },
+    lab_report: { label: "Lab Report", icon: Microscope, color: "#059669" },
+    medical_report: { label: "Medical Report", icon: Building2, color: "#7C3AED" },
+    other: { label: "Document", icon: FileText, color: "#D97706" },
 };
 
 const OCRResultView = ({ result, onReset, onDelete }: OCRResultViewProps) => {
@@ -36,74 +39,71 @@ const OCRResultView = ({ result, onReset, onDelete }: OCRResultViewProps) => {
         >
             {/* Result Header */}
             <div
-                className="flex items-start justify-between gap-4 p-4 rounded-2xl"
+                className="flex items-start justify-between gap-4 p-8 rounded-[2.5rem] shadow-luxe border border-white/10"
                 style={{ backgroundColor: "var(--color-navy-900)" }}
             >
-                <div className="flex items-start gap-3">
+                <div className="flex items-start gap-5">
                     <div
-                        className="w-10 h-10 rounded-xl flex items-center justify-center text-xl shrink-0"
-                        style={{ backgroundColor: "rgba(255,255,255,0.1)" }}
+                        className="w-14 h-14 rounded-2xl flex items-center justify-center text-emerald-400 shrink-0"
+                        style={{ backgroundColor: "rgba(16,185,129,0.1)" }}
                     >
-                        {docConfig.icon}
+                        <docConfig.icon size={28} />
                     </div>
                     <div>
+                        <div className="flex items-center gap-2 mb-1">
+                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-400">
+                                AI Analysis Complete
+                            </span>
+                        </div>
                         <h2
-                            className="font-heading font-bold text-lg leading-none"
+                            className="font-heading font-black text-2xl leading-none tracking-tight"
                             style={{ color: "white" }}
                         >
-                            {docConfig.label} Analysis
+                            {docConfig.label} <span className="text-emerald-500 font-light italic">Insights.</span>
                         </h2>
-                        <p
-                            className="text-xs mt-1 flex items-center gap-1.5"
-                            style={{ color: "rgba(255,255,255,0.6)" }}
-                        >
-                            <Clock size={11} />
-                            {formatRelativeTime(result.createdAt)}
-                        </p>
-                        <p
-                            className="text-xs mt-0.5 truncate max-w-xs"
-                            style={{ color: "rgba(255,255,255,0.5)" }}
-                        >
-                            {result.fileName}
-                        </p>
+                        <div className="flex items-center gap-4 mt-3">
+                            <p
+                                className="text-[10px] font-bold flex items-center gap-2"
+                                style={{ color: "rgba(255,255,255,0.4)" }}
+                            >
+                                <Clock size={12} className="text-emerald-500" />
+                                {formatRelativeTime(result.createdAt)}
+                            </p>
+                            <div className="w-1 h-1 rounded-full bg-white/10" />
+                            <p
+                                className="text-[10px] font-bold truncate max-w-xs"
+                                style={{ color: "rgba(255,255,255,0.4)" }}
+                            >
+                                {result.fileName}
+                            </p>
+                        </div>
                     </div>
                 </div>
 
-                <div className="flex items-center gap-2 shrink-0">
+                <div className="flex items-center gap-3 shrink-0">
                     <button
                         onClick={() => setShowRawText((p) => !p)}
                         className={cn(
-                            "flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium",
-                            "transition-all"
+                            "flex items-center gap-1.5 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all duration-300",
+                            showRawText ? "bg-white/20 text-white" : "bg-white/5 text-white/60 hover:bg-white/10"
                         )}
-                        style={{
-                            backgroundColor: showRawText
-                                ? "rgba(255,255,255,0.2)"
-                                : "rgba(255,255,255,0.1)",
-                            color: "rgba(255,255,255,0.8)",
-                        }}
                     >
-                        <FileText size={12} />
-                        {showRawText ? "Hide" : "Raw Text"}
+                        <FileText size={14} />
+                        {showRawText ? "Hide Output" : "Raw Source"}
                     </button>
                     <button
                         onClick={onReset}
-                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-all"
-                        style={{
-                            backgroundColor: "rgba(255,255,255,0.1)",
-                            color: "rgba(255,255,255,0.8)",
-                        }}
+                        className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider bg-emerald-500 text-navy-900 shadow-lg shadow-emerald-500/20 hover:scale-105 transition-all duration-300"
                     >
-                        <RotateCcw size={12} />
-                        New Scan
+                        <RotateCcw size={14} />
+                        New Registry
                     </button>
                     {onDelete && (
                         <button
                             onClick={() => onDelete(result._id)}
-                            className="p-1.5 rounded-xl transition-all hover:bg-red-500/20"
-                            style={{ color: "rgba(255,255,255,0.6)" }}
+                            className="p-2 rounded-xl bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white transition-all duration-300"
                         >
-                            <Trash2 size={14} />
+                            <Trash2 size={16} />
                         </button>
                     )}
                 </div>

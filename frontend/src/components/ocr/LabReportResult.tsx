@@ -56,7 +56,6 @@ const LabValueCard = ({
     index: number;
 }) => {
     const config = StatusConfig[value.status];
-    const Icon = config.icon;
     const TrendIcon = config.trendIcon;
 
     return (
@@ -141,18 +140,18 @@ const LabReportResult = ({ result }: LabReportResultProps) => {
             <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="p-4 rounded-xl"
-                style={{ backgroundColor: "var(--color-navy-900)" }}
+                className="p-6 rounded-[2rem] bg-navy-900 border border-white/5 relative overflow-hidden"
             >
+                <div className="absolute top-0 right-0 p-4 opacity-10">
+                    <CheckCircle className="text-emerald-500" size={80} />
+                </div>
                 <p
-                    className="text-xs font-semibold uppercase tracking-wider mb-2"
-                    style={{ color: "var(--color-emerald-400, #34D399)" }}
+                    className="text-[10px] font-black uppercase tracking-[0.2em] mb-3 text-emerald-400"
                 >
-                    AI Summary
+                    Analytical Overview
                 </p>
                 <p
-                    className="text-sm leading-relaxed"
-                    style={{ color: "rgba(255,255,255,0.85)" }}
+                    className="text-sm leading-relaxed text-emerald-50/80 relative z-10"
                 >
                     {result.simplifiedExplanation}
                 </p>
@@ -163,49 +162,52 @@ const LabReportResult = ({ result }: LabReportResultProps) => {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.05 }}
-                className="grid grid-cols-4 gap-3"
+                className="grid grid-cols-2 md:grid-cols-4 gap-4"
             >
                 {[
                     {
-                        label: "Normal",
+                        label: "Optimal",
                         count: normalValues.length,
                         color: "#10B981",
-                        bg: "#ECFDF5",
+                        bg: "rgba(16,185,129,0.05)",
+                        border: "rgba(16,185,129,0.1)",
                     },
                     {
-                        label: "High",
+                        label: "Elevated",
                         count: result.labValues.filter((v) => v.status === "high").length,
                         color: "#EF4444",
-                        bg: "#FEF2F2",
+                        bg: "rgba(239,68,68,0.05)",
+                        border: "rgba(239,68,68,0.1)",
                     },
                     {
-                        label: "Low",
+                        label: "Deficient",
                         count: result.labValues.filter((v) => v.status === "low").length,
                         color: "#F59E0B",
-                        bg: "#FFFBEB",
+                        bg: "rgba(245,158,11,0.05)",
+                        border: "rgba(245,158,11,0.1)",
                     },
                     {
                         label: "Critical",
                         count: result.labValues.filter((v) => v.status === "critical")
                             .length,
                         color: "#7C3AED",
-                        bg: "#F5F3FF",
+                        bg: "rgba(124,58,237,0.05)",
+                        border: "rgba(124,58,237,0.1)",
                     },
                 ].map((stat) => (
                     <div
                         key={stat.label}
-                        className="flex flex-col items-center p-3 rounded-xl"
-                        style={{ backgroundColor: stat.bg }}
+                        className="flex flex-col items-center p-4 rounded-2xl border bg-white/50 backdrop-blur-sm"
+                        style={{ backgroundColor: stat.bg, borderColor: stat.border }}
                     >
                         <span
-                            className="text-2xl font-bold font-heading"
+                            className="text-3xl font-black font-heading tracking-tighter"
                             style={{ color: stat.color }}
                         >
                             {stat.count}
                         </span>
                         <span
-                            className="text-xs mt-0.5"
-                            style={{ color: "var(--color-medical-muted)" }}
+                            className="text-[10px] font-black uppercase tracking-[0.15em] mt-1 text-slate-400"
                         >
                             {stat.label}
                         </span>

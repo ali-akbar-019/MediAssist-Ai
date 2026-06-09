@@ -7,13 +7,10 @@ import {
     MapPin,
     Phone,
     Shield,
-    Clock,
-    GitBranch,
 } from "lucide-react";
 import { ROUTES, EMERGENCY_NUMBERS } from "../../constants";
 
 const Footer = () => {
-    const currentYear = new Date().getFullYear();
 
     const footerLinks = {
         features: [
@@ -43,13 +40,8 @@ const Footer = () => {
                 <div className="max-w-4xl mx-auto mb-20">
                     <div className="bg-white/5 backdrop-blur-2xl border border-white/10 p-8 rounded-[2.5rem] flex flex-col md:flex-row items-center justify-between gap-8">
                         <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 rounded-2xl bg-red-500/10 flex items-center justify-center">
-                                <motion.div
-                                    animate={{ scale: [1, 1.2, 1] }}
-                                    transition={{ duration: 2, repeat: Infinity }}
-                                >
-                                    <Phone className="w-6 h-6 text-red-500" />
-                                </motion.div>
+                            <div className="w-12 h-12 rounded-2xl bg-red-500/10 flex items-center justify-center border border-red-500/20 group/emergency transition-all duration-300 hover:bg-red-500/20">
+                                <Phone className="w-6 h-6 text-red-500 transition-transform duration-300 group-hover/emergency:scale-110" />
                             </div>
                             <div>
                                 <h4 className="text-white font-bold text-lg leading-none mb-1">Emergency Support</h4>

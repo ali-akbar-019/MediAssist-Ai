@@ -82,86 +82,80 @@ const OCRPage = () => {
 
     return (
         <div
-            className="min-h-[calc(100vh-4rem)] py-10"
-            style={{ backgroundColor: "var(--color-medical-surface)" }}
+            className="medical-mesh min-h-screen pt-32 pb-24"
         >
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
                 {/* Header */}
                 <motion.div
-                    initial={{ opacity: 0, y: -10 }}
+                    initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="flex items-center gap-3 mb-8"
+                    className="text-center mb-16"
                 >
-                    <div
-                        className="w-11 h-11 rounded-2xl flex items-center justify-center"
-                        style={{ backgroundColor: "var(--color-navy-900)" }}
+                    <motion.div 
+                        initial={{ scale: 0.8 }}
+                        animate={{ scale: 1 }}
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/5 border border-emerald-500/10 mb-6"
                     >
-                        <ScanLine size={22} color="white" />
-                    </div>
-                    <div>
-                        <h1
-                            className="font-heading font-bold text-2xl"
-                            style={{ color: "var(--color-navy-900)" }}
-                        >
-                            Document Scanner
-                        </h1>
-                        <p
-                            className="text-sm"
-                            style={{ color: "var(--color-medical-muted)" }}
-                        >
-                            Upload prescriptions & lab reports — AI explains everything
-                        </p>
-                    </div>
+                        <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-navy-900">
+                            Vision Intelligence Terminal v2.1
+                        </span>
+                    </motion.div>
+                    
+                    <h1 className="text-5xl md:text-7xl font-black text-navy-900 tracking-tighter mb-4 uppercase">
+                        ANALYZE<span className="text-emerald-500">.</span>
+                    </h1>
+                    <p className="text-lg text-slate-500 max-w-2xl mx-auto font-medium tracking-tight">
+                        Upload prescriptions & clinical reports for instantaneous AI synthesis. Decrypting complexity with medical precision.
+                    </p>
                 </motion.div>
 
                 {/* Tab Switcher */}
-                <div
-                    className="flex items-center gap-1 p-1 rounded-xl mb-6 w-fit"
-                    style={{ backgroundColor: "var(--color-medical-border)" }}
-                >
-                    {[
-                        { id: "scan", label: "New Scan", icon: ScanLine },
-                        { id: "history", label: "History", icon: History },
-                    ].map((tab) => {
-                        const Icon = tab.icon;
-                        return (
-                            <button
-                                key={tab.id}
-                                onClick={() => setActiveTab(tab.id as "scan" | "history")}
-                                className={cn(
-                                    "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium",
-                                    "transition-all duration-200"
-                                )}
-                                style={{
-                                    backgroundColor:
-                                        activeTab === tab.id ? "white" : "transparent",
-                                    color:
-                                        activeTab === tab.id
-                                            ? "var(--color-navy-900)"
-                                            : "var(--color-medical-muted)",
-                                    boxShadow:
-                                        activeTab === tab.id ? "0 1px 3px rgba(0,0,0,0.1)" : "none",
-                                }}
-                            >
-                                <Icon size={15} />
-                                {tab.label}
-                                {tab.id === "history" && history.length > 0 && (
-                                    <span
-                                        className="px-1.5 py-0.5 text-xs font-bold rounded-full"
-                                        style={{
-                                            backgroundColor:
-                                                activeTab === tab.id
-                                                    ? "var(--color-navy-900)"
-                                                    : "var(--color-medical-muted)",
-                                            color: "white",
-                                        }}
-                                    >
-                                        {history.length}
-                                    </span>
-                                )}
-                            </button>
-                        );
-                    })}
+                <div className="flex justify-center mb-12">
+                    <div
+                        className="flex items-center gap-1 p-1.5 rounded-[1.5rem] bg-white/50 backdrop-blur-md border shadow-sm"
+                        style={{ borderColor: "rgba(0,0,0,0.05)" }}
+                    >
+                        {[
+                            { id: "scan", label: "New Scan", icon: ScanLine },
+                            { id: "history", label: "Archives", icon: History },
+                        ].map((tab) => {
+                            const Icon = tab.icon;
+                            return (
+                                <button
+                                    key={tab.id}
+                                    onClick={() => setActiveTab(tab.id as "scan" | "history")}
+                                    className={cn(
+                                        "flex items-center gap-2 px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.15em]",
+                                        "transition-all duration-300"
+                                    )}
+                                    style={{
+                                        backgroundColor:
+                                            activeTab === tab.id ? "var(--color-navy-900)" : "transparent",
+                                        color:
+                                            activeTab === tab.id
+                                                ? "white"
+                                                : "var(--color-medical-muted)",
+                                        boxShadow:
+                                            activeTab === tab.id ? "0 10px 15px -3px rgba(30,58,95,0.2)" : "none",
+                                    }}
+                                >
+                                    <Icon size={14} className={activeTab === tab.id ? "text-emerald-400" : ""} />
+                                    {tab.label}
+                                    {tab.id === "history" && history.length > 0 && (
+                                        <span
+                                            className={cn(
+                                                "ml-1 px-1.5 py-0.5 text-[8px] font-black rounded-full",
+                                                activeTab === tab.id ? "bg-white/10 text-white" : "bg-slate-100 text-slate-400"
+                                            )}
+                                        >
+                                            {history.length}
+                                        </span>
+                                    )}
+                                </button>
+                            );
+                        })}
+                    </div>
                 </div>
 
                 <AnimatePresence mode="wait">
@@ -178,38 +172,29 @@ const OCRPage = () => {
                                     onReset={handleReset}
                                     onDelete={handleDelete}
                                 />
-                            ) : (
-                                <div
-                                    className="bg-white rounded-2xl border p-6 sm:p-8"
-                                    style={{ borderColor: "var(--color-medical-border)" }}
+                            ) : (                                <div
+                                    className="glass-panel p-10 rounded-[3rem] border-white/20 shadow-luxe"
                                 >
                                     {/* Info Banner */}
                                     <div
-                                        className="flex items-start gap-3 p-4 rounded-xl mb-6"
-                                        style={{
-                                            backgroundColor: "var(--color-navy-50, #EFF6FF)",
-                                            border: "1px solid rgba(30,58,95,0.1)",
-                                        }}
+                                        className="flex items-start gap-4 p-5 rounded-[1.5rem] mb-10 bg-emerald-500/5 border border-emerald-500/10"
                                     >
-                                        <ScanLine
-                                            size={16}
-                                            className="shrink-0 mt-0.5"
-                                            style={{ color: "var(--color-navy-900)" }}
-                                        />
+                                        <div className="w-10 h-10 rounded-xl bg-navy-900 flex items-center justify-center shrink-0 shadow-sm">
+                                            <ScanLine
+                                                size={20}
+                                                className="text-emerald-400"
+                                            />
+                                        </div>
                                         <div>
                                             <p
-                                                className="text-sm font-semibold"
-                                                style={{ color: "var(--color-navy-900)" }}
+                                                className="text-[10px] font-black uppercase tracking-widest text-emerald-800"
                                             >
-                                                How it works
+                                                System Protocol
                                             </p>
                                             <p
-                                                className="text-xs mt-0.5 leading-relaxed"
-                                                style={{ color: "var(--color-medical-muted)" }}
+                                                className="text-sm font-medium text-slate-600 mt-1 leading-relaxed"
                                             >
-                                                Upload a photo or PDF of your prescription or lab report.
-                                                Our AI will extract the text, identify medicines & test
-                                                values, and explain everything in simple language.
+                                                Our vision engine interprets prescriptions and clinical reports. Securely upload any medical documentation for deep contextual analysis and simplified explanations.
                                             </p>
                                         </div>
                                     </div>
@@ -223,16 +208,16 @@ const OCRPage = () => {
                                         onClear={handleReset}
                                     />
                                 </div>
+
                             )}
                         </motion.div>
                     ) : (
                         <motion.div
                             key="history"
-                            initial={{ opacity: 0, y: 8 }}
+                            initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -8 }}
-                            className="bg-white rounded-2xl border p-5"
-                            style={{ borderColor: "var(--color-medical-border)" }}
+                            exit={{ opacity: 0, y: -20 }}
+                            className="glass-panel p-8 rounded-[3rem] border-white/20 shadow-luxe"
                         >
                             <OCRHistory
                                 history={history}

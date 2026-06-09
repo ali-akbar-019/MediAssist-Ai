@@ -50,7 +50,7 @@ const Login = () => {
     };
 
     return (
-        <div className="medical-mesh min-h-screen pt-24 pb-16 overflow-x-hidden">
+        <div className="medical-mesh min-h-screen pt-32 pb-16 overflow-x-hidden">
             <div className="container mx-auto px-6 relative">
                 <div className="max-w-6xl mx-auto grid lg:grid-cols-[1.1fr_0.9fr] gap-8 items-stretch">
                     {/* Left Panel */}

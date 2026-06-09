@@ -8,6 +8,10 @@ import {
     CheckCircle,
     AlertCircle,
     ScanLine,
+    Pill,
+    Microscope,
+    Building2,
+    FileSearch,
 } from "lucide-react";
 import type { OCRDocumentType } from "../../types";
 import { cn, formatFileSize } from "../../lib/utils";
@@ -25,31 +29,31 @@ const DOCUMENT_TYPES: Array<{
     value: OCRDocumentType;
     label: string;
     description: string;
-    icon: string;
+    icon: any;
 }> = [
         {
             value: "prescription",
             label: "Prescription",
-            description: "Doctor's prescription with medicines",
-            icon: "💊",
+            description: "Pharmacological orders",
+            icon: Pill,
         },
         {
             value: "lab_report",
             label: "Lab Report",
-            description: "Blood test, urine test results",
-            icon: "🧪",
+            description: "Biometric analysis data",
+            icon: Microscope,
         },
         {
             value: "medical_report",
             label: "Medical Report",
-            description: "X-ray, MRI, ultrasound reports",
-            icon: "🏥",
+            description: "Clinical diagnostics",
+            icon: Building2,
         },
         {
             value: "other",
-            label: "Other Document",
-            description: "Any other medical document",
-            icon: "📄",
+            label: "General File",
+            description: "Miscellaneous clinical documentation",
+            icon: FileSearch,
         },
     ];
 
@@ -120,59 +124,47 @@ const DocumentUploader = ({
         <div className="space-y-5">
             {/* Document Type Selector */}
             <div>
-                <p
-                    className="text-sm font-semibold mb-3"
-                    style={{ color: "var(--color-navy-900)" }}
-                >
-                    Document Type
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4 px-2">
+                    Classification Registry
                 </p>
-                <div className="grid grid-cols-2 gap-2">
-                    {DOCUMENT_TYPES.map((type) => (
-                        <button
-                            key={type.value}
-                            onClick={() => setSelectedType(type.value)}
-                            className={cn(
-                                "flex items-start gap-2.5 p-3 rounded-xl border text-left",
-                                "transition-all duration-200"
-                            )}
-                            style={{
-                                borderColor:
-                                    selectedType === type.value
-                                        ? "var(--color-navy-900)"
-                                        : "var(--color-medical-border)",
-                                backgroundColor:
-                                    selectedType === type.value
-                                        ? "var(--color-navy-900)"
-                                        : "white",
-                            }}
-                        >
-                            <span className="text-xl">{type.icon}</span>
-                            <div>
-                                <p
-                                    className="text-sm font-semibold"
-                                    style={{
-                                        color:
-                                            selectedType === type.value
-                                                ? "white"
-                                                : "var(--color-navy-900)",
-                                    }}
-                                >
-                                    {type.label}
-                                </p>
-                                <p
-                                    className="text-xs mt-0.5"
-                                    style={{
-                                        color:
-                                            selectedType === type.value
-                                                ? "rgba(255,255,255,0.7)"
-                                                : "var(--color-medical-muted)",
-                                    }}
-                                >
-                                    {type.description}
-                                </p>
-                            </div>
-                        </button>
-                    ))}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                    {DOCUMENT_TYPES.map((type) => {
+                        const Icon = type.icon;
+                        const isSelected = selectedType === type.value;
+                        return (
+                            <button
+                                key={type.value}
+                                onClick={() => setSelectedType(type.value)}
+                                className={cn(
+                                    "flex flex-col items-center text-center gap-3 p-4 rounded-2xl border transition-all duration-300",
+                                    isSelected 
+                                        ? "bg-navy-900 border-navy-900 shadow-lg scale-[1.02]" 
+                                        : "bg-white/50 border-slate-100 hover:border-emerald-200"
+                                )}
+                            >
+                                <div className={cn(
+                                    "w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300",
+                                    isSelected ? "bg-emerald-500/20 text-emerald-400" : "bg-slate-50 text-slate-400"
+                                )}>
+                                    <Icon size={20} />
+                                </div>
+                                <div>
+                                    <p className={cn(
+                                        "text-xs font-bold tracking-tight",
+                                        isSelected ? "text-white" : "text-navy-900"
+                                    )}>
+                                        {type.label}
+                                    </p>
+                                    <p className={cn(
+                                        "text-[9px] font-medium leading-tight mt-1 opacity-60",
+                                        isSelected ? "text-emerald-100" : "text-slate-500"
+                                    )}>
+                                        {type.description}
+                                    </p>
+                                </div>
+                            </button>
+                        );
+                    })}
                 </div>
             </div>
 
@@ -241,19 +233,19 @@ const DocumentUploader = ({
                         onDragLeave={() => setIsDragOver(false)}
                         onClick={() => !isUploading && inputRef.current?.click()}
                         className={cn(
-                            "relative flex flex-col items-center justify-center p-10",
-                            "rounded-xl border-2 border-dashed cursor-pointer",
-                            "transition-all duration-200"
+                            "relative flex flex-col items-center justify-center p-16",
+                            "rounded-[2.5rem] border-2 border-dashed cursor-pointer",
+                            "transition-all duration-500 group"
                         )}
                         style={{
                             borderColor: isDragOver
-                                ? "var(--color-navy-900)"
+                                ? "var(--color-emerald-500)"
                                 : displayError
                                     ? "#EF4444"
-                                    : "var(--color-medical-border)",
+                                    : "rgba(30,58,95,0.1)",
                             backgroundColor: isDragOver
-                                ? "rgba(30,58,95,0.04)"
-                                : "var(--color-medical-surface)",
+                                ? "rgba(16,185,129,0.02)"
+                                : "rgba(255,255,255,0.3)",
                         }}
                     >
                         <motion.div

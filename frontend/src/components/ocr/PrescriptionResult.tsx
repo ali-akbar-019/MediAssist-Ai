@@ -7,6 +7,8 @@ import {
     Clock,
     Pill,
     User,
+    Info,
+    Activity,
 } from "lucide-react";
 import type { OCRResult } from "../../types";
 
@@ -110,21 +112,18 @@ const PrescriptionResult = ({ result }: PrescriptionResultProps) => {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.05 }}
-                className="p-4 rounded-xl"
-                style={{
-                    backgroundColor: "var(--color-navy-900)",
-                    border: "1px solid rgba(255,255,255,0.1)",
-                }}
+                className="p-6 rounded-[2rem] bg-navy-900 border border-white/5 relative overflow-hidden"
             >
+                <div className="absolute top-0 right-0 p-4 opacity-10">
+                    <Activity size={80} className="text-emerald-500" />
+                </div>
                 <p
-                    className="text-xs font-semibold uppercase tracking-wider mb-2"
-                    style={{ color: "var(--color-emerald-400, #34D399)" }}
+                    className="text-[10px] font-black uppercase tracking-[0.2em] mb-3 text-emerald-400"
                 >
-                    AI Explanation
+                    Diagnostic Synthesis
                 </p>
                 <p
-                    className="text-sm leading-relaxed"
-                    style={{ color: "rgba(255,255,255,0.85)" }}
+                    className="text-sm leading-relaxed text-emerald-50/80 relative z-10"
                 >
                     {result.simplifiedExplanation}
                 </p>
@@ -227,12 +226,14 @@ const PrescriptionResult = ({ result }: PrescriptionResultProps) => {
                                         </div>
                                     )}
                                     {medicine.instructions && (
-                                        <p
-                                            className="text-xs w-full mt-1"
-                                            style={{ color: "var(--color-medical-muted)" }}
-                                        >
-                                            📝 {medicine.instructions}
-                                        </p>
+                                        <div className="flex items-start gap-2 w-full mt-2 p-2 rounded-lg bg-slate-50 border border-slate-100">
+                                            <Info size={12} className="text-navy-900 mt-0.5 shrink-0" />
+                                            <p
+                                                className="text-[11px] font-medium text-slate-600 leading-tight"
+                                            >
+                                                {medicine.instructions}
+                                            </p>
+                                        </div>
                                     )}
                                 </div>
                             </motion.div>
