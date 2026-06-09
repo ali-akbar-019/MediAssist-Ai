@@ -395,11 +395,12 @@ const Register = () => {
                                                 onValueChange={(val) =>
                                                     setFormData((prev) => ({ ...prev, gender: val }))
                                                 }
+
                                             >
-                                                <SelectTrigger className="h-14 rounded-2xl border-medical-border bg-white/70 text-navy-900">
+                                                <SelectTrigger className="h-14 rounded-2xl border-medical-border bg-white/70 text-navy-900" data-testid="gender-trigger">
                                                     <SelectValue placeholder="Select gender" />
                                                 </SelectTrigger>
-                                                <SelectContent>
+                                                <SelectContent className="bg-white">
                                                     {GENDER_OPTIONS.map((option) => (
                                                         <SelectItem key={option.value} value={option.value}>
                                                             {option.label}
@@ -421,10 +422,10 @@ const Register = () => {
                                                         setFormData((prev) => ({ ...prev, bloodGroup: val }))
                                                     }
                                                 >
-                                                    <SelectTrigger className="pl-10 h-14 rounded-2xl border-medical-border bg-white/70 text-navy-900">
+                                                    <SelectTrigger className="pl-10 h-14 rounded-2xl border-medical-border bg-white/70 text-navy-900" data-testid="bloodgroup-trigger" >
                                                         <SelectValue placeholder="Select blood group" />
                                                     </SelectTrigger>
-                                                    <SelectContent>
+                                                    <SelectContent className="bg-white">
                                                         {BLOOD_GROUPS.map((group) => (
                                                             <SelectItem key={group} value={group}>
                                                                 {group}

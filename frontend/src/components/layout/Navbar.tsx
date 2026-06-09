@@ -66,6 +66,7 @@ const Navbar = () => {
                         <Link
                             to={ROUTES.HOME}
                             className="flex items-center gap-2.5 group"
+                            data-testid="nav-logo"
                         >
                             <motion.div
                                 whileHover={{ scale: 1.05, rotate: 5 }}
@@ -97,6 +98,7 @@ const Navbar = () => {
                                 <Link
                                     key={item.href}
                                     to={item.href}
+                                    data-testid={`desktop-nav-${item.label.toLowerCase()}`}
                                     className={cn(
                                         "relative flex items-center gap-2.5 px-5 py-2.5 rounded-2xl text-[13px] font-bold transition-all duration-500 group",
                                         active
@@ -120,8 +122,8 @@ const Navbar = () => {
 
                         {/* Services Dropdown */}
                         <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <button className={cn(
+                            <DropdownMenuTrigger asChild >
+                                <button data-testid="desktop-nav-services-dropdown" className={cn(
                                     "relative flex items-center gap-2.5 px-5 py-2.5 rounded-2xl text-[13px] font-bold transition-all duration-500 group text-slate-500 hover:text-navy-900",
                                     NAV_ITEMS.filter(item => !["Home", "Dashboard", "Timeline"].includes(item.label)).some(item => isActive(item.href)) && "text-emerald-900"
                                 )}>
@@ -159,6 +161,7 @@ const Navbar = () => {
                                                     "rounded-2xl flex items-center gap-4 focus:bg-emerald-50/50 cursor-pointer p-3 transition-all group/item",
                                                     active && "bg-emerald-50"
                                                 )}
+                                                data-testid={`dropdown-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
                                             >
                                                 <div className={cn(
                                                     "w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-500",
@@ -312,6 +315,7 @@ const Navbar = () => {
                                             <Link
                                                 key={item.href}
                                                 to={item.href}
+                                                data-testid={`mobile-nav-${item.label.toLowerCase()}`}
                                                 onClick={() => setIsMobileMenuOpen(false)}
                                                 className={cn(
                                                     "flex items-center gap-4 px-5 sm:px-6 py-4 sm:py-5 rounded-[2rem] text-base sm:text-lg font-bold transition-all",
@@ -338,6 +342,7 @@ const Navbar = () => {
                                                 <Link
                                                     key={item.href}
                                                     to={item.href}
+                                                    data-testid={`mobile-service-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
                                                     onClick={() => setIsMobileMenuOpen(false)}
                                                     className={cn(
                                                         "flex items-center gap-4 px-5 sm:px-6 py-4 rounded-[1.5rem] transition-all",
