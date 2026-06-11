@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from src.models.schemas import MedicineInfoRequest, MedicineInfoResponse
-from src.services.gemini_service import generate_content
+from src.services.gemini_service import GeminiConfigurationError, generate_content
 from src.utils.helpers import parse_ai_json_response
 
 router = APIRouter(prefix="/api/medicine", tags=["Medicine"])
@@ -67,6 +67,11 @@ async def get_medicine_info(request: MedicineInfoRequest):
 
         return MedicineInfoResponse(**parsed_response)
 
+    except GeminiConfigurationError as e:
+        raise HTTPException(
+            status_code=503,
+            detail=str(e),
+        )
     except RuntimeError as e:
         raise HTTPException(
             status_code=500,

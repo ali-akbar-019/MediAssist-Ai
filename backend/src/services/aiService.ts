@@ -86,6 +86,25 @@ const aiClient = axios.create({
     },
 });
 
+const getErrorMessage = (error: unknown): string => {
+    if (axios.isAxiosError(error)) {
+        const detail = error.response?.data?.detail;
+        if (typeof detail === "string" && detail.trim().length > 0) {
+            return detail;
+        }
+
+        if (typeof error.message === "string" && error.message.trim().length > 0) {
+            return error.message;
+        }
+    }
+
+    if (error instanceof Error && error.message.trim().length > 0) {
+        return error.message;
+    }
+
+    return "Unknown AI service error";
+};
+
 // Analyze symptoms via Python AI microservice
 export const analyzeSymptoms = async (
     data: SymptomAnalysisRequest
@@ -102,15 +121,15 @@ export const analyzeSymptoms = async (
         } catch (error) {
             lastError = error as Error;
 
-            if (error instanceof AxiosError) {
-                // Don't retry on client errors
+            if (axios.isAxiosError(error)) {
+                const status = error.response?.status;
+
                 if (
-                    error.response?.status &&
-                    error.response.status >= 400 &&
-                    error.response.status < 500
+                    (status && status >= 400 && status < 500) ||
+                    status === 503
                 ) {
                     throw new Error(
-                        error.response.data?.detail ?? "AI service client error"
+                        getErrorMessage(error)
                     );
                 }
             }
@@ -125,7 +144,9 @@ export const analyzeSymptoms = async (
     }
 
     throw new Error(
-        `AI service unavailable after ${MAX_RETRIES} attempts: ${lastError?.message}`
+        `AI service unavailable after ${MAX_RETRIES} attempts: ${getErrorMessage(
+            lastError
+        )}`
     );
 };
 
@@ -145,14 +166,15 @@ export const sendChatMessage = async (
         } catch (error) {
             lastError = error as Error;
 
-            if (error instanceof AxiosError) {
+            if (axios.isAxiosError(error)) {
+                const status = error.response?.status;
+
                 if (
-                    error.response?.status &&
-                    error.response.status >= 400 &&
-                    error.response.status < 500
+                    (status && status >= 400 && status < 500) ||
+                    status === 503
                 ) {
                     throw new Error(
-                        error.response.data?.detail ?? "AI service client error"
+                        getErrorMessage(error)
                     );
                 }
             }
@@ -167,7 +189,9 @@ export const sendChatMessage = async (
     }
 
     throw new Error(
-        `AI service unavailable after ${MAX_RETRIES} attempts: ${lastError?.message}`
+        `AI service unavailable after ${MAX_RETRIES} attempts: ${getErrorMessage(
+            lastError
+        )}`
     );
 };
 
@@ -187,14 +211,15 @@ export const getMedicineInfo = async (
         } catch (error) {
             lastError = error as Error;
 
-            if (error instanceof AxiosError) {
+            if (axios.isAxiosError(error)) {
+                const status = error.response?.status;
+
                 if (
-                    error.response?.status &&
-                    error.response.status >= 400 &&
-                    error.response.status < 500
+                    (status && status >= 400 && status < 500) ||
+                    status === 503
                 ) {
                     throw new Error(
-                        error.response.data?.detail ?? "AI service client error"
+                        getErrorMessage(error)
                     );
                 }
             }
@@ -209,7 +234,9 @@ export const getMedicineInfo = async (
     }
 
     throw new Error(
-        `AI service unavailable after ${MAX_RETRIES} attempts: ${lastError?.message}`
+        `AI service unavailable after ${MAX_RETRIES} attempts: ${getErrorMessage(
+            lastError
+        )}`
     );
 };
 

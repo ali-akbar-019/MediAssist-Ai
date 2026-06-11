@@ -1,4 +1,4 @@
-from src.services.gemini_service import generate_content
+from src.services.gemini_service import GeminiConfigurationError, generate_content
 from src.models.schemas import SymptomAnalysisRequest, SymptomAnalysisResponse
 from src.utils.helpers import (
     parse_ai_json_response,
@@ -94,5 +94,7 @@ async def analyze_symptoms(
 
         return SymptomAnalysisResponse(**parsed_response)
 
+    except GeminiConfigurationError:
+        raise
     except Exception as e:
         raise RuntimeError(f"Symptom analysis failed: {str(e)}")

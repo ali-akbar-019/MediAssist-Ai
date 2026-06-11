@@ -1,29 +1,44 @@
 import traceback
 from google import genai
 from google.genai import types
-from tenacity import retry, stop_after_attempt, wait_exponential
+from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_not_exception_type
 from dotenv import load_dotenv
 import os
 import asyncio
+from pathlib import Path
 
-load_dotenv()
+load_dotenv(Path(__file__).resolve().parents[2] / ".env")
 
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash-lite")
 
-print(f"🔧 GEMINI_API_KEY loaded: {'✅ Yes' if GEMINI_API_KEY else '❌ NO'}")
 print(f"🔧 GEMINI_MODEL: {GEMINI_MODEL}")
 
-if not GEMINI_API_KEY:
-    raise ValueError("GEMINI_API_KEY is not set in environment variables")
 
-# Initialize the client
-try:
-    client = genai.Client(api_key=GEMINI_API_KEY)
-    print("✅ Gemini client initialized successfully")
-except Exception as e:
-    print(f"❌ Failed to initialize Gemini client: {str(e)}")
-    raise
+class GeminiConfigurationError(RuntimeError):
+    pass
+
+
+_client = None
+
+
+def get_gemini_client():
+    global _client
+
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        raise GeminiConfigurationError(
+            "GEMINI_API_KEY is not set in environment variables"
+        )
+
+    if _client is None:
+        try:
+            _client = genai.Client(api_key=api_key)
+            print("✅ Gemini client initialized successfully")
+        except Exception as e:
+            print(f"❌ Failed to initialize Gemini client: {str(e)}")
+            raise RuntimeError(f"Failed to initialize Gemini client: {str(e)}")
+
+    return _client
 
 # Generation config
 GENERATION_CONFIG = {
@@ -37,9 +52,12 @@ GENERATION_CONFIG = {
 @retry(
     stop=stop_after_attempt(3),
     wait=wait_exponential(multiplier=1, min=2, max=10),
+    retry=retry_if_not_exception_type(GeminiConfigurationError),
 )
 async def generate_content(prompt: str) -> str:
     """Generate content from Gemini with retry logic"""
+    client = get_gemini_client()
+
     try:
         print(f"📤 Calling Gemini API with model: {GEMINI_MODEL}")
         print(f"📝 Prompt length: {len(prompt)} characters")
@@ -73,6 +91,7 @@ async def generate_content(prompt: str) -> str:
 @retry(
     stop=stop_after_attempt(3),
     wait=wait_exponential(multiplier=1, min=2, max=10),
+    retry=retry_if_not_exception_type(GeminiConfigurationError),
 )
 async def generate_chat_response(
     system_prompt: str,
@@ -80,6 +99,8 @@ async def generate_chat_response(
     new_message: str,
 ) -> str:
     """Generate chat response using Gemini with conversation history"""
+    client = get_gemini_client()
+
     try:
         print(f"💬 Generating chat response")
         print(f"📝 System prompt length: {len(system_prompt)}")

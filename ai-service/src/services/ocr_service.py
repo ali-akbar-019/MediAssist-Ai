@@ -1,8 +1,12 @@
-import google.generativeai as genai
 import base64
 import json
 import re
+import os
+import asyncio
+from src.services.gemini_service import get_gemini_client, GeminiConfigurationError
 from src.utils.helpers import parse_ai_json_response
+
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash-lite")
 
 def build_ocr_prompt(document_type: str) -> str:
     base_prompt = """
@@ -87,7 +91,7 @@ async def analyze_document(
     file_name: str,
 ) -> dict:
     try:
-        model = genai.GenerativeModel("gemini-1.5-flash")
+        client = get_gemini_client()
         prompt = build_ocr_prompt(document_type)
 
         # Build image part
@@ -108,7 +112,11 @@ async def analyze_document(
                 }
             }
 
-        response = model.generate_content([prompt, image_part])
+        response = await asyncio.to_thread(
+            client.models.generate_content,
+            model=GEMINI_MODEL,
+            contents=[prompt, image_part],
+        )
 
         if not response.text:
             raise ValueError("Empty response from Gemini")
@@ -116,5 +124,7 @@ async def analyze_document(
         result = parse_ai_json_response(response.text)
         return result
 
+    except GeminiConfigurationError:
+        raise
     except Exception as e:
         raise RuntimeError(f"OCR analysis failed: {str(e)}")

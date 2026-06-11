@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from src.models.schemas import ChatRequest, ChatResponse
+from src.services.gemini_service import GeminiConfigurationError
 from src.services.chat_service import process_chat_message
 
 router = APIRouter(prefix="/api/chat", tags=["Chat"])
@@ -14,6 +15,11 @@ async def send_message_route(request: ChatRequest):
     try:
         result = await process_chat_message(request)
         return result
+    except GeminiConfigurationError as e:
+        raise HTTPException(
+            status_code=503,
+            detail=str(e),
+        )
     except RuntimeError as e:
         raise HTTPException(
             status_code=500,

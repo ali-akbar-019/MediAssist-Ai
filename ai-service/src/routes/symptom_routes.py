@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from src.models.schemas import SymptomAnalysisRequest, SymptomAnalysisResponse
+from src.services.gemini_service import GeminiConfigurationError
 from src.services.symptom_analyzer import analyze_symptoms
 
 router = APIRouter(prefix="/api/symptoms", tags=["Symptoms"])
@@ -14,6 +15,11 @@ async def analyze_symptom_route(request: SymptomAnalysisRequest):
     try:
         result = await analyze_symptoms(request)
         return result
+    except GeminiConfigurationError as e:
+        raise HTTPException(
+            status_code=503,
+            detail=str(e),
+        )
     except RuntimeError as e:
         raise HTTPException(
             status_code=500,

@@ -1,4 +1,4 @@
-from src.services.gemini_service import generate_chat_response
+from src.services.gemini_service import GeminiConfigurationError, generate_chat_response
 from src.models.schemas import ChatRequest, ChatResponse
 
 
@@ -79,5 +79,7 @@ async def process_chat_message(request: ChatRequest) -> ChatResponse:
             sessionId=request.sessionId,
         )
 
+    except GeminiConfigurationError:
+        raise
     except Exception as e:
         raise RuntimeError(f"Chat processing failed: {str(e)}")

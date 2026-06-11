@@ -2,11 +2,13 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from dotenv import load_dotenv
-from src.routes import symptom_routes, chat_routes, medicine_routes, ocr_routes
+from pathlib import Path
 
 import os
 
-load_dotenv()
+load_dotenv(Path(__file__).resolve().parents[1] / ".env")
+
+from src.routes import symptom_routes, chat_routes, medicine_routes, ocr_routes
 
 APP_NAME = os.getenv("APP_NAME", "MediAssist AI Service")
 APP_VERSION = os.getenv("APP_VERSION", "1.0.0")
