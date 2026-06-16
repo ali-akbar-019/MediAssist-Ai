@@ -33,7 +33,6 @@ export const getTimeline = async (
                 { additionalNotes: { $regex: searchStr, $options: "i" } },
             ];
         }
-
         if (severity && severity !== "all") {
             // Map category to numeric range for consistent filtering
             switch (severity.toLowerCase()) {
@@ -155,14 +154,13 @@ export const getTimelineStats = async (
             severe: 0,
             emergency: 0,
         };
-
         distResult.forEach((item) => {
             if (item._id && item._id in severityDistribution) {
                 severityDistribution[item._id as keyof typeof severityDistribution] =
                     item.count;
             }
         });
-
+        console.log(severityDistribution);
         res.status(200).json(
             successResponse(
                 {

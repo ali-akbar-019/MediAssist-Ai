@@ -22,7 +22,7 @@ const TimelinePage = () => {
     const [totalPages, setTotalPages] = useState(1);
     const [filters, setFilters] = useState<TimelineFilter>(DEFAULT_FILTERS);
     const [activeTab, setActiveTab] = useState<"timeline" | "trends">("timeline");
-
+    console.log("stats: ", stats);
     const fetchTimeline = useCallback(
         async (currentPage: number, currentFilters: TimelineFilter) => {
             try {
@@ -163,7 +163,7 @@ const TimelinePage = () => {
                                             <div className="w-1.5 h-4 bg-emerald-500 rounded-full" />
                                             <h3 className="text-[11px] font-black text-navy-900 uppercase tracking-[0.2em]">
                                                 Core Insights
-                    </h3>
+                                            </h3>
                                         </div>
                                         <div className="space-y-4">
                                             {[

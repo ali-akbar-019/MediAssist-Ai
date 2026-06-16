@@ -84,7 +84,6 @@ export const getSeverityFromScore = (score: number): SeverityLevel => {
   if (score <= 8) return "severe";
   return "emergency";
 };
-
 // Get probability info
 export const getProbabilityInfo = (probability: Probability) => {
   return PROBABILITY_LABELS[probability];

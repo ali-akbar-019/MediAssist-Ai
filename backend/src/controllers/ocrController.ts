@@ -75,7 +75,7 @@ export const analyzeDocument = async (
             patientName: analysisData.patientName,
             date: analysisData.date,
         });
-
+        console.log("AI RESPONSE:", JSON.stringify(analysisData.labValues, null, 2));
         res
             .status(201)
             .json(successResponse(ocrResult, "Document analyzed successfully"));
