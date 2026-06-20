@@ -92,7 +92,7 @@ const HospitalFinder = () => {
     };
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6" data-testid="hospital-finder-component">  {/* ADDED */}
             {/* Search Console */}
             <div className="space-y-4">
                 <div className="text-center">
@@ -119,7 +119,7 @@ const HospitalFinder = () => {
                         />
                     </div>
                     <Button
-                        data-testid="hospital-search-button"
+                        data-testid="hospital-near-me-btn"
                         onClick={handleGetLocation}
                         disabled={isLocating}
                         className="h-14 px-7 rounded-2xl bg-navy-900 hover:bg-navy-950 text-white shrink-0 font-semibold shadow-navy"
@@ -135,7 +135,7 @@ const HospitalFinder = () => {
             </div>
 
             {/* Filters */}
-            <div className="flex flex-wrap gap-2 justify-center sm:justify-start" data-testid="hospital-filters">
+            <div className="flex flex-wrap gap-2 justify-center sm:justify-start" data-testid="hospital-filters">  {/* ADDED */}
                 {filters.map((filter) => (
                     <button
                         key={filter.value}
@@ -159,6 +159,7 @@ const HospitalFinder = () => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     className="flex items-start gap-3 p-4 bg-amber-50 border border-amber-100 rounded-2xl"
+                    data-testid="hospital-permission-denied"  // ADDED
                 >
                     <AlertCircle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
                     <div>
@@ -179,6 +180,7 @@ const HospitalFinder = () => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     className="flex items-center gap-2 p-4 bg-red-50 border border-red-100 rounded-2xl text-sm text-red-600"
+                    data-testid="hospital-error"  // ADDED
                 >
                     <AlertCircle className="w-4 h-4 shrink-0" />
                     {error}
@@ -187,7 +189,7 @@ const HospitalFinder = () => {
 
             {/* Loading */}
             {isLoading && (
-                <div className="flex items-center justify-center py-14">
+                <div className="flex items-center justify-center py-14" data-testid="hospital-loading">  {/* ADDED */}
                     <div className="flex flex-col items-center gap-3">
                         <Loader2 className="w-8 h-8 animate-spin text-navy-900" />
                         <p className="text-sm text-medical-muted">
@@ -203,6 +205,7 @@ const HospitalFinder = () => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     className="flex flex-col items-center justify-center py-20 text-center"
+                    data-testid="hospital-empty-state"  // ADDED
                 >
                     <div className="w-16 h-16 rounded-2xl bg-navy-50 border border-navy-100 flex items-center justify-center mb-5">
                         <Hospital className="w-8 h-8 text-navy-900" />
@@ -241,12 +244,12 @@ const HospitalFinder = () => {
                                         <Hospital className="w-5 h-5 text-navy-900" />
                                     </div>
                                     <div className="flex-1 min-w-0">
-                                        <h3 className="text-sm font-semibold text-navy-900 truncate">
+                                        <h3 className="text-sm font-semibold text-navy-900 truncate" data-testid={`hospital-name-${index}`}>  {/* ADDED */}
                                             {hospital.name}
                                         </h3>
                                         <div className="flex items-start gap-1 mt-0.5">
                                             <MapPin className="w-3 h-3 text-medical-muted shrink-0 mt-0.5" />
-                                            <p className="text-xs text-medical-muted line-clamp-2">
+                                            <p className="text-xs text-medical-muted line-clamp-2" data-testid={`hospital-address-${index}`}>  {/* ADDED */}
                                                 {hospital.address}
                                             </p>
                                         </div>
@@ -257,7 +260,7 @@ const HospitalFinder = () => {
                                 <div className="flex items-center gap-3 flex-wrap pt-1">
                                     {/* Rating */}
                                     {hospital.rating && (
-                                        <div className="flex items-center gap-1">
+                                        <div className="flex items-center gap-1" data-testid={`hospital-rating-${index}`}>  {/* ADDED */}
                                             <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
                                             <span className="text-xs font-medium text-medical-text">
                                                 {hospital.rating.toFixed(1)}
@@ -277,6 +280,7 @@ const HospitalFinder = () => {
                                                 "flex items-center gap-1",
                                                 hospital.isOpen ? "text-emerald-600" : "text-red-500"
                                             )}
+                                            data-testid={`hospital-status-${index}`}  // ADDED
                                         >
                                             <Clock className="w-3 h-3" />
                                             <span className="text-xs font-medium">
@@ -287,7 +291,7 @@ const HospitalFinder = () => {
 
                                     {/* Distance */}
                                     {hospital.distance && (
-                                        <div className="flex items-center gap-1 text-medical-muted">
+                                        <div className="flex items-center gap-1 text-medical-muted" data-testid={`hospital-distance-${index}`}>  {/* ADDED */}
                                             <Navigation className="w-3 h-3" />
                                             <span className="text-xs">{hospital.distance}</span>
                                         </div>
@@ -297,6 +301,7 @@ const HospitalFinder = () => {
                                 {/* Get Directions Button */}
                                 <button
                                     onClick={() => openInMaps(hospital)}
+                                    data-testid={`hospital-directions-${index}`}  // ADDED
                                     className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-navy-900 text-navy-900 text-xs font-medium hover:bg-navy-50 transition-colors"
                                 >
                                     <Navigation className="w-3.5 h-3.5" />
@@ -310,7 +315,7 @@ const HospitalFinder = () => {
 
             {/* Results Count */}
             {!isLoading && hospitals.length > 0 && (
-                <p className="text-xs text-medical-muted text-center pt-1">
+                <p className="text-xs text-medical-muted text-center pt-1" data-testid="hospital-results-count">  {/* ADDED */}
                     Showing {hospitals.length} results
                     {location && " near your location"}
                 </p>

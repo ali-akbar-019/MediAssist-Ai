@@ -92,13 +92,17 @@ const ChatWindow = () => {
     };
 
     return (
-        <div className="flex h-[850px] glass-panel rounded-[2.5rem] border-white/20 overflow-hidden shadow-luxe relative">
+        <div
+            className="flex h-[850px] glass-panel rounded-[2.5rem] border-white/20 overflow-hidden shadow-luxe relative"
+            data-testid="chat-window"  // ADDED
+        >
             {/* Sidebar — Session List */}
-            <div className="w-80 border-r border-white/10 bg-white/20 backdrop-blur-md flex flex-col shrink-0 hidden md:flex">
+            <div className="w-80 border-r border-white/10 bg-white/20 backdrop-blur-md flex flex-col shrink-0 hidden md:flex" data-testid="chat-sidebar">  {/* ADDED */}
                 {/* Sidebar Header */}
                 <div className="p-6 border-b border-white/10">
                     <Button
                         onClick={handleNewChat}
+                        data-testid="chat-new-session-btn"  // ADDED
                         className="w-full h-14 rounded-2xl bg-navy-900 hover:bg-navy-950 text-white font-black text-[11px] uppercase tracking-[0.2em] shadow-navy transition-all active:scale-95"
                         disabled={isLoading}
                     >
@@ -108,13 +112,13 @@ const ChatWindow = () => {
                 </div>
 
                 {/* Session List */}
-                <div className="flex-1 overflow-y-auto p-4 space-y-2">
+                <div className="flex-1 overflow-y-auto p-4 space-y-2" data-testid="chat-session-list">  {/* ADDED */}
                     {isLoading && sessions.length === 0 ? (
-                        <div className="flex items-center justify-center py-12">
+                        <div className="flex items-center justify-center py-12" data-testid="chat-sessions-loading">  {/* ADDED */}
                             <Loader2 className="w-6 h-6 animate-spin text-emerald-500/50" />
                         </div>
                     ) : sessions.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center py-12 px-6 text-center">
+                        <div className="flex flex-col items-center justify-center py-12 px-6 text-center" data-testid="chat-no-sessions">  {/* ADDED */}
                             <div className="w-12 h-12 rounded-2xl bg-white/40 flex items-center justify-center mb-4">
                                 <MessageCircle className="w-6 h-6 text-slate-400" />
                             </div>
@@ -128,6 +132,7 @@ const ChatWindow = () => {
                                 key={session.sessionId}
                                 initial={{ opacity: 0, x: -10 }}
                                 animate={{ opacity: 1, x: 0 }}
+                                data-testid={`chat-session-${session.sessionId}`}  // ADDED
                                 className={cn(
                                     "group flex items-start justify-between p-4 rounded-2xl cursor-pointer transition-all duration-500 border",
                                     currentSessionId === session.sessionId
@@ -168,6 +173,7 @@ const ChatWindow = () => {
                                         e.stopPropagation();
                                         handleDelete(session.sessionId);
                                     }}
+                                    data-testid={`chat-delete-session-${session.sessionId}`}  // ADDED
                                     className={cn(
                                         "p-2 rounded-xl opacity-0 group-hover:opacity-100 transition-all active:scale-90",
                                         currentSessionId === session.sessionId
@@ -184,14 +190,14 @@ const ChatWindow = () => {
             </div>
 
             {/* Main Chat Area */}
-            <div className="flex-1 flex flex-col bg-white/30 min-w-0 backdrop-blur-sm">
+            <div className="flex-1 flex flex-col bg-white/30 min-w-0 backdrop-blur-sm" data-testid="chat-main-area">  {/* ADDED */}
                 {/* Chat Header */}
-                <div className="flex items-center gap-4 p-5 border-b border-white/10 bg-white/40 shrink-0">
+                <div className="flex items-center gap-4 p-5 border-b border-white/10 bg-white/40 shrink-0" data-testid="chat-header">  {/* ADDED */}
                     <div className="w-10 h-10 rounded-2xl bg-emerald-500 flex items-center justify-center shadow-[0_0_15px_rgba(16,185,129,0.3)]">
                         <Stethoscope className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                        <h2 className="text-[13px] font-black tracking-tight text-navy-900 uppercase">
+                        <h2 className="text-[13px] font-black tracking-tight text-navy-900 uppercase" data-testid="chat-header-title">  {/* ADDED */}
                             Clinical Intelligence Unit
                         </h2>
                         <div className="flex items-center gap-2 mt-0.5">
@@ -207,6 +213,7 @@ const ChatWindow = () => {
                         onClick={handleNewChat}
                         size="icon"
                         variant="ghost"
+                        data-testid="chat-mobile-new-chat"  // ADDED
                         className="ml-auto md:hidden w-10 h-10 rounded-xl bg-navy-900 text-white"
                     >
                         <Plus className="w-4 h-4" />
@@ -214,13 +221,14 @@ const ChatWindow = () => {
                 </div>
 
                 {/* Messages Area */}
-                <div className="flex-1 overflow-y-auto p-6 space-y-6">
+                <div className="flex-1 overflow-y-auto p-6 space-y-6" data-testid="chat-messages-area">  {/* ADDED */}
                     {/* Welcome HUD */}
                     {messages.length === 0 && !isLoading && (
                         <motion.div
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
                             className="flex flex-col items-center justify-center h-full gap-8 text-center py-12"
+                            data-testid="chat-welcome"  // ADDED
                         >
                             <motion.div
                                 animate={{
@@ -243,7 +251,7 @@ const ChatWindow = () => {
                                 </p>
                             </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-xl px-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-xl px-4" data-testid="chat-suggestions">  {/* ADDED */}
                                 {[
                                     "Persistent migraine analysis",
                                     "Acute inflammatory response",
@@ -253,6 +261,7 @@ const ChatWindow = () => {
                                     <button
                                         key={suggestion}
                                         onClick={() => handleSend(suggestion)}
+                                        data-testid={`chat-suggestion-${suggestion.replace(/\s+/g, '-').toLowerCase()}`}  // ADDED
                                         className="group p-4 rounded-2xl bg-white/40 border border-white/60 text-left transition-all duration-500 hover:border-emerald-500/50 hover:bg-white hover:shadow-luxe"
                                     >
                                         <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 group-hover:text-emerald-600 mb-1">Inquiry</p>
@@ -280,6 +289,7 @@ const ChatWindow = () => {
                             initial={{ opacity: 0, x: -10 }}
                             animate={{ opacity: 1, x: 0 }}
                             className="flex items-center gap-4"
+                            data-testid="chat-sending-indicator"  // ADDED
                         >
                             <div className="w-10 h-10 rounded-2xl bg-navy-900 flex items-center justify-center shrink-0 shadow-navy">
                                 <Stethoscope className="w-5 h-5 text-emerald-400" />
@@ -312,6 +322,7 @@ const ChatWindow = () => {
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             className="flex items-center gap-3 p-4 bg-red-500 text-white rounded-2xl text-[11px] font-black uppercase tracking-widest shadow-xl max-w-md mx-auto"
+                            data-testid="chat-error"  // ADDED
                         >
                             <AlertTriangle className="w-4 h-4" />
                             <span>Signal Interrupted: {error}</span>
@@ -322,7 +333,7 @@ const ChatWindow = () => {
                 </div>
 
                 {/* Input Area */}
-                <div className="p-6 bg-white/40 border-t border-white/10 backdrop-blur-md shrink-0">
+                <div className="p-6 bg-white/40 border-t border-white/10 backdrop-blur-md shrink-0" data-testid="chat-input-area">  {/* ADDED */}
                     <ChatInput
                         onSend={handleSend}
                         isSending={isSending}

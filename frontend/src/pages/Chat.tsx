@@ -4,7 +4,7 @@ import ChatWindow from "../components/chat/ChatWindow";
 
 const Chat = () => {
     return (
-        <div className="medical-mesh min-h-screen pt-24 pb-20">
+        <div className="medical-mesh min-h-screen pt-24 pb-20" data-testid="chat-page">  {/* ADDED */}
             <div className="container mx-auto px-6 relative">
                 {/* Elite Editorial Header */}
                 <motion.div
@@ -29,7 +29,7 @@ const Chat = () => {
                 </motion.div>
 
                 {/* Main Chat Interface */}
-                <div className="max-w-6xl mx-auto relative">
+                <div className="max-w-6xl mx-auto relative" data-testid="chat-container">  {/* ADDED */}
                     <ChatWindow />
 
                     {/* Elite Disclaimer Guideline */}
@@ -38,6 +38,7 @@ const Chat = () => {
                         animate={{ opacity: 1 }}
                         transition={{ delay: 1 }}
                         className="mt-12 flex items-center justify-center gap-6 px-8 py-4 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-sm max-w-3xl mx-auto"
+                        data-testid="chat-disclaimer"  // ADDED
                     >
                         <div className="flex items-center gap-3 text-navy-400">
                             <Info className="w-4 h-4 text-emerald-500" />

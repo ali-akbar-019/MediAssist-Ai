@@ -45,6 +45,7 @@ const EmergencyAlert = ({
                         exit={{ opacity: 0 }}
                         className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
                         onClick={onClose}
+                        data-testid="emergency-overlay"  // ADDED
                     />
 
                     {/* Alert Modal */}
@@ -55,11 +56,12 @@ const EmergencyAlert = ({
                         transition={{ type: "spring", damping: 20, stiffness: 300 }}
                         className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none"
                     >
-                        <div className="bg-white rounded-2xl shadow-elevated w-full max-w-md pointer-events-auto overflow-hidden">
+                        <div className="bg-white rounded-2xl shadow-elevated w-full max-w-md pointer-events-auto overflow-hidden" data-testid="emergency-modal">  {/* ADDED */}
                             {/* Header */}
-                            <div className="bg-red-500 p-5 relative">
+                            <div className="bg-red-500 p-5 relative" data-testid="emergency-header">  {/* ADDED */}
                                 <button
                                     onClick={onClose}
+                                    data-testid="emergency-close-btn"  // ADDED
                                     className="absolute top-4 right-4 p-1 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
                                 >
                                     <X className="w-4 h-4 text-white" />
@@ -73,7 +75,7 @@ const EmergencyAlert = ({
                                         <AlertTriangle className="w-6 h-6 text-white" />
                                     </motion.div>
                                     <div>
-                                        <h2 className="text-white font-heading font-bold text-xl">
+                                        <h2 className="text-white font-heading font-bold text-xl" data-testid="emergency-title">  {/* ADDED */}
                                             Emergency Alert
                                         </h2>
                                         <p className="text-red-100 text-sm">
@@ -86,7 +88,7 @@ const EmergencyAlert = ({
                             {/* Content */}
                             <div className="p-5">
                                 {triggeredBy && (
-                                    <div className="mb-4 p-3 bg-red-50 rounded-xl border border-red-100">
+                                    <div className="mb-4 p-3 bg-red-50 rounded-xl border border-red-100" data-testid="emergency-triggered-by">  {/* ADDED */}
                                         <p className="text-red-700 text-sm font-medium">
                                             Detected symptom:
                                         </p>
@@ -94,14 +96,14 @@ const EmergencyAlert = ({
                                     </div>
                                 )}
 
-                                <p className="text-medical-text text-sm mb-5 leading-relaxed">
+                                <p className="text-medical-text text-sm mb-5 leading-relaxed" data-testid="emergency-message">  {/* ADDED */}
                                     Your symptoms suggest a potentially serious medical condition.
                                     Please contact emergency services immediately or have someone
                                     take you to the nearest hospital.
                                 </p>
 
                                 {/* Emergency Numbers */}
-                                <div className="space-y-3 mb-5">
+                                <div className="space-y-3 mb-5" data-testid="emergency-contacts">  {/* ADDED */}
                                     <p className="text-medical-muted text-xs font-medium uppercase tracking-wider">
                                         Emergency Contacts — Pakistan
                                     </p>
@@ -113,6 +115,7 @@ const EmergencyAlert = ({
                                                 href={`tel:${contact.number}`}
                                                 whileHover={{ scale: 1.02 }}
                                                 whileTap={{ scale: 0.98 }}
+                                                data-testid={`emergency-contact-${contact.label.toLowerCase()}`}  // ADDED
                                                 className={`flex items-center justify-between w-full px-4 py-3 rounded-xl ${contact.color} text-white transition-opacity hover:opacity-90`}
                                             >
                                                 <div className="flex items-center gap-3">
@@ -128,7 +131,7 @@ const EmergencyAlert = ({
                                 </div>
 
                                 {/* Disclaimer */}
-                                <p className="text-medical-muted text-xs text-center">
+                                <p className="text-medical-muted text-xs text-center" data-testid="emergency-disclaimer">  {/* ADDED */}
                                     Do not rely solely on AI assessment for emergencies.
                                     Call emergency services immediately if in danger.
                                 </p>
@@ -136,6 +139,7 @@ const EmergencyAlert = ({
                                 {/* Close Button */}
                                 <button
                                     onClick={onClose}
+                                    data-testid="emergency-understand-btn"  // ADDED
                                     className="mt-4 w-full py-2.5 rounded-xl border border-medical-border text-medical-muted text-sm font-medium hover:bg-medical-surface transition-colors"
                                 >
                                     I understand, close this alert

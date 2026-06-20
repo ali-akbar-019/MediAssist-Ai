@@ -111,7 +111,7 @@ const SymptomForm = () => {
         !!formData.worseAt;
 
     return (
-        <div className="space-y-12">
+        <div className="space-y-12" data-testid="symptom-form">  {/* ADDED */}
             {/* Emergency Alert */}
             <EmergencyAlert
                 isVisible={emergencyVisible}
@@ -120,7 +120,7 @@ const SymptomForm = () => {
             />
 
             {/* Clinical Analytics Step Indicator */}
-            <div className="relative pt-4">
+            <div className="relative pt-4" data-testid="step-indicator">  {/* ADDED */}
                 <div className="flex items-center justify-between relative z-10">
                     {STEPS.map((step) => {
                         const isCompleted = currentStep > step.number;
@@ -129,6 +129,7 @@ const SymptomForm = () => {
                         return (
                             <div key={step.number} className="flex flex-col items-center group">
                                 <div
+                                    data-testid={`step-${step.number}`}  // ADDED
                                     className={cn(
                                         "w-10 h-10 rounded-2xl flex items-center justify-center text-[13px] font-black tracking-tighter transition-all duration-700 border shrink-0 relative",
                                         isCurrent
@@ -173,6 +174,7 @@ const SymptomForm = () => {
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: -20 }}
                         className="space-y-6"
+                        data-testid="step1-content"  // ADDED
                     >
                         <div className="text-center">
                             <h3 className="text-xl font-heading font-bold text-navy-900">
@@ -198,6 +200,7 @@ const SymptomForm = () => {
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: -20 }}
                         className="space-y-5"
+                        data-testid="step2-content"  // ADDED
                     >
                         <div>
                             <h3 className="text-lg font-heading font-semibold text-navy-900">
@@ -239,13 +242,14 @@ const SymptomForm = () => {
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     className="flex flex-wrap gap-2"
+                                    data-testid="symptom-list"  // ADDED
                                 >
                                     {formData.symptoms?.map((symptom) => (
                                         <SymptomTag
                                             key={symptom}
                                             symptom={symptom}
-
                                             onRemove={handleRemoveSymptom}
+                                            data-testid={`symptom-tag-${symptom}`}  // ADDED
                                         />
                                     ))}
                                 </motion.div>
@@ -269,6 +273,7 @@ const SymptomForm = () => {
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: -20 }}
                         className="space-y-5"
+                        data-testid="step3-content"  // ADDED
                     >
                         <div>
                             <h3 className="text-lg font-heading font-semibold text-navy-900">
@@ -348,12 +353,20 @@ const SymptomForm = () => {
                                         updateFormData({ durationUnit: val as never })
                                     }
                                 >
-                                    <SelectTrigger className="w-40 h-14 bg-white/40 border-white/60 rounded-2xl font-bold">
+                                    <SelectTrigger
+                                        data-testid="duration-unit"  // MOVED HERE
+                                        className="w-40 h-14 bg-white/40 border-white/60 rounded-2xl font-bold"
+                                    >
                                         <SelectValue />
                                     </SelectTrigger>
-                                    <SelectContent data-testid="duration-unit" className="glass-panel border-white/20 rounded-2xl shadow-xl">
+                                    <SelectContent className="glass-panel border-white/20 rounded-2xl shadow-xl">
                                         {DURATION_UNITS.map((unit) => (
-                                            <SelectItem data-testid={`duration-option-${unit.value}`} key={unit.value} value={unit.value} className="rounded-xl focus:bg-emerald-50">
+                                            <SelectItem
+                                                data-testid={`duration-option-${unit.value}`}
+                                                key={unit.value}
+                                                value={unit.value}
+                                                className="rounded-xl focus:bg-emerald-50"
+                                            >
                                                 {unit.label}
                                             </SelectItem>
                                         ))}
@@ -423,9 +436,10 @@ const SymptomForm = () => {
                         exit={{ opacity: 0, scale: 0.95 }}
                         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                         className="space-y-8"
+                        data-testid="step4-content"  // ADDED
                     >
                         {isAnalyzing ? (
-                            <div className="flex flex-col items-center justify-center py-20 gap-8">
+                            <div className="flex flex-col items-center justify-center py-20 gap-8" data-testid="analyzing-state">  {/* ADDED */}
                                 <div className="relative">
                                     <div className="w-24 h-24 rounded-full border-4 border-emerald-100 border-t-emerald-500 animate-spin" />
                                     <div className="absolute inset-4 rounded-full bg-emerald-500/10 animate-pulse flex items-center justify-center">
@@ -440,7 +454,7 @@ const SymptomForm = () => {
                                 </div>
                             </div>
                         ) : analysisResult ? (
-                            <div className="space-y-8">
+                            <div className="space-y-8" data-testid="analysis-result">  {/* ADDED */}
                                 <div className="text-center">
                                     <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-navy-900 text-white text-[10px] font-bold uppercase tracking-widest mb-6">
                                         Analysis Result Verified
@@ -622,7 +636,7 @@ const SymptomForm = () => {
 
             {/* Elite Navigation Controls */}
             {currentStep < 4 && (
-                <div className="pt-8 border-t border-white/60">
+                <div className="pt-8 border-t border-white/60" data-testid="navigation-controls">  {/* ADDED */}
                     <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-6">
                         <div className="flex-1">
                             <Button

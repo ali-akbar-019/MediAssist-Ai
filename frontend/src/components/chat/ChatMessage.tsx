@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import { Stethoscope, User, Clock } from "lucide-react";
 import ReactMarkdown from "react-markdown";
@@ -15,10 +16,11 @@ const ChatMessage = ({ message, index }: ChatMessageProps) => {
 
     return (
         <motion.div
+            data-testid={`chat-message-${index}`}  // ADDED
             initial={{ opacity: 0, x: isUser ? 20 : -20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ 
-                duration: 0.6, 
+            transition={{
+                duration: 0.6,
                 delay: index * 0.05,
                 ease: [0.16, 1, 0.3, 1]
             }}
@@ -29,6 +31,7 @@ const ChatMessage = ({ message, index }: ChatMessageProps) => {
         >
             {/* Elite Avatar */}
             <div
+                data-testid={`chat-avatar-${isUser ? 'user' : 'ai'}-${index}`}  // ADDED
                 className={cn(
                     "w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 mt-1 shadow-luxe",
                     isUser
@@ -51,12 +54,13 @@ const ChatMessage = ({ message, index }: ChatMessageProps) => {
                 )}
             >
                 {/* Tactical Label */}
-                <span className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1.5 px-2">
+                <span className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1.5 px-2" data-testid={`chat-label-${isUser ? 'user' : 'ai'}-${index}`}>  {/* ADDED */}
                     {isUser ? "Authorized Source" : "Intelligence Signal"}
                 </span>
 
                 {/* The Bubble */}
                 <div
+                    data-testid={`chat-bubble-${isUser ? 'user' : 'ai'}-${index}`}  // ADDED
                     className={cn(
                         "px-6 py-4 rounded-[2rem] text-sm leading-relaxed relative overflow-hidden",
                         isUser
@@ -70,7 +74,9 @@ const ChatMessage = ({ message, index }: ChatMessageProps) => {
                             <Stethoscope className="w-16 h-16 rotate-12" />
                         </div>
                     )}
-                    <ReactMarkdown>{message.content}</ReactMarkdown>
+                    <ReactMarkdown data-testid={`chat-content-${isUser ? 'user' : 'ai'}-${index}`}>  {/* ADDED */}
+                        {message.content || ""}
+                    </ReactMarkdown>
                 </div>
 
                 {/* Timestamp Index */}
@@ -79,7 +85,7 @@ const ChatMessage = ({ message, index }: ChatMessageProps) => {
                     isUser ? "flex-row-reverse" : "flex-row"
                 )}>
                     <Clock className="w-3 h-3 text-slate-300" />
-                    <span className="text-[10px] font-black uppercase tracking-tighter text-slate-400">
+                    <span className="text-[10px] font-black uppercase tracking-tighter text-slate-400" data-testid={`chat-timestamp-${index}`}>  {/* ADDED */}
                         {formatRelativeTime(message.timestamp)}
                     </span>
                 </div>
@@ -88,4 +94,4 @@ const ChatMessage = ({ message, index }: ChatMessageProps) => {
     );
 };
 
-export default ChatMessage;
+export default ChatMessage;

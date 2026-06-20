@@ -61,13 +61,14 @@ const ChatInput = ({
     };
 
     return (
-        <div className="space-y-4">
+        <div className="space-y-4" data-testid="chat-input-container">  {/* ADDED */}
             {/* Quick Suggestions — Elite Chips */}
             {showSuggestions && (
                 <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="flex flex-wrap gap-2 px-2"
+                    data-testid="chat-quick-suggestions"  // ADDED
                 >
                     <span className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 self-center mr-2">
                         Common Signal:
@@ -76,6 +77,7 @@ const ChatInput = ({
                         <button
                             key={suggestion}
                             onClick={() => handleSuggestionClick(suggestion)}
+                            data-testid={`chat-suggestion-${suggestion.replace(/\s+/g, '-').toLowerCase()}`}  // ADDED
                             className="px-4 py-1.5 rounded-full text-[11px] font-bold border border-white/60 bg-white/40 text-slate-500 hover:border-emerald-500/50 hover:text-emerald-600 hover:bg-white transiton-all duration-300"
                         >
                             {suggestion}
@@ -86,6 +88,7 @@ const ChatInput = ({
 
             {/* Input Area — Luxury Glass Interface */}
             <div
+                data-testid="chat-input-area"  // ADDED
                 className={cn(
                     "flex items-center gap-4 p-4 rounded-[1.8rem] border transition-all duration-500 ",
                     disabled
@@ -103,6 +106,7 @@ const ChatInput = ({
                     placeholder={placeholder}
                     disabled={disabled || isSending}
                     rows={1}
+                    data-testid="chat-textarea"  // ADDED
                     className={cn(
                         "flex-1 resize-none bg-transparent text-sm text-navy-900 placeholder:text-slate-400",
                         "focus:outline-none disabled:opacity-50",
@@ -114,6 +118,7 @@ const ChatInput = ({
                 <div className="flex items-center gap-2 shrink-0">
                     <button
                         disabled={disabled || isSending}
+                        data-testid="chat-voice-btn"  // ADDED
                         className="p-2.5 rounded-2xl text-slate-400 hover:text-emerald-600 hover:bg-emerald-50/50 transition-all duration-300 disabled:opacity-40"
                         title="Voice Analysis"
                     >
@@ -125,6 +130,7 @@ const ChatInput = ({
                         whileTap={{ scale: 0.95 }}
                         onClick={handleSend}
                         disabled={!message.trim() || isSending || disabled}
+                        data-testid="chat-send-btn"  // ADDED
                         className={cn(
                             "w-11 h-11 rounded-2xl flex items-center justify-center transition-all duration-500",
                             message.trim() && !isSending && !disabled
@@ -142,7 +148,7 @@ const ChatInput = ({
             </div>
 
             {/* Signal Protocol Info */}
-            <div className="flex items-center justify-center gap-4 py-1">
+            <div className="flex items-center justify-center gap-4 py-1" data-testid="chat-protocol-info">  {/* ADDED */}
                 <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest flex items-center gap-2">
                     <span className="w-1 h-1 rounded-full bg-emerald-500" />
                     Protocol: Secure Signal Area

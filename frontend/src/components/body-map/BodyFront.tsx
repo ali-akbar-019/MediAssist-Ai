@@ -82,6 +82,7 @@ const BodyFront = ({ selectedParts, onPartSelect }: BodyFrontProps) => {
             xmlns="http://www.w3.org/2000/svg"
             role="img"
             aria-labelledby="bodyFrontTitle bodyFrontDesc"
+            data-testid="body-front-svg"  // ADDED
         >
             <title id="bodyFrontTitle">Anterior human body map</title>
             <desc id="bodyFrontDesc">Interactive anterior view of a stylized human body for selecting regions.</desc>
@@ -131,6 +132,7 @@ const BodyFront = ({ selectedParts, onPartSelect }: BodyFrontProps) => {
                 <motion.path
                     key={part.id}
                     d={part.d}
+                    data-testid={`body-part-${part.id}`}  // ADDED
                     fill={isSelected(part.id) ? "#10b981" : "transparent"}
                     stroke={isSelected(part.id) ? "#065f46" : "#059669"}
                     strokeWidth={isSelected(part.id) ? "1.5" : "0.5"}

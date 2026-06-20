@@ -5,9 +5,10 @@ import { getSeverityFromScore, getSeverityScoreColor } from "../../lib/utils";
 interface SeveritySliderProps {
     value: number;
     onChange: (value: number) => void;
+    "data-testid"?: string;  // ADDED
 }
 
-const SeveritySlider = ({ value, onChange }: SeveritySliderProps) => {
+const SeveritySlider = ({ value, onChange, "data-testid": testId }: SeveritySliderProps) => {  // ADDED
     const severity = getSeverityFromScore(value);
     const color = getSeverityScoreColor(value);
 
@@ -21,7 +22,7 @@ const SeveritySlider = ({ value, onChange }: SeveritySliderProps) => {
     ];
 
     return (
-        <div className="space-y-4">
+        <div data-testid={testId} className="space-y-4">  {/* ADDED */}
             {/* Score Display */}
             <div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-medical-muted">
@@ -60,6 +61,7 @@ const SeveritySlider = ({ value, onChange }: SeveritySliderProps) => {
                     max={10}
                     value={value}
                     onChange={(e) => onChange(parseInt(e.target.value))}
+                    data-testid="severity-range"  // ADDED
                     className="w-full h-2 rounded-full appearance-none cursor-pointer"
                     style={{
                         background: `linear-gradient(to right, ${color} 0%, ${color} ${(value - 1) * 11.11}%, #E2E8F0 ${(value - 1) * 11.11}%, #E2E8F0 100%)`,
@@ -73,6 +75,7 @@ const SeveritySlider = ({ value, onChange }: SeveritySliderProps) => {
                     <button
                         key={item.score}
                         onClick={() => onChange(item.score)}
+                        data-testid={`severity-label-${item.score}`}  // ADDED
                         className={cn(
                             "text-xs transition-colors",
                             value === item.score
@@ -93,6 +96,7 @@ const SeveritySlider = ({ value, onChange }: SeveritySliderProps) => {
                         onClick={() => onChange(score)}
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.95 }}
+                        data-testid={`severity-bar-${score}`}  // ADDED
                         className="flex-1 h-6 rounded-sm transition-all"
                         style={{
                             backgroundColor:

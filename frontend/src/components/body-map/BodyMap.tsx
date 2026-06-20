@@ -20,12 +20,13 @@ const BodyMap = ({ selectedParts, onPartToggle, onPartRemove }: BodyMapProps) =>
     };
 
     return (
-        <div className="flex flex-col items-center gap-6">
+        <div className="flex flex-col items-center gap-6" data-testid="body-map-container">  {/* ADDED */}
             {/* View Toggle */}
             {/* View Toggle - Elite Console Style */}
-            <div className="flex items-center gap-1 bg-white/40 backdrop-blur-md rounded-2xl p-1 border border-white/50 shadow-soft ring-1 ring-black/5">
+            <div className="flex items-center gap-1 bg-white/40 backdrop-blur-md rounded-2xl p-1 border border-white/50 shadow-soft ring-1 ring-black/5" data-testid="body-view-toggle">  {/* ADDED */}
                 <button
                     onClick={() => setView("front")}
+                    data-testid="body-view-front"  // ADDED
                     className={cn(
                         "px-8 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all duration-500",
                         view === "front"
@@ -37,6 +38,7 @@ const BodyMap = ({ selectedParts, onPartToggle, onPartRemove }: BodyMapProps) =>
                 </button>
                 <button
                     onClick={() => setView("back")}
+                    data-testid="body-view-back"  // ADDED
                     className={cn(
                         "px-8 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all duration-500",
                         view === "back"
@@ -49,7 +51,7 @@ const BodyMap = ({ selectedParts, onPartToggle, onPartRemove }: BodyMapProps) =>
             </div>
 
             {/* Body SVG — Tactical Scanner Interface */}
-            <div className="relative w-full max-w-[320px] aspect-[1/2.2] flex items-center justify-center bg-white/30 backdrop-blur-sm rounded-[4rem] border border-white shadow-soft p-10 overflow-hidden group">
+            <div className="relative w-full max-w-[320px] aspect-[1/2.2] flex items-center justify-center bg-white/30 backdrop-blur-sm rounded-[4rem] border border-white shadow-soft p-10 overflow-hidden group" data-testid="body-map-svg-container">  {/* ADDED */}
                 {/* High-Intensity Scanner Animation */}
                 <motion.div
                     animate={{
@@ -100,6 +102,7 @@ const BodyMap = ({ selectedParts, onPartToggle, onPartRemove }: BodyMapProps) =>
                 {/* Tactical Flip Button */}
                 <button
                     onClick={handleFlip}
+                    data-testid="body-flip"  // ADDED
                     className="absolute bottom-6 right-6 p-4 bg-navy-900 border border-white/10 rounded-2xl shadow-navy text-emerald-400 hover:bg-navy-950 transition-all group active:scale-95"
                 >
                     <RotateCcw className="w-5 h-5 group-hover:rotate-180 transition-transform duration-700 ease-out" />
@@ -107,14 +110,15 @@ const BodyMap = ({ selectedParts, onPartToggle, onPartRemove }: BodyMapProps) =>
             </div>
 
             {/* Selected Parts List */}
-            <div className="w-full max-w-md space-y-3">
+            <div className="w-full max-w-md space-y-3" data-testid="selected-parts-container">  {/* ADDED */}
                 <div className="flex items-center justify-between px-1">
-                    <span className="text-sm font-semibold text-navy-900">
+                    <span className="text-sm font-semibold text-navy-900" data-testid="selected-parts-count">  {/* ADDED */}
                         Selected Areas ({selectedParts.length})
                     </span>
                     {selectedParts.length > 0 && (
                         <button
                             onClick={() => { }} // Reset handled in parent
+                            data-testid="clear-all-parts"  // ADDED
                             className="text-xs text-emerald-600 hover:text-emerald-700 font-medium"
                         >
                             Clear All
@@ -122,7 +126,7 @@ const BodyMap = ({ selectedParts, onPartToggle, onPartRemove }: BodyMapProps) =>
                     )}
                 </div>
 
-                <div className="flex flex-wrap gap-2 min-h-[40px]">
+                <div className="flex flex-wrap gap-2 min-h-[40px]" data-testid="selected-parts-list">  {/* ADDED */}
                     <AnimatePresence>
                         {selectedParts.map((part) => (
                             <motion.div
@@ -130,11 +134,13 @@ const BodyMap = ({ selectedParts, onPartToggle, onPartRemove }: BodyMapProps) =>
                                 initial={{ opacity: 0, scale: 0.8 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 exit={{ opacity: 0, scale: 0.8 }}
+                                data-testid={`selected-part-${part.id}`}  // ADDED
                                 className="flex items-center gap-2 px-3 py-1.5 bg-emerald-50 border border-emerald-200 text-emerald-900 rounded-xl text-sm font-medium pr-1 shadow-sm"
                             >
                                 <span>{part.name}</span>
                                 <button
                                     onClick={() => onPartRemove(part.id)}
+                                    data-testid={`remove-part-${part.id}`}  // ADDED
                                     className="p-1 hover:bg-emerald-200 rounded-lg transition-colors"
                                 >
                                     <X className="w-3.5 h-3.5" />
@@ -143,7 +149,7 @@ const BodyMap = ({ selectedParts, onPartToggle, onPartRemove }: BodyMapProps) =>
                         ))}
                     </AnimatePresence>
                     {selectedParts.length === 0 && (
-                        <p className="text-sm text-medical-muted italic px-1">
+                        <p className="text-sm text-medical-muted italic px-1" data-testid="no-parts-selected">  {/* ADDED */}
                             No parts selected. Click on the body map to start.
                         </p>
                     )}

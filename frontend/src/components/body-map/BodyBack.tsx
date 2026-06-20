@@ -62,6 +62,7 @@ const BodyBack = ({ selectedParts, onPartSelect }: BodyBackProps) => {
             xmlns="http://www.w3.org/2000/svg"
             role="img"
             aria-labelledby="bodyBackTitle bodyBackDesc"
+            data-testid="body-back-svg"  // ADDED
         >
             <title id="bodyBackTitle">Posterior human body map</title>
             <desc id="bodyBackDesc">Interactive posterior view of a stylized human body for selecting regions.</desc>
@@ -109,6 +110,7 @@ const BodyBack = ({ selectedParts, onPartSelect }: BodyBackProps) => {
                 <motion.path
                     key={part.id}
                     d={part.d}
+                    data-testid={`body-part-${part.id}`}  // ADDED
                     fill={isSelected(part.id) ? "#10b981" : "transparent"}
                     stroke={isSelected(part.id) ? "#065f46" : "#059669"}
                     strokeWidth={isSelected(part.id) ? "1.5" : "0.5"}

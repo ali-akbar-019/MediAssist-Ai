@@ -192,6 +192,7 @@ const MedicineInfo = () => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.2 }}
                             className="glass-panel p-6 rounded-[2.5rem] mb-8"
+                            data-testid="common-medicines-container"
                         >
                             <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-4 text-center">
                                 Quick Picks
@@ -200,6 +201,7 @@ const MedicineInfo = () => {
                                 {COMMON_MEDICINES.map((med) => (
                                     <button
                                         key={med}
+                                        data-testid={`common-medicine-${med.toLowerCase()}`}
                                         onClick={() => {
                                             setSearchQuery(med);
                                             handleSearch(med);
@@ -215,7 +217,7 @@ const MedicineInfo = () => {
 
                     {/* Loading */}
                     {isLoading && (
-                        <div className="flex flex-col items-center justify-center py-20 gap-3">
+                        <div data-testid="medicine-loading" className="flex flex-col items-center justify-center py-20 gap-3">
                             <motion.div
                                 animate={{ rotate: 360 }}
                                 transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
@@ -267,10 +269,10 @@ const MedicineInfo = () => {
                                                 <Pill className="w-7 h-7 text-amber-500" />
                                             </div>
                                             <div className="flex-1 min-w-0">
-                                                <h2 className="text-2xl font-heading font-bold text-navy-900">
+                                                <h2 data-testid="medicine-name" className="text-2xl font-heading font-bold text-navy-900">
                                                     {medicine.name}
                                                 </h2>
-                                                <p className="text-sm text-medical-muted mt-0.5">
+                                                <p data-testid="medicine-generic-name" className="text-sm text-medical-muted mt-0.5">
                                                     Generic name: {" "}
                                                     <span className="font-medium text-medical-text">
                                                         {medicine.genericName}
@@ -279,7 +281,7 @@ const MedicineInfo = () => {
                                             </div>
                                         </div>
 
-                                        <div className="mt-5 p-4 rounded-2xl bg-navy-50 border border-navy-100">
+                                        <div data-testid="medicine-dosage" className="mt-5 p-4 rounded-2xl bg-navy-50 border border-navy-100">
                                             <p className="text-[10px] font-black uppercase tracking-[0.3em] text-navy-600 mb-2">
                                                 General Dosage Information
                                             </p>
@@ -288,7 +290,7 @@ const MedicineInfo = () => {
                                             </p>
                                         </div>
 
-                                        <div className="mt-4 flex items-start gap-2 p-3 bg-amber-50 border border-amber-100 rounded-2xl">
+                                        <div data-testid="medicine-disclaimer" className="mt-4 flex items-start gap-2 p-3 bg-amber-50 border border-amber-100 rounded-2xl">
                                             <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
                                             <p className="text-xs text-amber-700 leading-relaxed">
                                                 Always consult a doctor or pharmacist before taking any
@@ -311,6 +313,7 @@ const MedicineInfo = () => {
                                             className="medical-card overflow-hidden"
                                         >
                                             <button
+                                                data-testid={`section-${section.id}`}
                                                 onClick={() => toggleSection(section.id)}
                                                 className="w-full flex items-center justify-between p-5 text-left hover:bg-medical-surface transition-colors"
                                             >
@@ -354,6 +357,7 @@ const MedicineInfo = () => {
                                                                 {section.items.map((item, itemIndex) => (
                                                                     <motion.li
                                                                         key={itemIndex}
+                                                                        data-testid={`section-${section.id}-item-${itemIndex}`}
                                                                         initial={{ opacity: 0, x: -10 }}
                                                                         animate={{ opacity: 1, x: 0 }}
                                                                         transition={{ delay: itemIndex * 0.05 }}
@@ -379,6 +383,7 @@ const MedicineInfo = () => {
 
                                 <div className="text-center pt-2">
                                     <button
+                                        data-testid="search-another-medicine"
                                         onClick={() => {
                                             setMedicine(null);
                                             setSearchQuery("");
