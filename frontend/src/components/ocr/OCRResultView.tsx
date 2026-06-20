@@ -36,11 +36,13 @@ const OCRResultView = ({ result, onReset, onDelete }: OCRResultViewProps) => {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             className="space-y-5"
+            data-testid="ocr-result-view"  // ADDED
         >
             {/* Result Header */}
             <div
                 className="flex flex-col xl:flex-row xl:items-start justify-between gap-5 p-5 sm:p-8 rounded-[2rem] sm:rounded-[2.5rem] shadow-luxe border border-white/10"
                 style={{ backgroundColor: "var(--color-navy-900)" }}
+                data-testid="ocr-result-header"  // ADDED
             >
                 <div className="flex items-start gap-4 sm:gap-5 min-w-0">
                     <div
@@ -58,6 +60,7 @@ const OCRResultView = ({ result, onReset, onDelete }: OCRResultViewProps) => {
                         <h2
                             className="font-heading font-black text-xl sm:text-2xl leading-none tracking-tight"
                             style={{ color: "white" }}
+                            data-testid="ocr-result-title"  // ADDED
                         >
                             {docConfig.label} <span className="text-emerald-500 font-light italic">Insights.</span>
                         </h2>
@@ -65,6 +68,7 @@ const OCRResultView = ({ result, onReset, onDelete }: OCRResultViewProps) => {
                             <p
                                 className="text-[10px] font-bold flex items-center gap-2"
                                 style={{ color: "rgba(255,255,255,0.4)" }}
+                                data-testid="ocr-result-time"  // ADDED
                             >
                                 <Clock size={12} className="text-emerald-500" />
                                 {formatRelativeTime(result.createdAt)}
@@ -73,6 +77,7 @@ const OCRResultView = ({ result, onReset, onDelete }: OCRResultViewProps) => {
                             <p
                                 className="text-[10px] font-bold truncate max-w-xs"
                                 style={{ color: "rgba(255,255,255,0.4)" }}
+                                data-testid="ocr-result-filename"  // ADDED
                             >
                                 {result.fileName}
                             </p>
@@ -83,6 +88,7 @@ const OCRResultView = ({ result, onReset, onDelete }: OCRResultViewProps) => {
                 <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0 w-full xl:w-auto">
                     <button
                         onClick={() => setShowRawText((p) => !p)}
+                        data-testid="ocr-toggle-raw-text"  // ADDED
                         className={cn(
                             "flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all duration-300 w-full sm:w-auto",
                             showRawText ? "bg-white/20 text-white" : "bg-white/5 text-white/60 hover:bg-white/10"
@@ -93,6 +99,7 @@ const OCRResultView = ({ result, onReset, onDelete }: OCRResultViewProps) => {
                     </button>
                     <button
                         onClick={onReset}
+                        data-testid="ocr-new-registry-btn"  // ADDED
                         className="flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider bg-emerald-500 text-navy-900 shadow-lg shadow-emerald-500/20 hover:scale-105 transition-all duration-300 w-full sm:w-auto"
                     >
                         <RotateCcw size={14} />
@@ -101,6 +108,7 @@ const OCRResultView = ({ result, onReset, onDelete }: OCRResultViewProps) => {
                     {onDelete && (
                         <button
                             onClick={() => onDelete(result._id)}
+                            data-testid="ocr-delete-result-btn"  // ADDED
                             className="p-2 rounded-xl bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white transition-all duration-300 self-center sm:self-auto"
                         >
                             <Trash2 size={16} />
@@ -117,10 +125,12 @@ const OCRResultView = ({ result, onReset, onDelete }: OCRResultViewProps) => {
                     exit={{ opacity: 0, height: 0 }}
                     className="rounded-xl border p-4"
                     style={{ borderColor: "var(--color-medical-border)" }}
+                    data-testid="ocr-raw-text-container"  // ADDED
                 >
                     <p
                         className="text-xs font-semibold uppercase tracking-wider mb-2"
                         style={{ color: "var(--color-medical-muted)" }}
+                        data-testid="ocr-raw-text-label"  // ADDED
                     >
                         Extracted Raw Text
                     </p>
@@ -131,6 +141,7 @@ const OCRResultView = ({ result, onReset, onDelete }: OCRResultViewProps) => {
                             maxHeight: "200px",
                             overflowY: "auto",
                         }}
+                        data-testid="ocr-raw-text-content"  // ADDED
                     >
                         {result.rawText}
                     </pre>
@@ -144,20 +155,23 @@ const OCRResultView = ({ result, onReset, onDelete }: OCRResultViewProps) => {
                 <LabReportResult result={result} />
             ) : (
                 /* Generic result for medical_report and other */
-                <div className="space-y-4">
+                <div className="space-y-4" data-testid="ocr-generic-result">  // ADDED
                     <div
                         className="p-4 rounded-xl"
                         style={{ backgroundColor: "var(--color-navy-900)" }}
+                        data-testid="ocr-summary-container"  // ADDED
                     >
                         <p
                             className="text-xs font-semibold uppercase tracking-wider mb-2"
                             style={{ color: "var(--color-emerald-400, #34D399)" }}
+                            data-testid="ocr-summary-label"  // ADDED
                         >
                             AI Summary
                         </p>
                         <p
                             className="text-sm leading-relaxed"
                             style={{ color: "rgba(255,255,255,0.85)" }}
+                            data-testid="ocr-summary-content"  // ADDED
                         >
                             {result.simplifiedExplanation || result.summary}
                         </p>
@@ -167,15 +181,20 @@ const OCRResultView = ({ result, onReset, onDelete }: OCRResultViewProps) => {
                         <div
                             className="p-4 rounded-xl"
                             style={{ backgroundColor: "#FFFBEB", border: "1px solid #FDE68A" }}
+                            data-testid="ocr-notes-container"  // ADDED
                         >
                             <p className="text-xs font-semibold uppercase tracking-wider mb-3"
-                                style={{ color: "#D97706" }}>
+                                style={{ color: "#D97706" }}
+                                data-testid="ocr-notes-label"  // ADDED
+                            >
                                 Key Findings
                             </p>
-                            <ul className="space-y-2">
+                            <ul className="space-y-2" data-testid="ocr-notes-list">  // ADDED
                                 {result.importantNotes.map((note, i) => (
                                     <li key={i} className="flex items-start gap-2 text-sm"
-                                        style={{ color: "var(--color-medical-muted)" }}>
+                                        style={{ color: "var(--color-medical-muted)" }}
+                                        data-testid={`ocr-note-${i}`}  // ADDED
+                                    >
                                         <span style={{ color: "#D97706" }}>•</span>
                                         {note}
                                     </li>
@@ -190,6 +209,7 @@ const OCRResultView = ({ result, onReset, onDelete }: OCRResultViewProps) => {
             <p
                 className="text-xs text-center"
                 style={{ color: "var(--color-medical-muted)" }}
+                data-testid="ocr-disclaimer"  // ADDED
             >
                 ⚠️ This AI analysis is for informational purposes only. Always consult
                 your doctor for medical decisions.

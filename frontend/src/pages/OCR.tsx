@@ -81,7 +81,10 @@ const OCRPage = () => {
     };
 
     return (
-        <div className="medical-mesh min-h-screen pt-24 sm:pt-28 pb-16 sm:pb-24">
+        <div
+            className="medical-mesh min-h-screen pt-24 sm:pt-28 pb-16 sm:pb-24"
+            data-testid="ocr-page"  // ADDED
+        >
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
                 {/* Header */}
                 <motion.div
@@ -100,7 +103,10 @@ const OCRPage = () => {
                         </span>
                     </motion.div>
 
-                    <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-navy-900 tracking-tighter mb-4 uppercase">
+                    <h1
+                        data-testid="ocr-heading"  // ADDED
+                        className="text-4xl sm:text-5xl md:text-7xl font-black text-navy-900 tracking-tighter mb-4 uppercase"
+                    >
                         ANALYZE<span className="text-emerald-500">.</span>
                     </h1>
                     <p className="text-sm sm:text-lg text-slate-500 max-w-2xl mx-auto font-medium tracking-tight">
@@ -109,7 +115,7 @@ const OCRPage = () => {
                 </motion.div>
 
                 {/* Tab Switcher */}
-                <div className="flex justify-center mb-8 sm:mb-12">
+                <div className="flex justify-center mb-8 sm:mb-12" data-testid="ocr-tabs">  {/* ADDED */}
                     <div
                         className="flex flex-col sm:flex-row items-stretch sm:items-center gap-1 p-2 sm:p-1.5 rounded-[1.5rem] bg-white/50 backdrop-blur-md border shadow-sm w-full sm:w-auto"
                         style={{ borderColor: "rgba(0,0,0,0.05)" }}
@@ -123,6 +129,7 @@ const OCRPage = () => {
                                 <button
                                     key={tab.id}
                                     onClick={() => setActiveTab(tab.id as "scan" | "history")}
+                                    data-testid={`ocr-tab-${tab.id}`}  // ADDED
                                     className={cn(
                                         "flex items-center justify-center gap-2 px-4 sm:px-6 py-3 sm:py-2.5 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-[0.15em]",
                                         "transition-all duration-300"
@@ -146,6 +153,7 @@ const OCRPage = () => {
                                                 "ml-1 px-1.5 py-0.5 text-[8px] font-black rounded-full",
                                                 activeTab === tab.id ? "bg-white/10 text-white" : "bg-slate-100 text-slate-400"
                                             )}
+                                            data-testid={`ocr-history-count`}  // ADDED
                                         >
                                             {history.length}
                                         </span>
@@ -163,6 +171,7 @@ const OCRPage = () => {
                             initial={{ opacity: 0, y: 8 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -8 }}
+                            data-testid="ocr-scan-tab"  // ADDED
                         >
                             {currentResult ? (
                                 <OCRResultView
@@ -173,10 +182,12 @@ const OCRPage = () => {
                             ) : (
                                 <div
                                     className="glass-panel p-5 sm:p-10 rounded-[2rem] sm:rounded-[3rem] border-white/20 shadow-luxe"
+                                    data-testid="ocr-upload-container"  // ADDED
                                 >
                                     {/* Info Banner */}
                                     <div
                                         className="flex flex-col sm:flex-row items-start gap-4 p-4 sm:p-5 rounded-[1.5rem] mb-8 sm:mb-10 bg-emerald-500/5 border border-emerald-500/10"
+                                        data-testid="ocr-info-banner"  // ADDED
                                     >
                                         <div className="w-10 h-10 rounded-xl bg-navy-900 flex items-center justify-center shrink-0 shadow-sm">
                                             <ScanLine
@@ -217,6 +228,7 @@ const OCRPage = () => {
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -20 }}
                             className="glass-panel p-8 rounded-[3rem] border-white/20 shadow-luxe"
+                            data-testid="ocr-history-tab"  // ADDED
                         >
                             <OCRHistory
                                 history={history}

@@ -26,9 +26,9 @@ const OCRHistory = ({
 }: OCRHistoryProps) => {
     if (isLoading) {
         return (
-            <div className="space-y-2">
+            <div className="space-y-2" data-testid="ocr-history-loading">  // ADDED
                 {[...Array(3)].map((_, i) => (
-                    <div key={i} className="h-16 rounded-xl skeleton" />
+                    <div key={i} className="h-16 rounded-xl skeleton" data-testid={`ocr-history-skeleton-${i}`} />  // ADDED
                 ))}
             </div>
         );
@@ -39,6 +39,7 @@ const OCRHistory = ({
             <div
                 className="flex flex-col items-center justify-center py-10 rounded-xl border border-dashed"
                 style={{ borderColor: "var(--color-medical-border)" }}
+                data-testid="ocr-history-empty"  // ADDED
             >
                 <ScanLine
                     size={24}
@@ -56,7 +57,7 @@ const OCRHistory = ({
     }
 
     return (
-        <div className="space-y-2">
+        <div className="space-y-2" data-testid="ocr-history-list">  // ADDED
             <AnimatePresence>
                 {history.map((item, index) => {
                     const config = DOC_TYPE_CONFIG[item.documentType];
@@ -67,6 +68,7 @@ const OCRHistory = ({
                             animate={{ opacity: 1, x: 0 }}
                             exit={{ opacity: 0, x: 10 }}
                             transition={{ delay: index * 0.04 }}
+                            data-testid={`ocr-history-item-${index}`}  // ADDED
                             className={cn(
                                 "flex flex-col sm:flex-row sm:items-center gap-3 p-3 rounded-xl border cursor-pointer",
                                 "hover:shadow-md transition-all"
@@ -74,20 +76,23 @@ const OCRHistory = ({
                             style={{ borderColor: "var(--color-medical-border)", backgroundColor: "white" }}
                             onClick={() => onSelect(item)}
                         >
-                            <span className="text-2xl shrink-0">{config.icon}</span>
+                            <span className="text-2xl shrink-0" data-testid={`ocr-history-icon-${index}`}>  // ADDED
+                                {config.icon}
+                            </span>
                             <div className="flex-1 min-w-0">
                                 <p
                                     className="text-sm font-semibold truncate"
                                     style={{ color: "var(--color-navy-900)" }}
+                                    data-testid={`ocr-history-label-${index}`}  // ADDED
                                 >
                                     {config.label}
                                 </p>
                                 <div className="flex items-center gap-2 mt-0.5">
                                     <Clock size={10} style={{ color: "var(--color-medical-muted)" }} />
-                                    <span className="text-xs" style={{ color: "var(--color-medical-muted)" }}>
+                                    <span className="text-xs" style={{ color: "var(--color-medical-muted)" }} data-testid={`ocr-history-time-${index}`}>  // ADDED
                                         {formatRelativeTime(item.createdAt)}
                                     </span>
-                                    <span className="text-xs truncate" style={{ color: "var(--color-medical-muted)" }}>
+                                    <span className="text-xs truncate" style={{ color: "var(--color-medical-muted)" }} data-testid={`ocr-history-filename-${index}`}>  // ADDED
                                         • {truncate(item.fileName, 20)}
                                     </span>
                                 </div>
@@ -99,6 +104,7 @@ const OCRHistory = ({
                                         e.stopPropagation();
                                         onDelete(item._id);
                                     }}
+                                    data-testid={`ocr-history-delete-${index}`}  // ADDED
                                     className="p-1.5 rounded-lg hover:bg-red-50 transition-colors"
                                     style={{ color: "var(--color-medical-muted)" }}
                                     onMouseEnter={(e) => (e.currentTarget.style.color = "#EF4444")}
