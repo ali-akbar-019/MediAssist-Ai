@@ -32,29 +32,30 @@ const StatCard = ({
     delay: number;
 }) => (
     <motion.div
+        data-testid={`stat-card-${label.replace(/\s+/g, '-').toLowerCase()}`}  // ADDED
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         className="glass-panel p-6 group relative overflow-hidden"
     >
         {/* Holographic Gradient Overlay */}
-        <div 
+        <div
             className="absolute -right-4 -top-4 w-24 h-24 blur-3xl opacity-0 group-hover:opacity-10 transition-opacity duration-700"
             style={{ backgroundColor: color }}
         />
-        
+
         <div className="flex items-center justify-between mb-6">
             <div className="flex flex-col">
                 <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1">
                     Metric Protocol
                 </span>
-                <span className="text-sm font-bold text-navy-900 leading-tight">
+                <span className="text-sm font-bold text-navy-900 leading-tight" data-testid={`stat-label-${label.replace(/\s+/g, '-').toLowerCase()}`}>  // ADDED
                     {label}
                 </span>
             </div>
             <div
                 className="w-12 h-12 rounded-2xl flex items-center justify-center border transition-all duration-500 group-hover:scale-110 shadow-sm"
-                style={{ 
+                style={{
                     backgroundColor: `${color}08`,
                     borderColor: `${color}20`
                 }}
@@ -64,7 +65,7 @@ const StatCard = ({
         </div>
 
         <div className="flex items-end justify-between relative z-10">
-            <p className="text-4xl font-black text-navy-900 tracking-tighter">
+            <p className="text-4xl font-black text-navy-900 tracking-tighter" data-testid={`stat-value-${label.replace(/\s+/g, '-').toLowerCase()}`}>  // ADDED
                 {value}
             </p>
             <div className="flex items-center gap-1 opacity-40">
@@ -99,21 +100,23 @@ const HealthDashboard = () => {
     }, []);
 
     return (
-        <div className="space-y-12">
+        <div className="space-y-12" data-testid="health-dashboard">  // ADDED
             {/* Command Actions Bar */}
             <motion.div
+                data-testid="dashboard-command-bar"  // ADDED
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 className="flex items-center justify-between p-2 pl-8 pr-2 rounded-[2rem] glass-panel border-white/60 shadow-luxe"
             >
                 <div className="flex items-center gap-4">
                     <div className="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
-                    <span className="text-xs font-black uppercase tracking-[0.2em] text-navy-900">
+                    <span className="text-xs font-black uppercase tracking-[0.2em] text-navy-900" data-testid="dashboard-status">  // ADDED
                         Operational Status: Clinical Optimal
                     </span>
                 </div>
                 <Link
                     to={ROUTES.ANALYZER}
+                    data-testid="dashboard-initiate-analysis-btn"  // ADDED
                     className="flex items-center gap-3 px-8 py-4 bg-navy-900 text-white rounded-[1.4rem] text-sm font-black uppercase tracking-widest hover:bg-navy-950 transition-all shadow-navy group overflow-hidden relative"
                 >
                     <div className="absolute inset-0 bg-emerald-500 translate-y-full group-hover:translate-y-0 transition-transform duration-500 opacity-10" />
@@ -128,7 +131,7 @@ const HealthDashboard = () => {
 
             {/* Stat Console */}
             {isLoadingStats ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" data-testid="dashboard-stats-loading">  // ADDED
                     {[...Array(4)].map((_, i) => (
                         <div
                             key={i}
@@ -141,7 +144,7 @@ const HealthDashboard = () => {
                     ))}
                 </div>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" data-testid="dashboard-stats">  // ADDED
                     <StatCard
                         icon={Activity}
                         label="Total Analyses"
@@ -188,31 +191,31 @@ const HealthDashboard = () => {
 
             {/* Charts Intelligence Zone */}
             {stats && !isLoadingStats && (
-                <div className="relative group">
+                <div className="relative group" data-testid="dashboard-charts">  // ADDED
                     <div className="absolute -inset-4 bg-emerald-500/5 blur-2xl rounded-[3rem] opacity-0 group-hover:opacity-100 transition-opacity duration-1000 -z-10" />
                     <StatsChart stats={stats} />
                 </div>
             )}
 
             {/* Diagnostic Chronology */}
-            <div className="space-y-8">
+            <div className="space-y-8" data-testid="dashboard-history">  // ADDED
                 <div className="flex items-center justify-between border-b border-navy-900/5 pb-4">
                     <div className="flex flex-col">
                         <span className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500 mb-1">
                             Chronological Data
                         </span>
-                        <h2 className="text-3xl font-black text-navy-900 tracking-tighter">
+                        <h2 className="text-3xl font-black text-navy-900 tracking-tighter" data-testid="dashboard-history-title">  // ADDED
                             DIAGNOSTIC HISTORY<span className="text-emerald-500">.</span>
                         </h2>
                     </div>
-                    <div className="group flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                    <div className="group flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-slate-400" data-testid="dashboard-history-count">  // ADDED
                         Total Records: {symptoms.length}
                         <div className="w-8 h-[1px] bg-slate-200 group-hover:w-12 group-hover:bg-navy-900 transition-all" />
                     </div>
                 </div>
 
                 {isLoadingSymptoms ? (
-                    <div className="flex flex-col items-center justify-center py-24 gap-4">
+                    <div className="flex flex-col items-center justify-center py-24 gap-4" data-testid="dashboard-history-loading">  // ADDED
                         <Loader2 className="w-10 h-10 animate-spin text-emerald-500" />
                         <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
                             Synchronizing Clinical Data...
@@ -220,6 +223,7 @@ const HealthDashboard = () => {
                     </div>
                 ) : symptoms.length === 0 ? (
                     <motion.div
+                        data-testid="dashboard-history-empty"  // ADDED
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         className="flex flex-col items-center justify-center py-20 text-center glass-panel"
@@ -235,6 +239,7 @@ const HealthDashboard = () => {
                         </p>
                         <Link
                             to={ROUTES.ANALYZER}
+                            data-testid="dashboard-empty-analyzer-link"  // ADDED
                             className="px-8 py-3 bg-navy-900 text-white rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-navy-950 transition-all shadow-navy"
                         >
                             Start Analysis Protocol
@@ -242,7 +247,7 @@ const HealthDashboard = () => {
                     </motion.div>
                 ) : (
                     <div className="space-y-10">
-                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" data-testid="dashboard-history-grid">  // ADDED
                             {symptoms.map((symptom, index) => (
                                 <HistoryCard
                                     key={symptom._id}
@@ -254,10 +259,11 @@ const HealthDashboard = () => {
                                 />
                             ))}
                         </div>
-                        
+
                         <div className="flex justify-center pt-4">
-                            <Link 
+                            <Link
                                 to={ROUTES.REPORTS}
+                                data-testid="dashboard-view-all-reports"  // ADDED
                                 className="group flex items-center gap-4 px-10 py-4 rounded-2xl bg-white border border-slate-100 text-[11px] font-black uppercase tracking-[0.2em] text-navy-900 hover:border-emerald-500 hover:bg-emerald-50/30 transition-all shadow-sm"
                             >
                                 <span className="relative">
@@ -275,7 +281,7 @@ const HealthDashboard = () => {
 
             {/* System Profiles */}
             {user && (
-                <div className="pt-8 border-t border-navy-900/5">
+                <div className="pt-8 border-t border-navy-900/5" data-testid="dashboard-user-profile">  // ADDED
                     <div className="flex items-center gap-4 mb-6">
                         <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                         <h2 className="text-[10px] font-black tracking-[0.4em] text-navy-900 uppercase">
@@ -284,19 +290,20 @@ const HealthDashboard = () => {
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                         {[
-                            { label: "Age Index", value: user.age ?? "N/A" },
-                            { label: "Gender Model", value: user.gender ?? "N/A" },
-                            { label: "Biological Type", value: user.bloodGroup ?? "N/A" },
+                            { label: "Age Index", value: user.age ?? "N/A", testId: "age" },
+                            { label: "Gender Model", value: user.gender ?? "N/A", testId: "gender" },
+                            { label: "Biological Type", value: user.bloodGroup ?? "N/A", testId: "bloodgroup" },
                             {
                                 label: "Sensitivity Log",
                                 value: user.allergies?.length ? user.allergies.join(", ") : "None",
+                                testId: "allergies"
                             },
                         ].map((item) => (
-                            <div key={item.label} className="p-4 rounded-3xl border border-navy-900/5 bg-white/40">
+                            <div key={item.label} className="p-4 rounded-3xl border border-navy-900/5 bg-white/40" data-testid={`dashboard-profile-${item.testId}`}>  // ADDED
                                 <p className="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-2">
                                     {item.label}
                                 </p>
-                                <p className="text-sm font-black text-navy-900 capitalize tracking-tight">
+                                <p className="text-sm font-black text-navy-900 capitalize tracking-tight" data-testid={`dashboard-profile-${item.testId}-value`}>  // ADDED
                                     {item.value}
                                 </p>
                             </div>
