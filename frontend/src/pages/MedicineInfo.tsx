@@ -122,7 +122,7 @@ const MedicineInfo = () => {
                     >
                         <Pill className="w-8 h-8 text-emerald-400" />
                     </motion.div>
-                    <h1 className="text-5xl md:text-7xl font-bold tracking-tighter text-navy-900 mb-6 leading-none">
+                    <h1 data-testid="medicine-heading" className="text-5xl md:text-7xl font-bold tracking-tighter text-navy-900 mb-6 leading-none">
                         Medicine <span className="gradient-text-luxe italic">Compass.</span>
                     </h1>
                     <p className="text-xl text-slate-500 max-w-2xl mx-auto font-light leading-relaxed">
@@ -160,6 +160,7 @@ const MedicineInfo = () => {
                                 <div className="relative flex-1">
                                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-medical-muted" />
                                     <Input
+                                        data-testid="medicine-search-input"
                                         value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
                                         onKeyDown={handleKeyDown}
@@ -168,6 +169,7 @@ const MedicineInfo = () => {
                                     />
                                 </div>
                                 <Button
+                                    data-testid="medicine-search-button"
                                     onClick={() => handleSearch(searchQuery)}
                                     disabled={!searchQuery.trim() || isLoading}
                                     className="h-14 px-7 rounded-2xl bg-navy-900 hover:bg-navy-950 text-white shrink-0 font-semibold shadow-navy"
@@ -229,6 +231,7 @@ const MedicineInfo = () => {
                     {/* Error */}
                     {error && !isLoading && (
                         <motion.div
+                            data-testid="medicine-error"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             className="max-w-2xl mx-auto p-4 bg-red-50 border border-red-100 rounded-2xl text-sm text-red-600 flex items-start gap-2"
@@ -242,6 +245,7 @@ const MedicineInfo = () => {
                     <AnimatePresence>
                         {medicine && !isLoading && (
                             <motion.div
+                                data-testid="medicine-result"
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -20 }}

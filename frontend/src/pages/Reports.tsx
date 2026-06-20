@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { 
-    FileText, 
-    ArrowLeft, 
-    Loader2, 
+import {
+    FileText,
+    ArrowLeft,
+    Loader2,
     ChevronLeft,
     ChevronRight,
 } from "lucide-react";
@@ -51,7 +51,7 @@ const Reports = () => {
                             Return to Command Center
                         </button>
                         <div className="space-y-2">
-                            <h1 className="text-5xl font-black text-navy-900 tracking-tighter">
+                            <h1 data-testid="reports-heading" className="text-5xl font-black text-navy-900 tracking-tighter">
                                 CLINICAL <span className="text-emerald-500">REPORTS.</span>
                             </h1>
                             <p className="text-slate-500 font-medium tracking-tight max-w-md">
@@ -92,10 +92,11 @@ const Reports = () => {
                             <p className="text-slate-500 mb-8 max-w-xs mx-auto">Your clinical history is currently empty. Initiate an analysis to begin your record.</p>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+                        <div data-testid="reports-grid" className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
                             {symptoms.map((symptom, index) => (
                                 <motion.div
                                     key={symptom._id}
+                                    data-testid={`report-card-${index}`}
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: index * 0.05 }}
@@ -115,7 +116,8 @@ const Reports = () => {
 
                 {/* Pagination Control */}
                 {totalPages > 1 && (
-                    <motion.div 
+                    <motion.div
+                        data-testid="reports-pagination"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         className="flex items-center justify-center gap-4 mt-16"
@@ -127,7 +129,7 @@ const Reports = () => {
                         >
                             <ChevronLeft size={20} />
                         </button>
-                        
+
                         <div className="flex items-center gap-2">
                             {[...Array(totalPages)].map((_, i) => (
                                 <button

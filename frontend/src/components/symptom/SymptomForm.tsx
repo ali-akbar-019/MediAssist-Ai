@@ -219,11 +219,13 @@ const SymptomForm = () => {
                                 onKeyDown={handleKeyDown}
                                 placeholder="Type a symptom and press Enter..."
                                 className="flex-1"
+                                data-testid="symptom-input"
                             />
                             <Button
                                 onClick={() => handleAddSymptom(symptomInput)}
                                 disabled={!symptomInput.trim()}
                                 size="icon"
+                                data-testid="symptom-add-btn"
                                 className="bg-navy-900 hover:bg-navy-800 text-white shrink-0"
                             >
                                 <Plus className="w-4 h-4" />
@@ -242,6 +244,7 @@ const SymptomForm = () => {
                                         <SymptomTag
                                             key={symptom}
                                             symptom={symptom}
+
                                             onRemove={handleRemoveSymptom}
                                         />
                                     ))}
@@ -281,6 +284,7 @@ const SymptomForm = () => {
                             <SeveritySlider
                                 value={formData.severity ?? 5}
                                 onChange={(val) => updateFormData({ severity: val })}
+                                data-testid="severity-slider"
                             />
                         </div>
 
@@ -296,6 +300,7 @@ const SymptomForm = () => {
                                         onClick={() =>
                                             updateFormData({ painType: type.value as never })
                                         }
+                                        data-testid={`pain-type-${type.value}`}
                                         className={cn(
                                             "group p-4 rounded-2xl border text-left transition-all duration-500",
                                             formData.painType === type.value
@@ -333,6 +338,7 @@ const SymptomForm = () => {
                                     onChange={(e) =>
                                         updateFormData({ duration: e.target.value })
                                     }
+                                    data-testid="duration-input"
                                     placeholder="Value"
                                     className="flex-1 h-14 bg-white/40 border-white/60 rounded-2xl focus:ring-emerald-500 font-bold"
                                 />
@@ -345,9 +351,9 @@ const SymptomForm = () => {
                                     <SelectTrigger className="w-40 h-14 bg-white/40 border-white/60 rounded-2xl font-bold">
                                         <SelectValue />
                                     </SelectTrigger>
-                                    <SelectContent className="glass-panel border-white/20 rounded-2xl shadow-xl">
+                                    <SelectContent data-testid="duration-unit" className="glass-panel border-white/20 rounded-2xl shadow-xl">
                                         {DURATION_UNITS.map((unit) => (
-                                            <SelectItem key={unit.value} value={unit.value} className="rounded-xl focus:bg-emerald-50">
+                                            <SelectItem data-testid={`duration-option-${unit.value}`} key={unit.value} value={unit.value} className="rounded-xl focus:bg-emerald-50">
                                                 {unit.label}
                                             </SelectItem>
                                         ))}
@@ -368,6 +374,7 @@ const SymptomForm = () => {
                                         onClick={() =>
                                             updateFormData({ worseAt: option.value as never })
                                         }
+                                        data-testid={`worse-at-${option.value}`}
                                         className={cn(
                                             "flex items-center gap-3 px-6 py-3 rounded-2xl border text-[13px] font-black tracking-tight transition-all duration-500",
                                             formData.worseAt === option.value
@@ -396,6 +403,7 @@ const SymptomForm = () => {
                                     placeholder="Optional data insights..."
                                     rows={4}
                                     maxLength={500}
+                                    data-testid="clinical-notes"
                                     className="w-full px-6 py-4 rounded-[2rem] bg-white/40 border border-white/60 text-sm text-navy-900 placeholder:text-slate-400 resize-none focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500/50 transition-all"
                                 />
                                 <div className="absolute bottom-4 right-6 text-[10px] font-black text-slate-300 uppercase tracking-widest">
@@ -442,6 +450,7 @@ const SymptomForm = () => {
 
                                 {/* Premium Severity Matrix */}
                                 <div
+                                    data-testid="analysis-severity"
                                     className={cn(
                                         "p-10 rounded-[3rem] text-center border transition-all shadow-luxe relative overflow-hidden",
                                         analysisResult.severity === "emergency" ? "bg-red-500 text-white border-transparent" :
@@ -476,6 +485,7 @@ const SymptomForm = () => {
                                                 initial={{ opacity: 0, x: -10 }}
                                                 animate={{ opacity: 1, x: 0 }}
                                                 transition={{ delay: index * 0.1 }}
+                                                data-testid={`condition-${index}`}
                                                 className="glass-panel p-6 rounded-3xl border-white/60 hover:border-emerald-500/30 transition-all group"
                                             >
                                                 <div className="flex items-center justify-between mb-3">
@@ -599,6 +609,7 @@ const SymptomForm = () => {
                                 <Button
                                     onClick={resetAnalyzer}
                                     variant="outline"
+                                    data-testid="analyzer-reset"
                                     className="h-16 rounded-2xl border-navy-900 text-navy-900 font-black text-[13px] uppercase tracking-widest hover:bg-navy-900 hover:text-white transition-all w-full"
                                 >
                                     Initiate New Clinical Signal
@@ -616,6 +627,7 @@ const SymptomForm = () => {
                         <div className="flex-1">
                             <Button
                                 variant="ghost"
+                                data-testid="analyzer-back"
                                 onClick={currentStep === 1 ? resetAnalyzer : prevStep}
                                 className="w-full sm:w-auto h-14 sm:h-14 px-6 sm:px-8 rounded-2xl text-[13px] font-black uppercase tracking-widest text-slate-400 hover:text-navy-900 hover:bg-white/60 transition-all"
                             >
@@ -632,6 +644,7 @@ const SymptomForm = () => {
                                         (currentStep === 1 && !canProceedStep1) ||
                                         (currentStep === 2 && !canProceedStep2)
                                     }
+                                    data-testid="analyzer-continue"
                                     className="w-full h-14 sm:h-16 px-6 sm:px-12 rounded-2xl bg-navy-900 text-white text-[13px] font-black uppercase tracking-widest hover:bg-navy-950 transition-all shadow-navy"
                                 >
                                     Continue
@@ -641,6 +654,7 @@ const SymptomForm = () => {
                                 <Button
                                     onClick={handleSubmit}
                                     disabled={!canProceedStep3 || isAnalyzing}
+                                    data-testid="analyzer-submit"
                                     className="w-full h-14 sm:h-16 px-6 sm:px-12 rounded-2xl bg-navy-900 text-white text-[13px] font-black uppercase tracking-widest hover:bg-navy-950 transition-all shadow-navy"
                                 >
                                     {isAnalyzing ? (

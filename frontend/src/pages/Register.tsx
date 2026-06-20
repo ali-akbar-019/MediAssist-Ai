@@ -255,6 +255,7 @@ const Register = () => {
                             {/* Error Alert */}
                             {error && (
                                 <motion.div
+                                    data-testid="register-error"
                                     initial={{ opacity: 0, y: -10 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     className="mb-6 p-4 bg-red-50 border border-red-100 rounded-2xl text-sm text-red-600"
@@ -263,7 +264,7 @@ const Register = () => {
                                 </motion.div>
                             )}
 
-                            <form onSubmit={handleSubmit} className="space-y-5">
+                            <form data-testid="register-form" onSubmit={handleSubmit} className="space-y-5">
                                 {step === 1 && (
                                     <motion.div
                                         initial={{ opacity: 0, x: 20 }}
@@ -277,6 +278,7 @@ const Register = () => {
                                             <div className="relative">
                                                 <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-medical-muted" />
                                                 <Input
+                                                    data-testid="register-name"
                                                     name="name"
                                                     type="text"
                                                     value={formData.name}
@@ -290,7 +292,7 @@ const Register = () => {
                                                 />
                                             </div>
                                             {validationErrors.name && (
-                                                <p className="text-xs text-red-500">{validationErrors.name}</p>
+                                                <p data-testid="register-name-error" className="text-xs text-red-500">{validationErrors.name}</p>
                                             )}
                                         </div>
 
@@ -301,6 +303,7 @@ const Register = () => {
                                             <div className="relative">
                                                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-medical-muted" />
                                                 <Input
+                                                    data-testid="register-email"
                                                     name="email"
                                                     type="email"
                                                     value={formData.email}
@@ -314,7 +317,7 @@ const Register = () => {
                                                 />
                                             </div>
                                             {validationErrors.email && (
-                                                <p className="text-xs text-red-500">{validationErrors.email}</p>
+                                                <p data-testid="register-email-error" className="text-xs text-red-500">{validationErrors.email}</p>
                                             )}
                                         </div>
 
@@ -325,6 +328,7 @@ const Register = () => {
                                             <div className="relative">
                                                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-medical-muted" />
                                                 <Input
+                                                    data-testid="register-password"
                                                     name="password"
                                                     type={showPassword ? "text" : "password"}
                                                     value={formData.password}
@@ -349,7 +353,7 @@ const Register = () => {
                                                 </button>
                                             </div>
                                             {validationErrors.password && (
-                                                <p className="text-xs text-red-500">{validationErrors.password}</p>
+                                                <p data-testid="register-password-error" className="text-xs text-red-500">{validationErrors.password}</p>
                                             )}
                                         </div>
                                     </motion.div>
@@ -374,6 +378,7 @@ const Register = () => {
                                             <div className="relative">
                                                 <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-medical-muted" />
                                                 <Input
+                                                    data-testid="register-age"
                                                     name="age"
                                                     type="number"
                                                     min={1}
@@ -402,7 +407,11 @@ const Register = () => {
                                                 </SelectTrigger>
                                                 <SelectContent className="bg-white">
                                                     {GENDER_OPTIONS.map((option) => (
-                                                        <SelectItem key={option.value} value={option.value}>
+                                                        <SelectItem
+                                                            key={option.value}
+                                                            value={option.value}
+                                                            data-testid={`gender-option-${option.label}`}
+                                                        >
                                                             {option.label}
                                                         </SelectItem>
                                                     ))}
@@ -427,7 +436,7 @@ const Register = () => {
                                                     </SelectTrigger>
                                                     <SelectContent className="bg-white">
                                                         {BLOOD_GROUPS.map((group) => (
-                                                            <SelectItem key={group} value={group}>
+                                                            <SelectItem key={group} value={group} data-testid={`bloodgroup-option-${group}`}>
                                                                 {group}
                                                             </SelectItem>
                                                         ))}
@@ -444,6 +453,7 @@ const Register = () => {
                                             type="button"
                                             variant="outline"
                                             onClick={() => setStep(1)}
+                                            data-testid="register-back"
                                             className="flex-1 h-14 rounded-2xl border-medical-border bg-white/70 text-medical-text hover:bg-navy-50"
                                         >
                                             Back
@@ -451,6 +461,7 @@ const Register = () => {
                                     )}
                                     <Button
                                         type="submit"
+                                        data-testid={step === 1 ? "register-continue" : "register-create"}
                                         disabled={isLoading}
                                         className="flex-1 h-14 bg-navy-900 hover:bg-navy-950 text-white rounded-2xl font-semibold shadow-navy"
                                     >
@@ -470,6 +481,7 @@ const Register = () => {
                                 {step === 2 && (
                                     <button
                                         type="button"
+                                        data-testid="register-skip-profile"
                                         onClick={() =>
                                             handleRegister({
                                                 name: formData.name,

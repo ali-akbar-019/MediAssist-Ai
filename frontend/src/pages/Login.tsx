@@ -167,6 +167,7 @@ const Login = () => {
                             {/* Error Alert */}
                             {error && (
                                 <motion.div
+                                    data-testid="login-error"
                                     initial={{ opacity: 0, y: -10 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     className="mb-6 p-4 bg-red-50 border border-red-100 rounded-2xl text-sm text-red-600"
@@ -175,7 +176,7 @@ const Login = () => {
                                 </motion.div>
                             )}
 
-                            <form onSubmit={handleSubmit} className="space-y-5">
+                            <form data-testid="login-form" onSubmit={handleSubmit} className="space-y-5">
                                 <div className="space-y-1.5">
                                     <Label htmlFor="email" className="text-sm font-medium text-medical-text">
                                         Email address
@@ -184,6 +185,7 @@ const Login = () => {
                                         <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-medical-muted" />
                                         <Input
                                             id="email"
+                                            data-testid="login-email"
                                             name="email"
                                             type="email"
                                             value={formData.email}
@@ -197,7 +199,7 @@ const Login = () => {
                                         />
                                     </div>
                                     {validationErrors.email && (
-                                        <p className="text-xs text-red-500">{validationErrors.email}</p>
+                                        <p data-testid="login-email-error" className="text-xs text-red-500">{validationErrors.email}</p>
                                     )}
                                 </div>
 
@@ -209,6 +211,7 @@ const Login = () => {
                                         <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-medical-muted" />
                                         <Input
                                             id="password"
+                                            data-testid="login-password"
                                             name="password"
                                             type={showPassword ? "text" : "password"}
                                             value={formData.password}
@@ -222,6 +225,7 @@ const Login = () => {
                                         />
                                         <button
                                             type="button"
+                                            data-testid="login-toggle-password"
                                             onClick={() => setShowPassword((prev) => !prev)}
                                             className="absolute right-4 top-1/2 -translate-y-1/2 text-medical-muted hover:text-navy-900 transition-colors"
                                         >
@@ -233,12 +237,13 @@ const Login = () => {
                                         </button>
                                     </div>
                                     {validationErrors.password && (
-                                        <p className="text-xs text-red-500">{validationErrors.password}</p>
+                                        <p data-testid="login-password-error" className="text-xs text-red-500">{validationErrors.password}</p>
                                     )}
                                 </div>
 
                                 <Button
                                     type="submit"
+                                    data-testid="login-submit"
                                     disabled={isLoading}
                                     className="w-full h-14 bg-navy-900 hover:bg-navy-950 text-white rounded-2xl font-semibold shadow-navy"
                                 >

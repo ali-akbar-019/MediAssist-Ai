@@ -12,18 +12,18 @@ const Chat = () => {
                     animate={{ opacity: 1, y: 0 }}
                     className="text-center mb-10"
                 >
-                    <motion.div 
+                    <motion.div
                         initial={{ scale: 0.8 }}
                         animate={{ scale: 1 }}
                         className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-navy-900 border border-emerald-500/20 mb-8 shadow-navy"
                     >
                         <MessageCircle className="w-8 h-8 text-emerald-400" />
                     </motion.div>
-                    <h1 className="text-5xl md:text-7xl font-bold tracking-tighter text-navy-900 mb-6 leading-none">
+                    <h1 data-testid="chat-heading" className="text-5xl md:text-7xl font-bold tracking-tighter text-navy-900 mb-6 leading-none">
                         Clinical <span className="gradient-text-luxe italic">Signal.</span>
                     </h1>
                     <p className="text-xl text-slate-500 max-w-2xl mx-auto font-light leading-relaxed">
-                        Secure AI diagnostics interface. Discuss symptoms and health 
+                        Secure AI diagnostics interface. Discuss symptoms and health
                         indices with our advanced medical intelligence.
                     </p>
                 </motion.div>
@@ -31,7 +31,7 @@ const Chat = () => {
                 {/* Main Chat Interface */}
                 <div className="max-w-6xl mx-auto relative">
                     <ChatWindow />
-                    
+
                     {/* Elite Disclaimer Guideline */}
                     <motion.div
                         initial={{ opacity: 0 }}

@@ -19,7 +19,7 @@ const Analyzer = () => {
                     >
                         <Stethoscope className="w-8 h-8 text-emerald-400" />
                     </motion.div>
-                    <h1 className="text-5xl md:text-7xl font-bold tracking-tighter text-navy-900 mb-6 leading-none">
+                    <h1 data-testid="analyzer-heading" className="text-5xl md:text-7xl font-bold tracking-tighter text-navy-900 mb-6 leading-none">
                         Clinical <span className="gradient-text-luxe italic">Analyzer.</span>
                     </h1>
                     <p className="text-xl text-slate-500 max-w-2xl mx-auto font-light leading-relaxed">

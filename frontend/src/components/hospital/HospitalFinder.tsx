@@ -108,6 +108,7 @@ const HospitalFinder = () => {
                     <div className="relative flex-1">
                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-medical-muted" />
                         <Input
+                            data-testid="hospital-search-input"
                             value={searchQuery}
                             onChange={(e) => {
                                 setSearchQuery(e.target.value);
@@ -118,6 +119,7 @@ const HospitalFinder = () => {
                         />
                     </div>
                     <Button
+                        data-testid="hospital-search-button"
                         onClick={handleGetLocation}
                         disabled={isLocating}
                         className="h-14 px-7 rounded-2xl bg-navy-900 hover:bg-navy-950 text-white shrink-0 font-semibold shadow-navy"
@@ -133,10 +135,11 @@ const HospitalFinder = () => {
             </div>
 
             {/* Filters */}
-            <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
+            <div className="flex flex-wrap gap-2 justify-center sm:justify-start" data-testid="hospital-filters">
                 {filters.map((filter) => (
                     <button
                         key={filter.value}
+                        data-testid={`hospital-filter-${filter.value}`}
                         onClick={() => setActiveFilter(filter.value)}
                         className={cn(
                             "px-4 py-2 rounded-full text-sm font-medium transition-all border",
@@ -218,6 +221,7 @@ const HospitalFinder = () => {
             <AnimatePresence>
                 {!isLoading && hospitals.length > 0 && (
                     <motion.div
+                        data-testid="hospital-results"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         className="grid grid-cols-1 md:grid-cols-2 gap-4"
@@ -225,6 +229,7 @@ const HospitalFinder = () => {
                         {hospitals.map((hospital, index) => (
                             <motion.div
                                 key={hospital.placeId}
+                                data-testid={`hospital-card-${index}`}
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: index * 0.05 }}

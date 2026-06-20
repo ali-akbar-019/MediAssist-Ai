@@ -19,7 +19,7 @@ const HospitalFinder = () => {
                     >
                         <MapPin className="w-8 h-8 text-emerald-400" />
                     </motion.div>
-                    <h1 className="text-5xl md:text-7xl font-bold tracking-tighter text-navy-900 mb-6 leading-none">
+                    <h1 data-testid="hospital-heading" className="text-5xl md:text-7xl font-bold tracking-tighter text-navy-900 mb-6 leading-none">
                         Hospital <span className="gradient-text-luxe italic">Finder.</span>
                     </h1>
                     <p className="text-xl text-slate-500 max-w-2xl mx-auto font-light leading-relaxed">
