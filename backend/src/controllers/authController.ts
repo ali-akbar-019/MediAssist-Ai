@@ -20,6 +20,23 @@ export const register = async (req: Request, res: Response): Promise<void> => {
             return;
         }
 
+        // === NEW: Additional password validation before hashing ===
+        if (password.length < 8) {
+            res.status(400).json({
+                success: false,
+                message: "Password must be at least 8 characters",
+            });
+            return;
+        }
+
+        if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
+            res.status(400).json({
+                success: false,
+                message: "Password must contain at least one uppercase letter, one lowercase letter, and one number",
+            });
+            return;
+        }
+
         // Create new user
         const user = await User.create({
             name,
@@ -265,6 +282,33 @@ export const changePassword = async (
             res.status(401).json({
                 success: false,
                 message: "Current password is incorrect",
+            });
+            return;
+        }
+
+        // === NEW: Validate new password strength ===
+        if (newPassword.length < 8) {
+            res.status(400).json({
+                success: false,
+                message: "New password must be at least 8 characters",
+            });
+            return;
+        }
+
+        if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(newPassword)) {
+            res.status(400).json({
+                success: false,
+                message: "New password must contain at least one uppercase letter, one lowercase letter, and one number",
+            });
+            return;
+        }
+
+        // === NEW: Prevent reusing same password ===
+        const isSamePassword = await user.comparePassword(newPassword);
+        if (isSamePassword) {
+            res.status(400).json({
+                success: false,
+                message: "New password cannot be the same as current password",
             });
             return;
         }

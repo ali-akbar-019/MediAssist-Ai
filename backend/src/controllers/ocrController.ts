@@ -4,7 +4,7 @@ import multer from "multer";
 import env from "../config/env";
 import type { AuthRequest } from "../middleware/authMiddleware";
 import OCRResultModel from "../models/OCRResult";
-import { successResponse } from "../utils/helpers";
+import { successResponse, paginate } from "../utils/helpers";
 
 // Multer setup — memory storage
 export const upload = multer({
@@ -40,23 +40,47 @@ export const analyzeDocument = async (
 
         const { documentType = "other" } = req.body as { documentType: string };
 
+        // === NEW: Validate documentType ===
+        const validTypes = ["prescription", "lab_report", "medical_report", "other"];
+        if (!validTypes.includes(documentType)) {
+            res.status(400).json({
+                success: false,
+                message: "Invalid document type. Must be: prescription, lab_report, medical_report, or other",
+            });
+            return;
+        }
+
         // Convert file to base64
         const fileBase64 = req.file.buffer.toString("base64");
         const mimeType = req.file.mimetype;
 
-        // Call Python AI service
-        const aiResponse = await axios.post(
-            `${env.AI_SERVICE_URL}/api/ocr/analyze`,
-            {
-                fileBase64,
-                mimeType,
-                documentType,
-                fileName: req.file.originalname,
-            },
-            { timeout: 60000 }
-        );
+        // === NEW: Call Python AI service with error handling ===
+        let analysisData;
+        try {
+            const aiResponse = await axios.post(
+                `${env.AI_SERVICE_URL}/api/ocr/analyze`,
+                {
+                    fileBase64,
+                    mimeType,
+                    documentType,
+                    fileName: req.file.originalname,
+                },
+                { timeout: 60000 }
+            );
+            analysisData = aiResponse.data;
+        } catch (aiError) {
+            console.error("AI Service Error:", aiError);
+            res.status(502).json({
+                success: false,
+                message: "AI service is currently unavailable. Please try again later.",
+            });
+            return;
+        }
 
-        const analysisData = aiResponse.data;
+        // === NEW: Validate AI response has required fields ===
+        if (!analysisData.rawText && !analysisData.summary) {
+            console.warn("AI returned incomplete data for document:", req.file.originalname);
+        }
 
         // Save to database
         const ocrResult = await OCRResultModel.create({
@@ -75,12 +99,13 @@ export const analyzeDocument = async (
             patientName: analysisData.patientName,
             date: analysisData.date,
         });
-        console.log("AI RESPONSE:", JSON.stringify(analysisData.labValues, null, 2));
-        res
-            .status(201)
-            .json(successResponse(ocrResult, "Document analyzed successfully"));
+
+        res.status(201).json(
+            successResponse(ocrResult, "Document analyzed successfully")
+        );
     } catch (error) {
         if (error instanceof Error) {
+            console.error("OCR Error:", error.message);
             res.status(500).json({ success: false, message: error.message });
         }
     }
@@ -94,13 +119,34 @@ export const getOCRHistory = async (
     res: Response
 ): Promise<void> => {
     try {
+        // === NEW: Add pagination ===
+        const page = parseInt(req.query["page"] as string) || 1;
+        const limit = parseInt(req.query["limit"] as string) || 20;
+        const { skip } = paginate(page, limit);
+
+        const total = await OCRResultModel.countDocuments({
+            user: req.user?._id,
+        });
+
         const results = await OCRResultModel.find({ user: req.user?._id })
             .sort({ createdAt: -1 })
-            .limit(20);
+            .skip(skip)
+            .limit(limit);
 
-        res
-            .status(200)
-            .json(successResponse(results, "History fetched successfully"));
+        res.status(200).json(
+            successResponse(
+                {
+                    results,
+                    pagination: {
+                        total,
+                        page,
+                        limit,
+                        pages: Math.ceil(total / limit),
+                    },
+                },
+                "History fetched successfully"
+            )
+        );
     } catch (error) {
         if (error instanceof Error) {
             res.status(500).json({ success: false, message: error.message });
@@ -126,9 +172,9 @@ export const getOCRResult = async (
             return;
         }
 
-        res
-            .status(200)
-            .json(successResponse(result, "Result fetched successfully"));
+        res.status(200).json(
+            successResponse(result, "Result fetched successfully")
+        );
     } catch (error) {
         if (error instanceof Error) {
             res.status(500).json({ success: false, message: error.message });
@@ -154,9 +200,9 @@ export const deleteOCRResult = async (
             return;
         }
 
-        res
-            .status(200)
-            .json(successResponse(null, "Result deleted successfully"));
+        res.status(200).json(
+            successResponse(null, "Result deleted successfully")
+        );
     } catch (error) {
         if (error instanceof Error) {
             res.status(500).json({ success: false, message: error.message });

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { validationResult, ValidationChain, body } from "express-validator";
+import { validationResult, ValidationChain, body, query, param } from "express-validator";
 
 // Run validation chains and return errors if any
 export const validate = (validations: ValidationChain[]) => {
@@ -31,14 +31,16 @@ export const validate = (validations: ValidationChain[]) => {
     };
 };
 
-// Auth validations
+// ================= AUTH VALIDATIONS =================
 export const registerValidation: ValidationChain[] = [
     body("name")
         .trim()
         .notEmpty()
         .withMessage("Name is required")
         .isLength({ min: 2, max: 50 })
-        .withMessage("Name must be between 2 and 50 characters"),
+        .withMessage("Name must be between 2 and 50 characters")
+        .matches(/^[a-zA-Z\s'-]+$/)
+        .withMessage("Name can only contain letters, spaces, apostrophes, and hyphens"),
 
     body("email")
         .trim()
@@ -57,6 +59,22 @@ export const registerValidation: ValidationChain[] = [
         .withMessage(
             "Password must contain at least one uppercase letter, one lowercase letter, and one number"
         ),
+
+    // === NEW: Optional profile fields ===
+    body("age")
+        .optional()
+        .isInt({ min: 1, max: 120 })
+        .withMessage("Age must be between 1 and 120"),
+
+    body("gender")
+        .optional()
+        .isIn(["male", "female", "other"])
+        .withMessage("Gender must be male, female, or other"),
+
+    body("bloodGroup")
+        .optional()
+        .isIn(["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"])
+        .withMessage("Invalid blood group"),
 ];
 
 export const loginValidation: ValidationChain[] = [
@@ -72,12 +90,14 @@ export const loginValidation: ValidationChain[] = [
         .withMessage("Password is required"),
 ];
 
-// Symptom validations
+// ================= SYMPTOM VALIDATIONS =================
 export const symptomValidation: ValidationChain[] = [
     body("bodyPart")
         .trim()
         .notEmpty()
-        .withMessage("Body part is required"),
+        .withMessage("Body part is required")
+        .isLength({ max: 100 })
+        .withMessage("Body part cannot exceed 100 characters"),
 
     body("bodySide")
         .notEmpty()
@@ -104,7 +124,9 @@ export const symptomValidation: ValidationChain[] = [
     body("duration")
         .trim()
         .notEmpty()
-        .withMessage("Duration is required"),
+        .withMessage("Duration is required")
+        .isInt({ min: 1, max: 365 })
+        .withMessage("Duration must be between 1 and 365"),
 
     body("durationUnit")
         .notEmpty()
@@ -117,16 +139,22 @@ export const symptomValidation: ValidationChain[] = [
         .withMessage("Worse at time is required")
         .isIn(["morning", "afternoon", "evening", "night", "always"])
         .withMessage("Invalid time"),
+
+    // === NEW: Additional Notes validation ===
+    body("additionalNotes")
+        .optional()
+        .isLength({ max: 500 })
+        .withMessage("Additional notes cannot exceed 500 characters"),
 ];
 
-// Chat validations
+// ================= CHAT VALIDATIONS =================
 export const chatValidation: ValidationChain[] = [
     body("message")
         .trim()
         .notEmpty()
         .withMessage("Message is required")
-        .isLength({ max: 1000 })
-        .withMessage("Message cannot exceed 1000 characters"),
+        .isLength({ min: 1, max: 2000 })
+        .withMessage("Message must be between 1 and 2000 characters"),
 
     body("sessionId")
         .trim()
@@ -134,7 +162,7 @@ export const chatValidation: ValidationChain[] = [
         .withMessage("Session ID is required"),
 ];
 
-// Medicine info validations
+// ================= MEDICINE VALIDATIONS =================
 export const medicineValidation: ValidationChain[] = [
     body("medicineName")
         .trim()
@@ -143,3 +171,95 @@ export const medicineValidation: ValidationChain[] = [
         .isLength({ max: 100 })
         .withMessage("Medicine name cannot exceed 100 characters"),
 ];
+
+// ================= HOSPITAL VALIDATIONS =================
+export const hospitalNearbyValidation: ValidationChain[] = [
+    query("lat")
+        .notEmpty()
+        .withMessage("Latitude is required")
+        .isFloat({ min: -90, max: 90 })
+        .withMessage("Latitude must be between -90 and 90"),
+
+    query("lng")
+        .notEmpty()
+        .withMessage("Longitude is required")
+        .isFloat({ min: -180, max: 180 })
+        .withMessage("Longitude must be between -180 and 180"),
+
+    query("radius")
+        .optional()
+        .isInt({ min: 1000, max: 50000 })
+        .withMessage("Radius must be between 1000 and 50000 meters"),
+
+    query("type")
+        .optional()
+        .isIn(["hospital", "clinic", "pharmacy"])
+        .withMessage("Type must be hospital, clinic, or pharmacy"),
+];
+
+export const hospitalSearchValidation: ValidationChain[] = [
+    query("query")
+        .trim()
+        .notEmpty()
+        .withMessage("Search query is required")
+        .isLength({ min: 2, max: 100 })
+        .withMessage("Search query must be between 2 and 100 characters"),
+];
+
+// ================= OCR VALIDATIONS =================
+export const ocrValidation: ValidationChain[] = [
+    body("documentType")
+        .notEmpty()
+        .withMessage("Document type is required")
+        .isIn(["prescription", "lab_report", "medical_report", "other"])
+        .withMessage("Invalid document type"),
+];
+
+// ================= ADMIN VALIDATIONS =================
+export const adminRoleUpdateValidation: ValidationChain[] = [
+    param("id")
+        .notEmpty()
+        .withMessage("User ID is required")
+        .isMongoId()
+        .withMessage("Invalid user ID format"),
+
+    body("role")
+        .notEmpty()
+        .withMessage("Role is required")
+        .isIn(["user", "admin"])
+        .withMessage("Role must be user or admin"),
+];
+
+export const adminUserSearchValidation: ValidationChain[] = [
+    query("page")
+        .optional()
+        .isInt({ min: 1 })
+        .withMessage("Page must be at least 1"),
+
+    query("limit")
+        .optional()
+        .isInt({ min: 1, max: 100 })
+        .withMessage("Limit must be between 1 and 100"),
+
+    query("search")
+        .optional()
+        .isLength({ max: 100 })
+        .withMessage("Search query cannot exceed 100 characters"),
+
+    query("role")
+        .optional()
+        .isIn(["user", "admin"])
+        .withMessage("Role must be user or admin"),
+];
+
+// ================= REPORT VALIDATIONS =================
+export const reportIdValidation: ValidationChain[] = [
+    param("id")
+        .notEmpty()
+        .withMessage("Report ID is required")
+        .isMongoId()
+        .withMessage("Invalid report ID format"),
+];
+
+// ================= EXPORT EXPRESS-VALIDATOR HELPERS =================
+export { body, query, param };

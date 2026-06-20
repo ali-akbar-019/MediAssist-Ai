@@ -137,8 +137,16 @@ export const getNearbyHospitals = async (req: Request, res: Response): Promise<v
             return distA - distB;
         });
 
+        // === NEW: Add rating and isOpen for testing ===
+        const hospitalsWithRating = hospitals.map(h => ({
+            ...h,
+            rating: 3.5 + (Math.random() * 1.5),
+            totalRatings: Math.floor(Math.random() * 500) + 10,
+            isOpen: Math.random() > 0.3,
+        }));
+
         res.status(200).json(successResponse({
-            hospitals: hospitals.slice(0, 25),
+            hospitals: hospitalsWithRating.slice(0, 25),
             total: hospitals.length,
             center: { lat: latitude, lng: longitude },
             source: "Pakistan Healthcare Database"
@@ -181,8 +189,16 @@ export const searchHospitals = async (req: Request, res: Response): Promise<void
             });
         }
 
+        // === NEW: Add rating and isOpen for testing ===
+        const hospitalsWithRating = hospitals.map(h => ({
+            ...h,
+            rating: 3.5 + (Math.random() * 1.5),
+            totalRatings: Math.floor(Math.random() * 500) + 10,
+            isOpen: Math.random() > 0.3,
+        }));
+
         res.status(200).json(successResponse({
-            hospitals,
+            hospitals: hospitalsWithRating,
             total: hospitals.length,
             searchedFor: query
         }, `Found ${hospitals.length} hospitals matching "${query}"`));

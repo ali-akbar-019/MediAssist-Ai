@@ -47,7 +47,6 @@ export const createSymptom = async (
             ...aiAnalysis,
             medicinesToConsider: aiAnalysis.medicinesToConsider ?? [],
         };
-        // console.log("Normalized AI Analysis: ", normalizedAiAnalysis);
 
         // Save symptom with AI analysis
         const symptom = await Symptom.create({
@@ -87,11 +86,26 @@ export const getSymptoms = async (
     try {
         const page = parseInt(req.query["page"] as string) || 1;
         const limit = parseInt(req.query["limit"] as string) || 10;
+        const severityFilter = req.query["severity"] as string;
+        const bodyPartFilter = req.query["bodyPart"] as string;
         const { skip } = paginate(page, limit);
 
-        const total = await Symptom.countDocuments({ user: req.user?._id });
+        // === NEW: Build filter object ===
+        const filter: { user: string; "aiAnalysis.severity"?: string; bodyPart?: string } = {
+            user: req.user?._id,
+        };
 
-        const symptoms = await Symptom.find({ user: req.user?._id })
+        if (severityFilter) {
+            filter["aiAnalysis.severity"] = severityFilter;
+        }
+
+        if (bodyPartFilter) {
+            filter.bodyPart = bodyPartFilter;
+        }
+
+        const total = await Symptom.countDocuments(filter);
+
+        const symptoms = await Symptom.find(filter)
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit);
@@ -200,6 +214,7 @@ export const getSymptomStats = async (
             user: req.user?._id,
         });
 
+        // === UPDATED: Handle empty severity stats ===
         const severityStats = await Symptom.aggregate([
             { $match: { user: req.user?._id } },
             {
@@ -210,6 +225,7 @@ export const getSymptomStats = async (
             },
         ]);
 
+        // === UPDATED: Handle empty body part stats ===
         const bodyPartStats = await Symptom.aggregate([
             { $match: { user: req.user?._id } },
             {
@@ -231,9 +247,9 @@ export const getSymptomStats = async (
             successResponse(
                 {
                     totalSymptoms,
-                    severityStats,
-                    bodyPartStats,
-                    recentSymptoms,
+                    severityStats: severityStats || [],
+                    bodyPartStats: bodyPartStats || [],
+                    recentSymptoms: recentSymptoms || [],
                 },
                 "Stats fetched successfully"
             )

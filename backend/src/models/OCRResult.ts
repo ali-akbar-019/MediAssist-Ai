@@ -46,11 +46,27 @@ const OCRResultSchema = new Schema<IOCRResult>(
             enum: ["prescription", "lab_report", "medical_report", "other"],
             required: true,
         },
-        fileName: { type: String, required: true },
+        fileName: {
+            type: String,
+            required: true,
+            maxlength: [255, "File name cannot exceed 255 characters"],
+        },
         fileUrl: { type: String },
-        rawText: { type: String, default: "" },
-        summary: { type: String, default: "" },
-        simplifiedExplanation: { type: String, default: "" },
+        rawText: {
+            type: String,
+            default: "",
+            maxlength: [10000, "Raw text cannot exceed 10,000 characters"],
+        },
+        summary: {
+            type: String,
+            default: "",
+            maxlength: [2000, "Summary cannot exceed 2,000 characters"],
+        },
+        simplifiedExplanation: {
+            type: String,
+            default: "",
+            maxlength: [2000, "Simplified explanation cannot exceed 2,000 characters"],
+        },
         extractedMedicines: [
             {
                 name: { type: String, required: true },
@@ -77,8 +93,14 @@ const OCRResultSchema = new Schema<IOCRResult>(
         importantNotes: [{ type: String }],
         warnings: [{ type: String }],
         followUpActions: [{ type: String }],
-        doctorName: { type: String },
-        patientName: { type: String },
+        doctorName: {
+            type: String,
+            maxlength: [100, "Doctor name cannot exceed 100 characters"],
+        },
+        patientName: {
+            type: String,
+            maxlength: [100, "Patient name cannot exceed 100 characters"],
+        },
         date: { type: String },
     },
     { timestamps: true }

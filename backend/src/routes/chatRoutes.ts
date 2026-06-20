@@ -7,7 +7,12 @@ import {
     deleteSession,
 } from "../controllers/chatController";
 import authMiddleware from "../middleware/authMiddleware";
-import { validate, chatValidation } from "../middleware/validateMiddleware";
+import {
+    validate,
+    chatValidation,
+    body,
+    param
+} from "../middleware/validateMiddleware";
 
 const router = Router();
 
@@ -15,9 +20,42 @@ const router = Router();
 router.use(authMiddleware);
 
 router.post("/message", validate(chatValidation), sendMessage);
-router.post("/session", createSession);
+
+// === UPDATED: Create session with validation ===
+router.post(
+    "/session",
+    validate([
+        body("title")
+            .optional()
+            .trim()
+            .isLength({ max: 100 })
+            .withMessage("Title cannot exceed 100 characters"),
+    ]),
+    createSession
+);
+
 router.get("/sessions", getSessions);
-router.get("/sessions/:sessionId", getSessionById);
-router.delete("/sessions/:sessionId", deleteSession);
+
+// === UPDATED: Get session by ID with validation ===
+router.get(
+    "/sessions/:sessionId",
+    validate([
+        param("sessionId")
+            .notEmpty()
+            .withMessage("Session ID is required"),
+    ]),
+    getSessionById
+);
+
+// === UPDATED: Delete session with validation ===
+router.delete(
+    "/sessions/:sessionId",
+    validate([
+        param("sessionId")
+            .notEmpty()
+            .withMessage("Session ID is required"),
+    ]),
+    deleteSession
+);
 
 export default router;

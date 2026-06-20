@@ -107,12 +107,35 @@ export const createSession = async (
     res: Response
 ): Promise<void> => {
     try {
+        const { title } = req.body;
         const sessionId = generateSessionId();
+
+        // === NEW: Check for existing active session (optional - prevent duplicates) ===
+        const existingSession = await ChatHistory.findOne({
+            user: req.user?._id,
+            isActive: true,
+            title: "New Conversation",
+        });
+
+        // If there's an empty session, reuse it instead of creating a new one
+        if (existingSession && existingSession.messages.length === 0) {
+            res.status(200).json(
+                successResponse(
+                    {
+                        sessionId: existingSession.sessionId,
+                        chatSession: existingSession,
+                        reused: true
+                    },
+                    "Existing empty session reused"
+                )
+            );
+            return;
+        }
 
         const chatSession = await ChatHistory.create({
             user: req.user?._id,
             sessionId,
-            title: "New Conversation",
+            title: title || "New Conversation",
             messages: [],
         });
 
@@ -142,17 +165,22 @@ export const getSessions = async (
     try {
         const page = parseInt(req.query["page"] as string) || 1;
         const limit = parseInt(req.query["limit"] as string) || 10;
+        const search = req.query["search"] as string || "";
         const { skip } = paginate(page, limit);
 
-        const total = await ChatHistory.countDocuments({
+        // === NEW: Build filter with search ===
+        const filter: any = {
             user: req.user?._id,
             isActive: true,
-        });
+        };
 
-        const sessions = await ChatHistory.find({
-            user: req.user?._id,
-            isActive: true,
-        })
+        if (search) {
+            filter.title = { $regex: search, $options: "i" };
+        }
+
+        const total = await ChatHistory.countDocuments(filter);
+
+        const sessions = await ChatHistory.find(filter)
             .sort({ updatedAt: -1 })
             .skip(skip)
             .limit(limit)

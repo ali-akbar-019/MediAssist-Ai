@@ -66,44 +66,66 @@ const ReportSchema = new Schema<IReport>(
             type: String,
             required: [true, "Title is required"],
             trim: true,
+            maxlength: [100, "Title cannot exceed 100 characters"],
         },
         summary: {
             type: String,
             required: [true, "Summary is required"],
             trim: true,
+            maxlength: [2000, "Summary cannot exceed 2000 characters"],
         },
         patientInfo: {
             name: {
                 type: String,
                 required: [true, "Patient name is required"],
                 trim: true,
+                maxlength: [100, "Patient name cannot exceed 100 characters"],
             },
-            age: { type: Number },
-            gender: { type: String },
-            bloodGroup: { type: String },
+            age: {
+                type: Number,
+                min: [1, "Age must be at least 1"],
+                max: [120, "Age cannot exceed 120"],
+            },
+            gender: {
+                type: String,
+                enum: ["male", "female", "other"],
+            },
+            bloodGroup: {
+                type: String,
+                enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
+            },
         },
         symptomDetails: {
             bodyPart: {
                 type: String,
                 required: [true, "Body part is required"],
+                trim: true,
             },
             painType: {
                 type: String,
                 required: [true, "Pain type is required"],
+                enum: ["sharp", "dull", "burning", "throbbing", "aching", "stabbing"],
             },
             severity: {
                 type: Number,
                 required: [true, "Severity is required"],
+                min: [1, "Severity must be at least 1"],
+                max: [10, "Severity cannot exceed 10"],
             },
             duration: {
                 type: String,
                 required: [true, "Duration is required"],
+                trim: true,
             },
             worseAt: {
                 type: String,
                 required: [true, "Worse at is required"],
+                enum: ["morning", "afternoon", "evening", "night", "always"],
             },
-            additionalNotes: { type: String },
+            additionalNotes: {
+                type: String,
+                maxlength: [500, "Additional notes cannot exceed 500 characters"],
+            },
         },
         aiAnalysis: {
             possibleConditions: [
@@ -155,7 +177,6 @@ const ReportSchema = new Schema<IReport>(
 
 // Index for faster queries
 ReportSchema.index({ user: 1, createdAt: -1 });
-// ReportSchema.index({ reportId: 1 });
 
 const Report = mongoose.model<IReport>("Report", ReportSchema);
 
