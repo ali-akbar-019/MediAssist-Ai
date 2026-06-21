@@ -20,7 +20,7 @@ const VitalityGauge = ({ score }: { score: number }) => {
     const strokeDashoffset = circumference - (score / 100) * circumference;
 
     return (
-        <div className="relative w-64 h-64 flex items-center justify-center" data-testid="vitality-gauge">  // ADDED
+        <div className="relative w-64 h-64 flex items-center justify-center" data-testid="vitality-gauge">
             {/* Spinning Outer Ring */}
             <motion.div
                 animate={{ rotate: 360 }}
@@ -59,7 +59,7 @@ const VitalityGauge = ({ score }: { score: number }) => {
                     strokeLinecap="round"
                     fill="none"
                     style={{ strokeDasharray: circumference }}
-                    data-testid="vitality-gauge-progress"  // ADDED
+                    data-testid="vitality-gauge-progress"
                 />
                 <defs>
                     <linearGradient id="vitality-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -75,11 +75,11 @@ const VitalityGauge = ({ score }: { score: number }) => {
                     initial={{ opacity: 0, scale: 0.5 }}
                     animate={{ opacity: 1, scale: 1 }}
                     className="text-6xl font-black text-navy-900 tracking-tighter"
-                    data-testid="vitality-score"  // ADDED
+                    data-testid="vitality-score"
                 >
                     {score}<span className="text-emerald-500">%</span>
                 </motion.span>
-                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mt-1" data-testid="vitality-label">  // ADDED
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mt-1" data-testid="vitality-label">
                     System Vitality
                 </span>
             </div>
@@ -95,22 +95,22 @@ const VitalityGauge = ({ score }: { score: number }) => {
 };
 
 const SystemStatus = ({ icon: Icon, label, status, color }: any) => (
-    <div className="flex flex-col gap-3 p-4 rounded-3xl bg-white/40 border border-navy-900/5 group hover:bg-white transition-all duration-500" data-testid={`system-status-${label.toLowerCase()}`}>  // ADDED
+    <div className="flex flex-col gap-3 p-4 rounded-3xl bg-white/40 border border-navy-900/5 group hover:bg-white transition-all duration-500" data-testid={`system-status-${label.toLowerCase()}`}>
         <div className="flex items-center justify-between">
             <div className={`p-2 rounded-xl bg-${color}-500/10`}>
                 <Icon size={16} className={`text-${color}-500`} />
             </div>
             <div className="flex gap-0.5">
                 {[...Array(3)].map((_, i) => (
-                    <div key={i} className={`w-1 h-3 rounded-full ${status === 'Optimal' ? 'bg-emerald-500' : 'bg-slate-100'}`} data-testid={`system-status-dot-${label.toLowerCase()}-${i}`} />  // ADDED
+                    <div key={i} className={`w-1 h-3 rounded-full ${status === 'Optimal' ? 'bg-emerald-500' : 'bg-slate-100'}`} data-testid={`system-status-dot-${label.toLowerCase()}-${i}`} />
                 ))}
             </div>
         </div>
         <div>
-            <p className="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-0.5" data-testid={`system-status-label-${label.toLowerCase()}`}>  // ADDED
+            <p className="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-0.5" data-testid={`system-status-label-${label.toLowerCase()}`}>
                 {label}
             </p>
-            <p className="text-xs font-black text-navy-900" data-testid={`system-status-value-${label.toLowerCase()}`}>  // ADDED
+            <p className="text-xs font-black text-navy-900" data-testid={`system-status-value-${label.toLowerCase()}`}>
                 {status}
             </p>
         </div>
@@ -128,7 +128,7 @@ const VitalityIntelligence = ({ recentEntries }: VitalityIntelligenceProps) => {
 
     return (
         <motion.div
-            data-testid="vitality-intelligence"  // ADDED
+            data-testid="vitality-intelligence"
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
             className="glass-panel p-10 relative overflow-hidden group"
@@ -140,9 +140,9 @@ const VitalityIntelligence = ({ recentEntries }: VitalityIntelligenceProps) => {
                 {/* Left: Gauge Display */}
                 <div className="lg:col-span-4 flex flex-col items-center justify-center border-r border-navy-900/5">
                     <VitalityGauge score={score} />
-                    <div className="mt-8 flex items-center gap-4 bg-navy-900/5 px-6 py-2 rounded-full border border-navy-900/5" data-testid="vitality-status-badge">  // ADDED
+                    <div className="mt-8 flex items-center gap-4 bg-navy-900/5 px-6 py-2 rounded-full border border-navy-900/5" data-testid="vitality-status-badge">
                         <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                        <span className="text-[10px] font-black uppercase tracking-widest text-navy-900" data-testid="vitality-status-text">  // ADDED
+                        <span className="text-[10px] font-black uppercase tracking-widest text-navy-900" data-testid="vitality-status-text">
                             Neural Synthesis Active
                         </span>
                     </div>
@@ -154,23 +154,23 @@ const VitalityIntelligence = ({ recentEntries }: VitalityIntelligenceProps) => {
                         <div className="space-y-2">
                             <div className="flex items-center gap-3">
                                 <ShieldCheck size={18} className="text-emerald-500" />
-                                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500" data-testid="vitality-protocol">  // ADDED
+                                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500" data-testid="vitality-protocol">
                                     Diagnostic Protocol v4.0
                                 </span>
                             </div>
-                            <h2 className="text-4xl font-black text-navy-900 tracking-tighter leading-none" data-testid="vitality-title">  // ADDED
+                            <h2 className="text-4xl font-black text-navy-900 tracking-tighter leading-none" data-testid="vitality-title">
                                 SYSTEM INTEGRITY MONITOR<span className="text-emerald-500">.</span>
                             </h2>
                         </div>
                         <div className="flex flex-col items-end">
                             <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-1">Health Signature</span>
-                            <span className="text-sm font-black text-navy-900 tracking-tight" data-testid="vitality-signature">  // ADDED
+                            <span className="text-sm font-black text-navy-900 tracking-tight" data-testid="vitality-signature">
                                 SIG-{Math.random().toString(36).substring(7).toUpperCase()}
                             </span>
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4" data-testid="vitality-system-statuses">  // ADDED
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4" data-testid="vitality-system-statuses">
                         <SystemStatus
                             icon={Brain}
                             label="Neurological"
@@ -197,7 +197,7 @@ const VitalityIntelligence = ({ recentEntries }: VitalityIntelligenceProps) => {
                         />
                     </div>
 
-                    <div className="p-6 rounded-[2rem] bg-navy-900 text-white relative overflow-hidden shadow-navy group-hover:scale-[1.02] transition-transform duration-500" data-testid="vitality-ai-insight">  // ADDED
+                    <div className="p-6 rounded-[2rem] bg-navy-900 text-white relative overflow-hidden shadow-navy group-hover:scale-[1.02] transition-transform duration-500" data-testid="vitality-ai-insight">
                         <div className="absolute top-0 right-0 p-4 opacity-10">
                             <Zap size={80} />
                         </div>
@@ -206,10 +206,10 @@ const VitalityIntelligence = ({ recentEntries }: VitalityIntelligenceProps) => {
                                 <Activity className="text-emerald-400" />
                             </div>
                             <div className="space-y-2">
-                                <p className="text-xs font-black uppercase tracking-widest text-emerald-400" data-testid="vitality-insight-label">  // ADDED
+                                <p className="text-xs font-black uppercase tracking-widest text-emerald-400" data-testid="vitality-insight-label">
                                     AI Intelligence Insight
                                 </p>
-                                <p className="text-sm font-medium leading-relaxed opacity-90" data-testid="vitality-insight-text">  // ADDED
+                                <p className="text-sm font-medium leading-relaxed opacity-90" data-testid="vitality-insight-text">
                                     Current physiological analysis suggests a high degree of system stability. No acute patterns of clinical concern identified in recent chronological logs.
                                 </p>
                             </div>

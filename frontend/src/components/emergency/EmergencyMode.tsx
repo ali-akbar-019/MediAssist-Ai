@@ -113,7 +113,7 @@ const EmergencyMode = ({ contacts, onDeactivate }: EmergencyModeProps) => {
             className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8 overflow-hidden font-sans"
         >
             {/* Tactical Backdrop */}
-            <motion.div 
+            <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 onClick={onDeactivate}
@@ -251,8 +251,8 @@ const EmergencyMode = ({ contacts, onDeactivate }: EmergencyModeProps) => {
                                         disabled={isGettingLocation || !!location}
                                         className={cn(
                                             "relative group p-8 rounded-[2rem] border-2 transition-all duration-500 flex flex-col items-center justify-center gap-6 overflow-hidden",
-                                            location 
-                                                ? "bg-emerald-500/5 border-emerald-500/20 text-emerald-500" 
+                                            location
+                                                ? "bg-emerald-500/5 border-emerald-500/20 text-emerald-500"
                                                 : "bg-[#020617] border-white/5 text-white/20 hover:border-white/20"
                                         )}
                                     >
@@ -303,7 +303,7 @@ const EmergencyMode = ({ contacts, onDeactivate }: EmergencyModeProps) => {
                             >
                                 <div className="p-10 rounded-[3rem] bg-emerald-500/5 border border-emerald-500/20 text-center relative overflow-hidden group">
                                     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-px bg-gradient-to-r from-transparent via-emerald-500 to-transparent" />
-                                    <motion.div 
+                                    <motion.div
                                         initial={{ scale: 0.5, opacity: 0 }}
                                         animate={{ scale: 1, opacity: 1 }}
                                         className="w-20 h-20 rounded-[2rem] bg-emerald-500 text-white flex items-center justify-center mx-auto mb-8 shadow-[0_20px_40px_rgba(16,185,129,0.3)]"
@@ -334,7 +334,7 @@ const EmergencyMode = ({ contacts, onDeactivate }: EmergencyModeProps) => {
                                                 >
                                                     <div className="flex items-center gap-6 flex-1 min-w-0">
                                                         <div className="w-16 h-16 rounded-2xl bg-navy-950 border border-white/5 flex items-center justify-center text-white text-2xl font-black shadow-2xl transition-transform group-hover:scale-105">
-                                                            {contact.name[0]?.toUpperCase()}
+                                                            {contact.name && contact.name.length > 0 ? contact.name[0].toUpperCase() : "?"}
                                                         </div>
                                                         <div className="min-w-0">
                                                             <p className="font-heading font-black text-white text-xl tracking-tight uppercase truncate leading-none mb-2">{contact.name}</p>
@@ -406,7 +406,8 @@ const EmergencyMode = ({ contacts, onDeactivate }: EmergencyModeProps) => {
                 </div>
             </motion.div>
 
-            <style dangerouslySetInnerHTML={{ __html: `
+            <style dangerouslySetInnerHTML={{
+                __html: `
                 @keyframes shimmer {
                     0% { background-position: -200% 0; }
                     100% { background-position: 200% 0; }

@@ -30,10 +30,20 @@ api.interceptors.request.use(
 api.interceptors.response.use(
     (response) => response,
     (error: AxiosError) => {
+        // Check if it's a login or register request
+        const isLoginRequest = error.config?.url?.includes("/auth/login");
+        const isRegisterRequest = error.config?.url?.includes("/auth/register");
+        const isAuthRequest = isLoginRequest || isRegisterRequest;
+
         if (error.response?.status === 401) {
-            // Token expired or invalid — logout user
-            useAuthStore.getState().logout();
-            window.location.href = "/login";
+            // ✅ ONLY redirect if NOT a login/register request
+            if (!isAuthRequest) {
+                // Token expired or invalid — logout user
+                useAuthStore.getState().logout();
+                window.location.href = "/login";
+            }
+            // ✅ If it's a login/register request, just pass the error through
+            // Let the useAuth hook handle it
         }
 
         if (error.response?.status === 429) {

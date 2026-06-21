@@ -3,7 +3,7 @@ import HealthDashboard from "../components/dashboard/HealthDashboard";
 
 const Dashboard = () => {
     return (
-        <div className="medical-mesh min-h-screen pt-32 pb-24" data-testid="dashboard-page">  {/* ADDED */}
+        <div className="medical-mesh min-h-screen pt-32 pb-24" data-testid="dashboard-page">
             <div className="container mx-auto px-6 relative">
                 {/* Elite Editorial Header */}
                 <motion.div
@@ -17,15 +17,15 @@ const Dashboard = () => {
                         className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-navy-900/5 border border-navy-900/10 mb-6"
                     >
                         <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-navy-900" data-testid="dashboard-badge">  {/* ADDED */}
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-navy-900" data-testid="dashboard-badge">
                             Health Intelligence System v4.0
                         </span>
                     </motion.div>
 
-                    <h1 className="text-6xl md:text-8xl font-black text-navy-900 tracking-tighter mb-4" data-testid="dashboard-heading">  {/* ADDED */}
+                    <h1 className="text-6xl md:text-8xl font-black text-navy-900 tracking-tighter mb-4" data-testid="dashboard-heading">
                         COMMAND<span className="text-emerald-500">.</span>
                     </h1>
-                    <p className="text-lg text-slate-500 max-w-2xl mx-auto font-medium tracking-tight" data-testid="dashboard-subtitle">  {/* ADDED */}
+                    <p className="text-lg text-slate-500 max-w-2xl mx-auto font-medium tracking-tight" data-testid="dashboard-subtitle">
                         Real-time physiological synthesis and diagnostic history. Your health architecture, visualized through clinical-grade AI.
                     </p>
                 </motion.div>
@@ -35,7 +35,7 @@ const Dashboard = () => {
                     initial={{ opacity: 0, scale: 0.98 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.2 }}
-                    data-testid="dashboard-container"  // ADDED
+                    data-testid="dashboard-container"
                 >
                     <HealthDashboard />
                 </motion.div>

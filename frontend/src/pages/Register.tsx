@@ -38,10 +38,7 @@ const Register = () => {
         gender: "",
         bloodGroup: "",
     });
-    const [validationErrors, setValidationErrors] = useState
-        <Record<string, string>
-        >({});
-
+    const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
     const validateStep1 = (): boolean => {
         const errors: Record<string, string> = {};
         if (!formData.name.trim()) {
@@ -69,18 +66,24 @@ const Register = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         clearError();
+
         if (step === 1) {
             if (validateStep1()) setStep(2);
             return;
         }
-        await handleRegister({
+
+        const res = await handleRegister({
             name: formData.name,
             email: formData.email,
             password: formData.password,
             age: formData.age ? parseInt(formData.age) : undefined,
-            gender: formData.gender as "male" | "female" | "other" | undefined,
+            gender: formData.gender as any,
             bloodGroup: formData.bloodGroup || undefined,
         });
+
+        if (!res.success && res.fieldErrors) {
+            setValidationErrors(res.fieldErrors);
+        }
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

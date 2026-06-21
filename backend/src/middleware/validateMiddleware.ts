@@ -96,18 +96,33 @@ export const symptomValidation: ValidationChain[] = [
         .trim()
         .notEmpty()
         .withMessage("Body part is required")
-        .isLength({ max: 100 })
-        .withMessage("Body part cannot exceed 100 characters"),
+        .isLength({ max: 500 })
+        .withMessage("Body part cannot exceed 500 characters"),
 
     body("bodySide")
         .notEmpty()
         .withMessage("Body side is required")
-        .isIn(["front", "back"])
-        .withMessage("Body side must be front or back"),
+        .isIn(["front", "back", "various"])
+        .withMessage("Body side must be front, back, or various"),
+
+    body("bodyParts")
+        .optional()
+        .isArray()
+        .withMessage("Body parts must be an array")
+        .custom((value) => {
+            if (!Array.isArray(value)) return true;
+            return value.every((item) => typeof item === 'string' && item.trim().length > 0);
+        })
+        .withMessage("Each body part must be a non-empty string"),
 
     body("symptoms")
         .isArray({ min: 1 })
-        .withMessage("At least one symptom is required"),
+        .withMessage("At least one symptom is required")
+        .custom((value) => {
+            if (!Array.isArray(value)) return false;
+            return value.every((item) => typeof item === 'string' && item.trim().length > 0);
+        })
+        .withMessage("Each symptom must be a non-empty string"),
 
     body("painType")
         .notEmpty()
@@ -140,7 +155,6 @@ export const symptomValidation: ValidationChain[] = [
         .isIn(["morning", "afternoon", "evening", "night", "always"])
         .withMessage("Invalid time"),
 
-    // === NEW: Additional Notes validation ===
     body("additionalNotes")
         .optional()
         .isLength({ max: 500 })

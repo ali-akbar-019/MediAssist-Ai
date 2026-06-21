@@ -19,6 +19,12 @@ export const registerUser = async (
         "/api/auth/register",
         credentials
     );
+
+    // ✅ CHECK success
+    if (!response.data.success) {
+        throw new Error(response.data.message || "Registration failed");
+    }
+
     return response.data.data;
 };
 
@@ -30,6 +36,12 @@ export const loginUser = async (
         "/api/auth/login",
         credentials
     );
+
+    // ✅ CHECK success - THIS IS THE FIX!
+    if (!response.data.success) {
+        throw new Error(response.data.message || "Invalid email or password");
+    }
+
     return response.data.data;
 };
 
@@ -38,6 +50,11 @@ export const getCurrentUser = async (): Promise<User> => {
     const response = await api.get<APIResponse<{ user: User }>>(
         "/api/auth/me"
     );
+
+    if (!response.data.success) {
+        throw new Error(response.data.message || "Failed to get user");
+    }
+
     return response.data.data.user;
 };
 
@@ -49,6 +66,11 @@ export const updateUserProfile = async (
         "/api/auth/profile",
         profileData
     );
+
+    if (!response.data.success) {
+        throw new Error(response.data.message || "Profile update failed");
+    }
+
     return response.data.data.user;
 };
 
@@ -57,13 +79,21 @@ export const changeUserPassword = async (
     currentPassword: string,
     newPassword: string
 ): Promise<void> => {
-    await api.put("/api/auth/change-password", {
+    const response = await api.put("/api/auth/change-password", {
         currentPassword,
         newPassword,
     });
+
+    if (!response.data.success) {
+        throw new Error(response.data.message || "Password change failed");
+    }
 };
 
 // Logout
 export const logoutUser = async (): Promise<void> => {
-    await api.post("/api/auth/logout");
+    try {
+        await api.post("/api/auth/logout");
+    } catch {
+        // Silent fail - we still logout locally
+    }
 };

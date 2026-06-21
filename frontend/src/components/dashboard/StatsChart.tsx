@@ -41,7 +41,7 @@ const StatsChart = ({ stats }: StatsChartProps) => {
     const CustomTooltip = ({ active, payload, label }: any) => {
         if (active && payload && payload.length) {
             return (
-                <div className="glass-panel p-3 border-white/60 shadow-luxe backdrop-blur-xl" data-testid="chart-tooltip">  // ADDED
+                <div className="glass-panel p-3 border-white/60 shadow-luxe backdrop-blur-xl" data-testid="chart-tooltip">
                     <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">
                         Diagnostic Data
                     </p>
@@ -58,10 +58,10 @@ const StatsChart = ({ stats }: StatsChartProps) => {
     };
 
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8" data-testid="stats-chart-container">  // ADDED
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8" data-testid="stats-chart-container">
             {/* Severity Distribution — Elite Pulse */}
             <motion.div
-                data-testid="severity-pie-chart"  // ADDED
+                data-testid="severity-pie-chart"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 className="glass-panel p-8 relative overflow-hidden"
@@ -70,17 +70,17 @@ const StatsChart = ({ stats }: StatsChartProps) => {
                     <span className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500 mb-1">
                         Statistical Analysis
                     </span>
-                    <h3 className="text-xl font-black text-navy-900 tracking-tighter" data-testid="severity-chart-title">  // ADDED
+                    <h3 className="text-xl font-black text-navy-900 tracking-tighter" data-testid="severity-chart-title">
                         SEVERITY MATRIX<span className="text-emerald-500">.</span>
                     </h3>
                 </div>
 
                 {severityData.length === 0 ? (
-                    <div className="flex items-center justify-center h-[280px] text-[10px] font-bold uppercase tracking-widest text-slate-300" data-testid="severity-no-data">  // ADDED
+                    <div className="flex items-center justify-center h-[280px] text-[10px] font-bold uppercase tracking-widest text-slate-300" data-testid="severity-no-data">
                         Zero Data Points Identified
                     </div>
                 ) : (
-                    <div className="h-[280px]" data-testid="severity-chart-container">  // ADDED
+                    <div className="h-[280px]" data-testid="severity-chart-container">
                         <ResponsiveContainer width="100%" height="100%">
                             <PieChart>
                                 <Pie
@@ -94,7 +94,7 @@ const StatsChart = ({ stats }: StatsChartProps) => {
                                     stroke="none"
                                 >
                                     {severityData.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={entry.color} opacity={0.9} data-testid={`severity-cell-${index}`} />  // ADDED
+                                        <Cell key={`cell-${index}`} fill={entry.color} opacity={0.9} data-testid={`severity-cell-${index}`} />
                                     ))}
                                 </Pie>
                                 <Tooltip content={<CustomTooltip />} />
@@ -102,9 +102,9 @@ const StatsChart = ({ stats }: StatsChartProps) => {
                                     verticalAlign="bottom"
                                     height={36}
                                     content={({ payload }) => (
-                                        <div className="flex justify-center gap-6 mt-4" data-testid="severity-legend">  // ADDED
+                                        <div className="flex justify-center gap-6 mt-4" data-testid="severity-legend">
                                             {payload?.map((entry: any, index: number) => (
-                                                <div key={index} className="flex items-center gap-2" data-testid={`severity-legend-${index}`}>  // ADDED
+                                                <div key={index} className="flex items-center gap-2" data-testid={`severity-legend-${index}`}>
                                                     <div
                                                         className="w-2 h-2 rounded-full"
                                                         style={{ backgroundColor: entry.color }}
@@ -125,7 +125,7 @@ const StatsChart = ({ stats }: StatsChartProps) => {
 
             {/* Body Part Frequency — Tactical Bar */}
             <motion.div
-                data-testid="bodypart-bar-chart"  // ADDED
+                data-testid="bodypart-bar-chart"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.1 }}
@@ -135,17 +135,17 @@ const StatsChart = ({ stats }: StatsChartProps) => {
                     <span className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500 mb-1">
                         Anatomical Trends
                     </span>
-                    <h3 className="text-xl font-black text-navy-900 tracking-tighter" data-testid="bodypart-chart-title">  // ADDED
+                    <h3 className="text-xl font-black text-navy-900 tracking-tighter" data-testid="bodypart-chart-title">
                         HOTSPOT FREQUENCY<span className="text-emerald-500">.</span>
                     </h3>
                 </div>
 
                 {bodyPartData.length === 0 ? (
-                    <div className="flex items-center justify-center h-[280px] text-[10px] font-bold uppercase tracking-widest text-slate-300" data-testid="bodypart-no-data">  // ADDED
+                    <div className="flex items-center justify-center h-[280px] text-[10px] font-bold uppercase tracking-widest text-slate-300" data-testid="bodypart-no-data">
                         Zero Data Points Identified
                     </div>
                 ) : (
-                    <div className="h-[280px]" data-testid="bodypart-chart-container">  // ADDED
+                    <div className="h-[280px]" data-testid="bodypart-chart-container">
                         <ResponsiveContainer width="100%" height="100%">
                             <BarChart
                                 data={bodyPartData}
@@ -181,7 +181,7 @@ const StatsChart = ({ stats }: StatsChartProps) => {
                                             key={`cell-${index}`}
                                             fill={index === 0 ? "#10B981" : "#1E3A5F"}
                                             fillOpacity={0.9}
-                                            data-testid={`bodypart-bar-${index}`}  // ADDED
+                                            data-testid={`bodypart-bar-${index}`}
                                         />
                                     ))}
                                 </Bar>

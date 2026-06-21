@@ -14,7 +14,7 @@ Provide detailed information about the medicine: {medicine_name}
 
 IMPORTANT: Respond ONLY with a valid JSON object. No extra text or markdown.
 
-Respond with this exact JSON structure:
+If the medicine IS a recognized pharmaceutical product, respond with this structure:
 {{
     "name": "Official medicine name",
     "genericName": "Generic/chemical name",
@@ -42,6 +42,17 @@ Respond with this exact JSON structure:
     ]
 }}
 
+If the medicine is NOT a recognized pharmaceutical product, respond with this EXACT structure:
+{{
+    "name": "NOT_FOUND",
+    "genericName": "",
+    "uses": [],
+    "dosage": "",
+    "sideEffects": [],
+    "warnings": [],
+    "interactions": []
+}}
+
 Rules:
 - Provide accurate pharmaceutical information
 - uses must have 2-5 items
@@ -49,7 +60,8 @@ Rules:
 - warnings must have 2-4 items
 - interactions must have 2-4 items
 - Always note that a doctor or pharmacist should be consulted
-- If medicine name is not recognized, provide best available information
+- **CRITICAL: ONLY use "NOT_FOUND" if the medicine does not exist in medical literature**
+- **CRITICAL: Do NOT generate placeholder or fake information for unrecognized medicines**
 - Keep all text concise and clear
 """
 
@@ -61,26 +73,61 @@ async def get_medicine_info(request: MedicineInfoRequest):
     uses, dosage, side effects, warnings and drug interactions.
     """
     try:
-        prompt = build_medicine_prompt(request.medicineName)
+        medicine_name = request.medicineName.strip()
+        
+        # Basic validation
+        if not medicine_name:
+            raise HTTPException(
+                status_code=400,
+                detail="Medicine name is required",
+            )
+        
+        if len(medicine_name) > 100:
+            raise HTTPException(
+                status_code=400,
+                detail="Medicine name cannot exceed 100 characters",
+            )
+        
+        # Get AI response
+        prompt = build_medicine_prompt(medicine_name)
         response_text = await generate_content(prompt)
         parsed_response = parse_ai_json_response(response_text)
-
+        
+        # Check if medicine was found
+        if parsed_response.get("name") == "NOT_FOUND":
+            raise HTTPException(
+                status_code=404,
+                detail=f"No information found for medicine: {medicine_name}",
+            )
+        
+        # Validate required fields exist for found medicine
+        required_fields = ["name", "genericName", "uses", "dosage", "sideEffects", "warnings", "interactions"]
+        for field in required_fields:
+            if field not in parsed_response:
+                raise HTTPException(
+                    status_code=500,
+                    detail=f"Invalid response from medicine service: missing {field}",
+                )
+        
         return MedicineInfoResponse(**parsed_response)
 
     except GeminiConfigurationError as e:
         raise HTTPException(
             status_code=503,
-            detail=str(e),
+            detail="Medicine information service is currently unavailable. Please try again later.",
         )
+    except HTTPException:
+        # Re-raise HTTP exceptions
+        raise
     except RuntimeError as e:
         raise HTTPException(
             status_code=500,
-            detail=str(e),
+            detail="An error occurred while processing your request. Please try again.",
         )
     except ValueError as e:
         raise HTTPException(
             status_code=400,
-            detail=str(e),
+            detail="Invalid response format from medicine service.",
         )
     except Exception as e:
         raise HTTPException(

@@ -40,8 +40,8 @@ router.get(
             .withMessage("Invalid severity filter"),
         query("bodyPart")
             .optional()
-            .isLength({ max: 100 })
-            .withMessage("Body part filter cannot exceed 100 characters"),
+            .isLength({ max: 500 })
+            .withMessage("Body part filter cannot exceed 500 characters"),
     ]),
     getSymptoms
 );

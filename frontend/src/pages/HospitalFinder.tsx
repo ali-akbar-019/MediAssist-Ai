@@ -6,7 +6,7 @@ const HospitalFinder = () => {
     return (
         <div
             className="medical-mesh min-h-screen pt-32 pb-24 page-enter overflow-x-hidden"
-            data-testid="hospital-page"  // ADDED
+            data-testid="hospital-page"
         >
             <div className="container mx-auto px-6 relative">
                 {/* Editorial Header */}
@@ -33,7 +33,7 @@ const HospitalFinder = () => {
 
                 <div
                     className="max-w-5xl mx-auto relative"
-                    data-testid="hospital-container"  // ADDED
+                    data-testid="hospital-container"
                 >
                     <div className="absolute -top-20 -left-20 w-64 h-64 bg-emerald-400/10 rounded-full blur-[100px] pointer-events-none" />
                     <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-navy-400/5 rounded-full blur-[100px] pointer-events-none" />

@@ -74,8 +74,10 @@ const ChatMessage = ({ message, index }: ChatMessageProps) => {
                             <Stethoscope className="w-16 h-16 rotate-12" />
                         </div>
                     )}
-                    <ReactMarkdown data-testid={`chat-content-${isUser ? 'user' : 'ai'}-${index}`}>  {/* ADDED */}
-                        {message.content || ""}
+                    <ReactMarkdown>
+                        {typeof message.content === "string"
+                            ? message.content
+                            : String(message.content ?? "")}
                     </ReactMarkdown>
                 </div>
 

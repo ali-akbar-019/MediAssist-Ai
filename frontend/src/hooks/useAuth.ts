@@ -39,17 +39,40 @@ export const useAuth = () => {
 
     const handleRegister = async (
         credentials: RegisterCredentials
-    ): Promise<boolean> => {
+    ): Promise<{
+        success: boolean;
+        fieldErrors?: Record<string, string>;
+    }> => {
         try {
             setError(null);
             setLoading(true);
+
             const data = await registerUser(credentials);
+
             login(data.user, data.token);
             navigate(ROUTES.DASHBOARD);
-            return true;
-        } catch (err) {
+
+            return { success: true };
+        } catch (err: any) {
+            const data = err?.response?.data;
+
+            // field validation errors
+            if (data?.errors) {
+                const fieldErrors: Record<string, string> = {};
+
+                data.errors.forEach((e: any) => {
+                    fieldErrors[e.field] = e.message;
+                });
+
+                return {
+                    success: false,
+                    fieldErrors,
+                };
+            }
+
             setError(parseErrorMessage(err));
-            return false;
+
+            return { success: false };
         } finally {
             setLoading(false);
         }
@@ -65,7 +88,6 @@ export const useAuth = () => {
             navigate(ROUTES.HOME);
         }
     };
-
     const handleUpdateProfile = async (
         profileData: Partial<User>
     ): Promise<boolean> => {

@@ -1,22 +1,23 @@
 import { Router } from "express";
 import {
-    register,
-    login,
-    getMe,
-    updateProfile,
     changePassword,
+    getMe,
+    login,
     logout,
+    register,
+    updateProfile,
 } from "../controllers/authController";
 import authMiddleware from "../middleware/authMiddleware";
 import {
-    validate,
-    registerValidation,
-    loginValidation,
     // === NEW: Profile update validation ===
-    body
+    body,
+    loginValidation,
+    registerValidation,
+    validate
 } from "../middleware/validateMiddleware";
 
 const router = Router();
+
 
 // Public routes
 router.post("/register", validate(registerValidation), register);

@@ -32,7 +32,7 @@ const StatCard = ({
     delay: number;
 }) => (
     <motion.div
-        data-testid={`stat-card-${label.replace(/\s+/g, '-').toLowerCase()}`}  // ADDED
+        data-testid={`stat-card-${label.replace(/\s+/g, '-').toLowerCase()}`}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
@@ -49,7 +49,7 @@ const StatCard = ({
                 <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1">
                     Metric Protocol
                 </span>
-                <span className="text-sm font-bold text-navy-900 leading-tight" data-testid={`stat-label-${label.replace(/\s+/g, '-').toLowerCase()}`}>  // ADDED
+                <span className="text-sm font-bold text-navy-900 leading-tight" data-testid={`stat-label-${label.replace(/\s+/g, '-').toLowerCase()}`}>
                     {label}
                 </span>
             </div>
@@ -65,7 +65,7 @@ const StatCard = ({
         </div>
 
         <div className="flex items-end justify-between relative z-10">
-            <p className="text-4xl font-black text-navy-900 tracking-tighter" data-testid={`stat-value-${label.replace(/\s+/g, '-').toLowerCase()}`}>  // ADDED
+            <p className="text-4xl font-black text-navy-900 tracking-tighter" data-testid={`stat-value-${label.replace(/\s+/g, '-').toLowerCase()}`}>
                 {value}
             </p>
             <div className="flex items-center gap-1 opacity-40">
@@ -100,23 +100,23 @@ const HealthDashboard = () => {
     }, []);
 
     return (
-        <div className="space-y-12" data-testid="health-dashboard">  // ADDED
+        <div className="space-y-12" data-testid="health-dashboard">
             {/* Command Actions Bar */}
             <motion.div
-                data-testid="dashboard-command-bar"  // ADDED
+                data-testid="dashboard-command-bar"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 className="flex items-center justify-between p-2 pl-8 pr-2 rounded-[2rem] glass-panel border-white/60 shadow-luxe"
             >
                 <div className="flex items-center gap-4">
                     <div className="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
-                    <span className="text-xs font-black uppercase tracking-[0.2em] text-navy-900" data-testid="dashboard-status">  // ADDED
+                    <span className="text-xs font-black uppercase tracking-[0.2em] text-navy-900" data-testid="dashboard-status">
                         Operational Status: Clinical Optimal
                     </span>
                 </div>
                 <Link
                     to={ROUTES.ANALYZER}
-                    data-testid="dashboard-initiate-analysis-btn"  // ADDED
+                    data-testid="dashboard-initiate-analysis-btn"
                     className="flex items-center gap-3 px-8 py-4 bg-navy-900 text-white rounded-[1.4rem] text-sm font-black uppercase tracking-widest hover:bg-navy-950 transition-all shadow-navy group overflow-hidden relative"
                 >
                     <div className="absolute inset-0 bg-emerald-500 translate-y-full group-hover:translate-y-0 transition-transform duration-500 opacity-10" />
@@ -131,7 +131,7 @@ const HealthDashboard = () => {
 
             {/* Stat Console */}
             {isLoadingStats ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" data-testid="dashboard-stats-loading">  // ADDED
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" data-testid="dashboard-stats-loading">
                     {[...Array(4)].map((_, i) => (
                         <div
                             key={i}
@@ -144,7 +144,7 @@ const HealthDashboard = () => {
                     ))}
                 </div>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" data-testid="dashboard-stats">  // ADDED
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" data-testid="dashboard-stats">
                     <StatCard
                         icon={Activity}
                         label="Total Analyses"
@@ -191,31 +191,31 @@ const HealthDashboard = () => {
 
             {/* Charts Intelligence Zone */}
             {stats && !isLoadingStats && (
-                <div className="relative group" data-testid="dashboard-charts">  // ADDED
+                <div className="relative group" data-testid="dashboard-charts">
                     <div className="absolute -inset-4 bg-emerald-500/5 blur-2xl rounded-[3rem] opacity-0 group-hover:opacity-100 transition-opacity duration-1000 -z-10" />
                     <StatsChart stats={stats} />
                 </div>
             )}
 
             {/* Diagnostic Chronology */}
-            <div className="space-y-8" data-testid="dashboard-history">  // ADDED
+            <div className="space-y-8" data-testid="dashboard-history">
                 <div className="flex items-center justify-between border-b border-navy-900/5 pb-4">
                     <div className="flex flex-col">
                         <span className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500 mb-1">
                             Chronological Data
                         </span>
-                        <h2 className="text-3xl font-black text-navy-900 tracking-tighter" data-testid="dashboard-history-title">  // ADDED
+                        <h2 className="text-3xl font-black text-navy-900 tracking-tighter" data-testid="dashboard-history-title">
                             DIAGNOSTIC HISTORY<span className="text-emerald-500">.</span>
                         </h2>
                     </div>
-                    <div className="group flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-slate-400" data-testid="dashboard-history-count">  // ADDED
+                    <div className="group flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-slate-400" data-testid="dashboard-history-count">
                         Total Records: {symptoms.length}
                         <div className="w-8 h-[1px] bg-slate-200 group-hover:w-12 group-hover:bg-navy-900 transition-all" />
                     </div>
                 </div>
 
                 {isLoadingSymptoms ? (
-                    <div className="flex flex-col items-center justify-center py-24 gap-4" data-testid="dashboard-history-loading">  // ADDED
+                    <div className="flex flex-col items-center justify-center py-24 gap-4" data-testid="dashboard-history-loading">
                         <Loader2 className="w-10 h-10 animate-spin text-emerald-500" />
                         <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
                             Synchronizing Clinical Data...
@@ -223,7 +223,7 @@ const HealthDashboard = () => {
                     </div>
                 ) : symptoms.length === 0 ? (
                     <motion.div
-                        data-testid="dashboard-history-empty"  // ADDED
+                        data-testid="dashboard-history-empty"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         className="flex flex-col items-center justify-center py-20 text-center glass-panel"
@@ -239,7 +239,7 @@ const HealthDashboard = () => {
                         </p>
                         <Link
                             to={ROUTES.ANALYZER}
-                            data-testid="dashboard-empty-analyzer-link"  // ADDED
+                            data-testid="dashboard-empty-analyzer-link"
                             className="px-8 py-3 bg-navy-900 text-white rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-navy-950 transition-all shadow-navy"
                         >
                             Start Analysis Protocol
@@ -247,7 +247,7 @@ const HealthDashboard = () => {
                     </motion.div>
                 ) : (
                     <div className="space-y-10">
-                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" data-testid="dashboard-history-grid">  // ADDED
+                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" data-testid="dashboard-history-grid">
                             {symptoms.map((symptom, index) => (
                                 <HistoryCard
                                     key={symptom._id}
@@ -263,7 +263,7 @@ const HealthDashboard = () => {
                         <div className="flex justify-center pt-4">
                             <Link
                                 to={ROUTES.REPORTS}
-                                data-testid="dashboard-view-all-reports"  // ADDED
+                                data-testid="dashboard-view-all-reports"
                                 className="group flex items-center gap-4 px-10 py-4 rounded-2xl bg-white border border-slate-100 text-[11px] font-black uppercase tracking-[0.2em] text-navy-900 hover:border-emerald-500 hover:bg-emerald-50/30 transition-all shadow-sm"
                             >
                                 <span className="relative">
@@ -281,7 +281,7 @@ const HealthDashboard = () => {
 
             {/* System Profiles */}
             {user && (
-                <div className="pt-8 border-t border-navy-900/5" data-testid="dashboard-user-profile">  // ADDED
+                <div className="pt-8 border-t border-navy-900/5" data-testid="dashboard-user-profile">
                     <div className="flex items-center gap-4 mb-6">
                         <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                         <h2 className="text-[10px] font-black tracking-[0.4em] text-navy-900 uppercase">
@@ -299,11 +299,11 @@ const HealthDashboard = () => {
                                 testId: "allergies"
                             },
                         ].map((item) => (
-                            <div key={item.label} className="p-4 rounded-3xl border border-navy-900/5 bg-white/40" data-testid={`dashboard-profile-${item.testId}`}>  // ADDED
+                            <div key={item.label} className="p-4 rounded-3xl border border-navy-900/5 bg-white/40" data-testid={`dashboard-profile-${item.testId}`}>
                                 <p className="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-2">
                                     {item.label}
                                 </p>
-                                <p className="text-sm font-black text-navy-900 capitalize tracking-tight" data-testid={`dashboard-profile-${item.testId}-value`}>  // ADDED
+                                <p className="text-sm font-black text-navy-900 capitalize tracking-tight" data-testid={`dashboard-profile-${item.testId}-value`}>
                                     {item.value}
                                 </p>
                             </div>

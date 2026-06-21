@@ -43,6 +43,13 @@ const STEPS = [
     { number: 4, label: "Analysis" },
 ];
 
+const isValidSymptom = (text: string): boolean => {
+    const trimmed = text.trim();
+    if (trimmed.length < 2) return false;
+    const validPattern = /^[a-zA-Z\s\-'()]+$/;
+    return validPattern.test(trimmed);
+};
+
 const SymptomForm = () => {
     const {
         selectedBodyParts,
@@ -58,10 +65,10 @@ const SymptomForm = () => {
     } = useSymptomStore();
 
     const { handleCreateSymptom, analysisResult } = useSymptoms();
-    // console.log("ai analysis result: ", analysisResult);
     const [symptomInput, setSymptomInput] = useState("");
     const [emergencyVisible, setEmergencyVisible] = useState(false);
     const [emergencyTrigger, setEmergencyTrigger] = useState("");
+    const [inputError, setInputError] = useState("");
 
     const currentSuggestions = selectedBodyParts.length > 0
         ? COMMON_SYMPTOMS[selectedBodyParts[0].name] ?? []
@@ -69,18 +76,29 @@ const SymptomForm = () => {
 
     const handleAddSymptom = (symptom: string) => {
         const trimmed = symptom.trim();
-        if (!trimmed) return;
-
-        // Check for emergency symptoms
+        if (!trimmed) {
+            setInputError("Please enter a symptom");
+            return;
+        }
+        if (!isValidSymptom(trimmed)) {
+            setInputError("Please enter a valid symptom (letters only)");
+            return;
+        }
+        const current = formData.symptoms ?? [];
+        if (current.length >= 10) {
+            setInputError("Maximum 10 symptoms allowed");
+            return;
+        }
+        if (current.includes(trimmed)) {
+            setInputError("This symptom is already added");
+            return;
+        }
+        setInputError("");
         if (isEmergencySymptom(trimmed)) {
             setEmergencyTrigger(trimmed);
             setEmergencyVisible(true);
         }
-
-        const current = formData.symptoms ?? [];
-        if (!current.includes(trimmed)) {
-            updateFormData({ symptoms: [...current, trimmed] });
-        }
+        updateFormData({ symptoms: [...current, trimmed] });
         setSymptomInput("");
     };
 
@@ -94,6 +112,11 @@ const SymptomForm = () => {
             e.preventDefault();
             handleAddSymptom(symptomInput);
         }
+    };
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSymptomInput(e.target.value);
+        if (inputError) setInputError("");
     };
 
     const handleSubmit = async () => {
@@ -111,16 +134,14 @@ const SymptomForm = () => {
         !!formData.worseAt;
 
     return (
-        <div className="space-y-12" data-testid="symptom-form">  {/* ADDED */}
-            {/* Emergency Alert */}
+        <div className="space-y-12" data-testid="symptom-form">
             <EmergencyAlert
                 isVisible={emergencyVisible}
                 onClose={() => setEmergencyVisible(false)}
                 triggeredBy={emergencyTrigger}
             />
 
-            {/* Clinical Analytics Step Indicator */}
-            <div className="relative pt-4" data-testid="step-indicator">  {/* ADDED */}
+            <div className="relative pt-4" data-testid="step-indicator">
                 <div className="flex items-center justify-between relative z-10">
                     {STEPS.map((step) => {
                         const isCompleted = currentStep > step.number;
@@ -129,7 +150,7 @@ const SymptomForm = () => {
                         return (
                             <div key={step.number} className="flex flex-col items-center group">
                                 <div
-                                    data-testid={`step-${step.number}`}  // ADDED
+                                    data-testid={`step-${step.number}`}
                                     className={cn(
                                         "w-10 h-10 rounded-2xl flex items-center justify-center text-[13px] font-black tracking-tighter transition-all duration-700 border shrink-0 relative",
                                         isCurrent
@@ -154,7 +175,6 @@ const SymptomForm = () => {
                         );
                     })}
                 </div>
-                {/* Connecting Lines with Dynamic Glow */}
                 <div className="absolute top-9 left-6 right-6 h-[1.5px] bg-slate-100 z-0">
                     <motion.div
                         initial={{ width: "0%" }}
@@ -164,9 +184,7 @@ const SymptomForm = () => {
                 </div>
             </div>
 
-            {/* Step Content */}
             <AnimatePresence mode="wait">
-                {/* Step 1 — Body Part Selection */}
                 {currentStep === 1 && (
                     <motion.div
                         key="step1"
@@ -174,7 +192,7 @@ const SymptomForm = () => {
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: -20 }}
                         className="space-y-6"
-                        data-testid="step1-content"  // ADDED
+                        data-testid="step1-content"
                     >
                         <div className="text-center">
                             <h3 className="text-xl font-heading font-bold text-navy-900">
@@ -192,7 +210,6 @@ const SymptomForm = () => {
                     </motion.div>
                 )}
 
-                {/* Step 2 — Symptoms */}
                 {currentStep === 2 && (
                     <motion.div
                         key="step2"
@@ -200,7 +217,7 @@ const SymptomForm = () => {
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: -20 }}
                         className="space-y-5"
-                        data-testid="step2-content"  // ADDED
+                        data-testid="step2-content"
                     >
                         <div>
                             <h3 className="text-lg font-heading font-semibold text-navy-900">
@@ -214,49 +231,66 @@ const SymptomForm = () => {
                             </p>
                         </div>
 
-                        {/* Symptom Input */}
-                        <div className="flex gap-2">
-                            <Input
-                                value={symptomInput}
-                                onChange={(e) => setSymptomInput(e.target.value)}
-                                onKeyDown={handleKeyDown}
-                                placeholder="Type a symptom and press Enter..."
-                                className="flex-1"
-                                data-testid="symptom-input"
-                            />
-                            <Button
-                                onClick={() => handleAddSymptom(symptomInput)}
-                                disabled={!symptomInput.trim()}
-                                size="icon"
-                                data-testid="symptom-add-btn"
-                                className="bg-navy-900 hover:bg-navy-800 text-white shrink-0"
-                            >
-                                <Plus className="w-4 h-4" />
-                            </Button>
+                        <div>
+                            <div className="flex gap-2">
+                                <Input
+                                    value={symptomInput}
+                                    onChange={handleInputChange}
+                                    onKeyDown={handleKeyDown}
+                                    placeholder="Type a symptom and press Enter..."
+                                    className={cn(
+                                        "flex-1",
+                                        inputError && "border-red-500 focus-visible:ring-red-500/20"
+                                    )}
+                                    data-testid="symptom-input"
+                                />
+                                <Button
+                                    onClick={() => handleAddSymptom(symptomInput)}
+                                    disabled={!symptomInput.trim() || (formData.symptoms?.length ?? 0) >= 10}
+                                    size="icon"
+                                    data-testid="symptom-add-btn"
+                                    className="bg-navy-900 hover:bg-navy-800 text-white shrink-0"
+                                >
+                                    <Plus className="w-4 h-4" />
+                                </Button>
+                            </div>
+                            {inputError && (
+                                <motion.p
+                                    initial={{ opacity: 0, y: -5 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="text-xs text-red-500 mt-2 ml-1 font-medium"
+                                    data-testid="symptom-input-error"
+                                >
+                                    {inputError}
+                                </motion.p>
+                            )}
+                            <p className="text-[10px] text-slate-400 mt-2 ml-1 font-medium">
+                                Enter valid symptom names (letters only)
+                            </p>
                         </div>
-
-                        {/* Selected Symptoms */}
+                        <p className="text-[10px] text-slate-400 mt-2 ml-1 font-medium">
+                            {(formData.symptoms?.length ?? 0)} / 10 symptoms added
+                        </p>
                         <AnimatePresence>
                             {(formData.symptoms?.length ?? 0) > 0 && (
                                 <motion.div
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     className="flex flex-wrap gap-2"
-                                    data-testid="symptom-list"  // ADDED
+                                    data-testid="symptom-list"
                                 >
                                     {formData.symptoms?.map((symptom) => (
                                         <SymptomTag
                                             key={symptom}
                                             symptom={symptom}
                                             onRemove={handleRemoveSymptom}
-                                            data-testid={`symptom-tag-${symptom}`}  // ADDED
+                                            data-testid={`symptom-tag-${symptom}`}
                                         />
                                     ))}
                                 </motion.div>
                             )}
                         </AnimatePresence>
 
-                        {/* Suggestions */}
                         <SymptomSuggestions
                             suggestions={currentSuggestions}
                             selectedSymptoms={formData.symptoms ?? []}
@@ -265,7 +299,6 @@ const SymptomForm = () => {
                     </motion.div>
                 )}
 
-                {/* Step 3 — Pain Details */}
                 {currentStep === 3 && (
                     <motion.div
                         key="step3"
@@ -273,7 +306,7 @@ const SymptomForm = () => {
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: -20 }}
                         className="space-y-5"
-                        data-testid="step3-content"  // ADDED
+                        data-testid="step3-content"
                     >
                         <div>
                             <h3 className="text-lg font-heading font-semibold text-navy-900">
@@ -284,7 +317,6 @@ const SymptomForm = () => {
                             </p>
                         </div>
 
-                        {/* Severity Slider Module */}
                         <div className="glass-panel p-8 rounded-3xl border-white/40 shadow-sm">
                             <SeveritySlider
                                 value={formData.severity ?? 5}
@@ -293,7 +325,6 @@ const SymptomForm = () => {
                             />
                         </div>
 
-                        {/* Pain Selection Matrix */}
                         <div className="space-y-4">
                             <Label className="text-[10px] uppercase tracking-[0.2em] font-black text-navy-400 ml-1">
                                 Physiological Sensation
@@ -329,7 +360,6 @@ const SymptomForm = () => {
                             </div>
                         </div>
 
-                        {/* Temporal Duration */}
                         <div className="space-y-4">
                             <Label className="text-[10px] uppercase tracking-[0.2em] font-black text-navy-400 ml-1">
                                 Duration Magnitude
@@ -340,9 +370,19 @@ const SymptomForm = () => {
                                     min={1}
                                     max={365}
                                     value={formData.duration ?? ""}
-                                    onChange={(e) =>
-                                        updateFormData({ duration: e.target.value })
-                                    }
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+                                        // Allow empty string
+                                        if (value === "") {
+                                            updateFormData({ duration: value });
+                                            return;
+                                        }
+                                        const num = Number(value);
+                                        // Only update if it's a valid number between 1 and 365
+                                        if (!isNaN(num) && num >= 1 && num <= 365) {
+                                            updateFormData({ duration: value });
+                                        }
+                                    }}
                                     data-testid="duration-input"
                                     placeholder="Value"
                                     className="flex-1 h-14 bg-white/40 border-white/60 rounded-2xl focus:ring-emerald-500 font-bold"
@@ -354,7 +394,7 @@ const SymptomForm = () => {
                                     }
                                 >
                                     <SelectTrigger
-                                        data-testid="duration-unit"  // MOVED HERE
+                                        data-testid="duration-unit"
                                         className="w-40 h-14 bg-white/40 border-white/60 rounded-2xl font-bold"
                                     >
                                         <SelectValue />
@@ -375,7 +415,6 @@ const SymptomForm = () => {
                             </div>
                         </div>
 
-                        {/* Diurnal Pattern (Worse At) */}
                         <div className="space-y-4">
                             <Label className="text-[10px] uppercase tracking-[0.2em] font-black text-navy-400 ml-1">
                                 Temporal Aggravation
@@ -402,7 +441,6 @@ const SymptomForm = () => {
                             </div>
                         </div>
 
-                        {/* Clinical Annotations */}
                         <div className="space-y-4">
                             <Label className="text-[10px] uppercase tracking-[0.2em] font-black text-navy-400 ml-1">
                                 Clinical Annotations
@@ -427,7 +465,6 @@ const SymptomForm = () => {
                     </motion.div>
                 )}
 
-                {/* Step 4 — Elite AI Signal Analysis */}
                 {currentStep === 4 && (
                     <motion.div
                         key="step4"
@@ -436,10 +473,10 @@ const SymptomForm = () => {
                         exit={{ opacity: 0, scale: 0.95 }}
                         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                         className="space-y-8"
-                        data-testid="step4-content"  // ADDED
+                        data-testid="step4-content"
                     >
                         {isAnalyzing ? (
-                            <div className="flex flex-col items-center justify-center py-20 gap-8" data-testid="analyzing-state">  {/* ADDED */}
+                            <div className="flex flex-col items-center justify-center py-20 gap-8" data-testid="analyzing-state">
                                 <div className="relative">
                                     <div className="w-24 h-24 rounded-full border-4 border-emerald-100 border-t-emerald-500 animate-spin" />
                                     <div className="absolute inset-4 rounded-full bg-emerald-500/10 animate-pulse flex items-center justify-center">
@@ -454,7 +491,7 @@ const SymptomForm = () => {
                                 </div>
                             </div>
                         ) : analysisResult ? (
-                            <div className="space-y-8" data-testid="analysis-result">  {/* ADDED */}
+                            <div className="space-y-8" data-testid="analysis-result">
                                 <div className="text-center">
                                     <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-navy-900 text-white text-[10px] font-bold uppercase tracking-widest mb-6">
                                         Analysis Result Verified
@@ -462,7 +499,6 @@ const SymptomForm = () => {
                                     <h3 className="text-3xl font-black text-navy-900 tracking-tighter">Clinical Summary</h3>
                                 </div>
 
-                                {/* Premium Severity Matrix */}
                                 <div
                                     data-testid="analysis-severity"
                                     className={cn(
@@ -487,7 +523,6 @@ const SymptomForm = () => {
                                     </p>
                                 </div>
 
-                                {/* Possible Conditions - Elite Grid */}
                                 <div className="space-y-4">
                                     <h4 className="text-[10px] uppercase tracking-[0.2em] font-black text-navy-400 ml-1">
                                         Statistical Probabilities
@@ -527,14 +562,12 @@ const SymptomForm = () => {
                                     </div>
                                 </div>
 
-                                {/* Clinical Guidance */}
                                 <div className="space-y-4">
                                     <h4 className="text-[10px] uppercase tracking-[0.2em] font-black text-navy-400 ml-1">
                                         Clinical Guidance
                                     </h4>
 
                                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                                        {/* Recommendation */}
                                         <div className="p-6 rounded-[2rem] bg-white/55 border border-white/70 shadow-soft">
                                             <div className="flex items-center gap-2 mb-3">
                                                 <div className="w-8 h-8 rounded-xl bg-navy-900 flex items-center justify-center shrink-0">
@@ -549,7 +582,6 @@ const SymptomForm = () => {
                                             </p>
                                         </div>
 
-                                        {/* Home Remedies */}
                                         <div className="p-6 rounded-[2rem] bg-emerald-50 border border-emerald-100 shadow-soft">
                                             <div className="flex items-center gap-2 mb-3">
                                                 <div className="w-8 h-8 rounded-xl bg-emerald-500 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
@@ -573,7 +605,6 @@ const SymptomForm = () => {
                                         </div>
 
                                     </div>
-                                    {/* Medicines to Consider */}
                                     <div className="p-6 rounded-[2rem] bg-blue-50 border border-blue-100 shadow-soft mt-4">
                                         <div className="flex items-center gap-2 mb-3">
                                             <div className="w-8 h-8 rounded-xl bg-blue-500 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(59,130,246,0.2)]">
@@ -601,7 +632,6 @@ const SymptomForm = () => {
                                             ))}
                                         </ul>
                                     </div>
-                                    {/* When to See a Doctor */}
                                     <div className="p-6 rounded-[2rem] bg-amber-50 border border-amber-100 shadow-soft">
                                         <div className="flex items-start gap-3">
                                             <div className="w-9 h-9 rounded-xl bg-amber-500 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(245,158,11,0.15)]">
@@ -619,7 +649,6 @@ const SymptomForm = () => {
                                     </div>
                                 </div>
 
-                                {/* Reset Prototype */}
                                 <Button
                                     onClick={resetAnalyzer}
                                     variant="outline"
@@ -634,9 +663,8 @@ const SymptomForm = () => {
                 )}
             </AnimatePresence>
 
-            {/* Elite Navigation Controls */}
             {currentStep < 4 && (
-                <div className="pt-8 border-t border-white/60" data-testid="navigation-controls">  {/* ADDED */}
+                <div className="pt-8 border-t border-white/60" data-testid="navigation-controls">
                     <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-6">
                         <div className="flex-1">
                             <Button

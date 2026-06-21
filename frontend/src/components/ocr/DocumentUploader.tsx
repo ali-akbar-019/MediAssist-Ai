@@ -135,7 +135,7 @@ const DocumentUploader = ({
                             <button
                                 key={type.value}
                                 onClick={() => setSelectedType(type.value)}
-                                data-testid={`doc-type-${type.value}`}  // ADDED
+                                data-testid={`doc-type-${type.value}`}
                                 className={cn(
                                     "flex flex-col items-center text-center gap-3 p-4 rounded-2xl border transition-all duration-300",
                                     isSelected
@@ -182,7 +182,7 @@ const DocumentUploader = ({
                             borderColor: "var(--color-emerald-500)",
                             backgroundColor: "var(--color-emerald-50)",
                         }}
-                        data-testid="uploaded-file-container"  // ADDED
+                        data-testid="uploaded-file-container"
                     >
                         <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shrink-0">
                             {isImage ? (
@@ -198,7 +198,7 @@ const DocumentUploader = ({
                             <p
                                 className="text-sm font-semibold truncate"
                                 style={{ color: "var(--color-navy-900)" }}
-                                data-testid="uploaded-file-name"  // ADDED
+                                data-testid="uploaded-file-name"
                             >
                                 {uploadedFileName}
                             </p>
@@ -206,7 +206,7 @@ const DocumentUploader = ({
                                 <p
                                     className="text-xs mt-0.5"
                                     style={{ color: "var(--color-medical-muted)" }}
-                                    data-testid="uploaded-file-size"  // ADDED
+                                    data-testid="uploaded-file-size"
                                 >
                                     {formatFileSize(selectedFile.size)}
                                 </p>
@@ -215,11 +215,11 @@ const DocumentUploader = ({
                         <CheckCircle
                             size={20}
                             style={{ color: "var(--color-emerald-500)" }}
-                            data-testid="uploaded-check"  // ADDED
+                            data-testid="uploaded-check"
                         />
                         <button
                             onClick={handleClear}
-                            data-testid="uploaded-clear-btn"  // ADDED
+                            data-testid="uploaded-clear-btn"
                             className="p-1 rounded-lg hover:bg-white/50 transition-colors"
                             style={{ color: "var(--color-medical-muted)" }}
                         >
@@ -238,7 +238,7 @@ const DocumentUploader = ({
                         }}
                         onDragLeave={() => setIsDragOver(false)}
                         onClick={() => !isUploading && inputRef.current?.click()}
-                        data-testid="upload-dropzone"  // ADDED
+                        data-testid="upload-dropzone"
                         className={cn(
                             "relative flex flex-col items-center justify-center p-16",
                             "rounded-[2.5rem] border-2 border-dashed cursor-pointer",
@@ -264,15 +264,15 @@ const DocumentUploader = ({
                                     : "white",
                                 border: "1px solid var(--color-medical-border)",
                             }}
-                            data-testid="upload-icon-container"  // ADDED
+                            data-testid="upload-icon-container"
                         >
                             {isDragOver ? (
-                                <Upload size={24} color="white" data-testid="upload-icon-drag" />  // ADDED
+                                <Upload size={24} color="white" data-testid="upload-icon-drag" />
                             ) : (
                                 <ScanLine
                                     size={24}
                                     style={{ color: "var(--color-navy-900)" }}
-                                    data-testid="upload-icon-idle"  // ADDED
+                                    data-testid="upload-icon-idle"
                                 />
                             )}
                         </motion.div>
@@ -280,14 +280,14 @@ const DocumentUploader = ({
                         <p
                             className="font-semibold text-base mb-1"
                             style={{ color: "var(--color-navy-900)" }}
-                            data-testid="upload-title"  // ADDED
+                            data-testid="upload-title"
                         >
                             {isDragOver ? "Drop document here" : "Upload Medical Document"}
                         </p>
                         <p
                             className="text-sm mb-4"
                             style={{ color: "var(--color-medical-muted)" }}
-                            data-testid="upload-subtitle"  // ADDED
+                            data-testid="upload-subtitle"
                         >
                             or{" "}
                             <span
@@ -298,11 +298,11 @@ const DocumentUploader = ({
                             </span>
                         </p>
 
-                        <div className="flex items-center gap-2 flex-wrap justify-center" data-testid="upload-formats">  // ADDED
+                        <div className="flex items-center gap-2 flex-wrap justify-center" data-testid="upload-formats">
                             {["JPG", "PNG", "PDF", "WebP"].map((fmt) => (
                                 <span
                                     key={fmt}
-                                    data-testid={`upload-format-${fmt.toLowerCase()}`}  // ADDED
+                                    data-testid={`upload-format-${fmt.toLowerCase()}`}
                                     className="px-2 py-0.5 text-xs font-medium rounded-lg border"
                                     style={{
                                         borderColor: "var(--color-medical-border)",
@@ -316,7 +316,7 @@ const DocumentUploader = ({
                             <span
                                 className="text-xs"
                                 style={{ color: "var(--color-medical-muted)" }}
-                                data-testid="upload-max-size"  // ADDED
+                                data-testid="upload-max-size"
                             >
                                 up to 10MB
                             </span>
@@ -330,13 +330,13 @@ const DocumentUploader = ({
                                     animate={{ opacity: 1 }}
                                     exit={{ opacity: 0 }}
                                     className="absolute inset-0 flex flex-col items-center justify-center rounded-xl bg-white/90 backdrop-blur-sm"
-                                    data-testid="upload-progress-overlay"  // ADDED
+                                    data-testid="upload-progress-overlay"
                                 >
                                     <div className="w-48 space-y-3">
                                         <p
                                             className="text-sm font-medium text-center"
                                             style={{ color: "var(--color-navy-900)" }}
-                                            data-testid="upload-progress-text"  // ADDED
+                                            data-testid="upload-progress-text"
                                         >
                                             Uploading & Analyzing... {uploadProgress}%
                                         </p>
@@ -345,7 +345,7 @@ const DocumentUploader = ({
                                             style={{
                                                 backgroundColor: "var(--color-medical-border)",
                                             }}
-                                            data-testid="upload-progress-bar"  // ADDED
+                                            data-testid="upload-progress-bar"
                                         >
                                             <motion.div
                                                 initial={{ width: 0 }}
@@ -354,13 +354,13 @@ const DocumentUploader = ({
                                                 style={{
                                                     backgroundColor: "var(--color-navy-900)",
                                                 }}
-                                                data-testid="upload-progress-fill"  // ADDED
+                                                data-testid="upload-progress-fill"
                                             />
                                         </div>
                                         <p
                                             className="text-xs text-center"
                                             style={{ color: "var(--color-medical-muted)" }}
-                                            data-testid="upload-progress-label"  // ADDED
+                                            data-testid="upload-progress-label"
                                         >
                                             AI is reading your document...
                                         </p>
@@ -381,10 +381,10 @@ const DocumentUploader = ({
                         exit={{ opacity: 0 }}
                         className="flex items-center gap-2 px-3 py-2.5 rounded-xl"
                         style={{ backgroundColor: "#FEF2F2", border: "1px solid #FEE2E2" }}
-                        data-testid="upload-error"  // ADDED
+                        data-testid="upload-error"
                     >
                         <AlertCircle size={14} style={{ color: "#EF4444" }} />
-                        <p className="text-xs font-medium" style={{ color: "#EF4444" }} data-testid="upload-error-text">  // ADDED
+                        <p className="text-xs font-medium" style={{ color: "#EF4444" }} data-testid="upload-error-text">
                             {displayError}
                         </p>
                     </motion.div>
@@ -400,7 +400,7 @@ const DocumentUploader = ({
                     if (file) handleFile(file);
                 }}
                 className="hidden"
-                data-testid="upload-file-input"  // ADDED
+                data-testid="upload-file-input"
             />
         </div>
     );

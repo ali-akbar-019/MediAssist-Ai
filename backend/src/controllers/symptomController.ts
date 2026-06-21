@@ -90,8 +90,8 @@ export const getSymptoms = async (
         const bodyPartFilter = req.query["bodyPart"] as string;
         const { skip } = paginate(page, limit);
 
-        // === NEW: Build filter object ===
-        const filter: { user: string; "aiAnalysis.severity"?: string; bodyPart?: string } = {
+        // Build filter object with proper types
+        const filter: any = {
             user: req.user?._id,
         };
 

@@ -22,10 +22,14 @@ interface CreateSessionResponse {
 }
 
 // Create new chat session
-export const createChatSession = async (): Promise<CreateSessionResponse> => {
-    const response = await api.post<APIResponse<CreateSessionResponse>>(
-        "/api/chat/session"
+export const createChatSession = async (
+    title: string = "New Conversation"
+) => {
+    const response = await api.post(
+        "/api/chat/session",
+        { title } // ✅ THIS IS REQUIRED
     );
+
     return response.data.data;
 };
 

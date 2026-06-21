@@ -37,18 +37,18 @@ app.use(
 );
 
 // Rate limiting
-const limiter = rateLimit({
-    windowMs: env.RATE_LIMIT_WINDOW_MS,
-    max: env.RATE_LIMIT_MAX,
-    message: {
-        success: false,
-        message: "Too many requests, please try again later.",
-    },
-    standardHeaders: true,
-    legacyHeaders: false,
-});
+// const limiter = rateLimit({
+//     windowMs: env.RATE_LIMIT_WINDOW_MS,
+//     max: env.RATE_LIMIT_MAX,
+//     message: {
+//         success: false,
+//         message: "Too many requests, please try again later.",
+//     },
+//     standardHeaders: true,
+//     legacyHeaders: false,
+// });
 
-app.use("/api", limiter);
+// app.use("/api", limiter);
 
 // Body parser
 app.use(express.json({ limit: "10mb" }));
@@ -80,6 +80,7 @@ app.use("/api/timeline", timelineRoutes);
 app.use("/api/emergency", emergencyRoutes);
 app.use("/api/ocr", ocrRoutes);
 app.use("/api/admin", adminRoutes);
+
 // Error handling middleware
 app.use(notFound);
 app.use(errorHandler);
