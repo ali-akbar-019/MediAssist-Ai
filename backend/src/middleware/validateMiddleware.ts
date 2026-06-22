@@ -275,5 +275,120 @@ export const reportIdValidation: ValidationChain[] = [
         .withMessage("Invalid report ID format"),
 ];
 
+// ================= PROFILE UPDATE VALIDATIONS =================
+export const profileUpdateValidation: ValidationChain[] = [
+    body("name")
+        .optional()
+        .trim()
+        .isLength({ min: 2, max: 50 })
+        .withMessage("Name must be between 2 and 50 characters")
+        .matches(/^[a-zA-Z\s'-]+$/)
+        .withMessage("Name can only contain letters, spaces, apostrophes, and hyphens"),
+
+    body("age")
+        .optional()
+        .isInt({ min: 1, max: 120 })
+        .withMessage("Age must be between 1 and 120"),
+
+    body("gender")
+        .optional()
+        .isIn(["male", "female", "other"])
+        .withMessage("Gender must be male, female, or other"),
+
+    body("bloodGroup")
+        .optional()
+        .isIn(["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"])
+        .withMessage("Invalid blood group"),
+
+    body("allergies")
+        .optional()
+        .isArray()
+        .withMessage("Allergies must be an array")
+        .custom((value) => {
+            if (!Array.isArray(value)) return true;
+            return value.every(
+                (item: unknown) =>
+                    typeof item === "string" &&
+                    item.trim().length >= 2 &&
+                    item.trim().length <= 100 &&
+                    /[a-zA-Z]/.test(item.trim()) &&
+                    /^[a-zA-Z\s\-\(\)\,\.']+$/.test(item.trim())
+            );
+        })
+        .withMessage("Each allergy must contain at least one letter and be between 2-100 characters"),
+
+    body("chronicConditions")
+        .optional()
+        .isArray()
+        .withMessage("Chronic conditions must be an array")
+        .custom((value) => {
+            if (!Array.isArray(value)) return true;
+            return value.every(
+                (item: unknown) =>
+                    typeof item === "string" &&
+                    item.trim().length >= 2 &&
+                    item.trim().length <= 100 &&
+                    /[a-zA-Z]/.test(item.trim()) &&
+                    /^[a-zA-Z\s\-\(\)\,\.']+$/.test(item.trim())
+            );
+        })
+        .withMessage("Each chronic condition must contain at least one letter and be between 2-100 characters"),
+
+    body("emergencyContact")
+        .optional()
+        .isObject()
+        .withMessage("Emergency contact must be an object"),
+
+    body("emergencyContact.name")
+        .if(body("emergencyContact").exists())
+        .notEmpty()
+        .withMessage("Emergency contact name is required")
+        .trim()
+        .isLength({ min: 2, max: 50 })
+        .withMessage("Emergency contact name must be between 2 and 50 characters")
+        .matches(/^[a-zA-Z\s'-]+$/)
+        .withMessage("Emergency contact name can only contain letters, spaces, apostrophes, and hyphens"),
+
+    body("emergencyContact.phone")
+        .if(body("emergencyContact").exists())
+        .notEmpty()
+        .withMessage("Emergency contact phone is required")
+        .trim()
+        .isLength({ min: 7, max: 20 })
+        .withMessage("Phone number must be between 7 and 20 characters")
+        .matches(/^[\d\s\-\(\)+]+$/)
+        .withMessage("Phone number can only contain digits, spaces, hyphens, parentheses, and plus sign"),
+
+    body("emergencyContact.relation")
+        .if(body("emergencyContact").exists())
+        .notEmpty()
+        .withMessage("Emergency contact relation is required")
+        .trim()
+        .isLength({ min: 2, max: 50 })
+        .withMessage("Relation must be between 2 and 50 characters")
+        .matches(/^[a-zA-Z\s'-]+$/)
+        .withMessage("Relation can only contain letters, spaces, apostrophes, and hyphens"),
+
+    body("emergencyContacts")
+        .optional()
+        .isArray()
+        .withMessage("Emergency contacts must be an array")
+        .custom((value) => {
+            if (!Array.isArray(value)) return true;
+            return value.every(
+                (contact: unknown) =>
+                    typeof contact === "object" &&
+                    contact !== null &&
+                    typeof (contact as Record<string, any>).name === "string" &&
+                    (contact as Record<string, any>).name.trim().length > 0 &&
+                    typeof (contact as Record<string, any>).phone === "string" &&
+                    (contact as Record<string, any>).phone.trim().length > 0 &&
+                    typeof (contact as Record<string, any>).relation === "string" &&
+                    (contact as Record<string, any>).relation.trim().length > 0
+            );
+        })
+        .withMessage("Each emergency contact must have a non-empty name, phone, and relation"),
+];
+
 // ================= EXPORT EXPRESS-VALIDATOR HELPERS =================
 export { body, query, param };

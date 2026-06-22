@@ -1,10 +1,11 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import { motion } from "framer-motion";
+import { toast } from "sonner";
 import {
     Stethoscope,
     MessageCircle,
     MapPin,
-    Pill,
     Shield,
     Zap,
     ArrowRight,
@@ -77,7 +78,17 @@ const stats = [
 
 const Home = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const { isAuthenticated } = useAuthStore();
+
+    useEffect(() => {
+        const state = location.state as { message?: string };
+        if (state?.message) {
+            toast.error(state.message);
+            // Clear the state so it doesn't show again on refresh
+            window.history.replaceState({}, document.title);
+        }
+    }, [location]);
 
     return (
         <div className="medical-mesh min-h-screen">

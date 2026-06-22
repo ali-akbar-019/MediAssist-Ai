@@ -22,6 +22,9 @@ export interface IUser extends Document {
         relation: string;
     }>;
     role: "user" | "admin";
+    isVerified: boolean;
+    verificationToken?: string;
+    verificationTokenExpires?: Date;
     createdAt: Date;
     updatedAt: Date;
     comparePassword(candidatePassword: string): Promise<boolean>;
@@ -113,6 +116,12 @@ const UserSchema = new Schema<IUser>(
             enum: ["user", "admin"],
             default: "user",
         },
+        isVerified: {
+            type: Boolean,
+            default: false,
+        },
+        verificationToken: String,
+        verificationTokenExpires: Date,
     },
     {
         timestamps: true,

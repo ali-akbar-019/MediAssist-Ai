@@ -90,16 +90,29 @@ export const useAuth = () => {
     };
     const handleUpdateProfile = async (
         profileData: Partial<User>
-    ): Promise<boolean> => {
+    ): Promise<{
+        success: boolean;
+        fieldErrors?: Record<string, string>;
+    }> => {
         try {
             setError(null);
             setLoading(true);
             const updatedUser = await updateUserProfile(profileData);
             updateUser(updatedUser);
-            return true;
-        } catch (err) {
+            return { success: true };
+        } catch (err: any) {
+            const data = err?.response?.data;
+
+            if (data?.errors) {
+                const fieldErrors: Record<string, string> = {};
+                data.errors.forEach((e: any) => {
+                    fieldErrors[e.field] = e.message;
+                });
+                return { success: false, fieldErrors };
+            }
+
             setError(parseErrorMessage(err));
-            return false;
+            return { success: false };
         } finally {
             setLoading(false);
         }

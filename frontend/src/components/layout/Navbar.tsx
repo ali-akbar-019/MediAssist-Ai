@@ -231,6 +231,19 @@ const Navbar = () => {
                                         </div>
                                     </DropdownMenuItem>
 
+                                    <DropdownMenuItem
+                                        onClick={() => navigate(ROUTES.PROFILE)}
+                                        className="rounded-2xl flex items-center gap-4 focus:bg-emerald-50 cursor-pointer p-4 transition-all"
+                                    >
+                                        <div className="w-10 h-10 rounded-xl bg-emerald-100/50 flex items-center justify-center">
+                                            <User className="w-5 h-5 text-emerald-600" />
+                                        </div>
+                                        <div className="flex flex-col">
+                                            <span className="text-sm font-black text-navy-900 leading-none mb-1">Edit Profile</span>
+                                            <span className="text-[11px] text-slate-400 font-medium">Update personal & medical info</span>
+                                        </div>
+                                    </DropdownMenuItem>
+
                                     {user.role === "admin" && (
                                         <DropdownMenuItem
                                             onClick={() => navigate(ROUTES.ADMIN_DASHBOARD)}

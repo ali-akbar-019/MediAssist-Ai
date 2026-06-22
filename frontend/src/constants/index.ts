@@ -15,6 +15,8 @@ export const ROUTES = {
     HOME: "/",
     LOGIN: "/login",
     REGISTER: "/register",
+    REGISTER_SUCCESS: "/register-success",
+    VERIFY_NOTICE: "/verify-notice",
     ANALYZER: "/analyzer",
     CHAT: "/chat",
     DASHBOARD: "/dashboard",
@@ -27,6 +29,8 @@ export const ROUTES = {
     ADMIN_DASHBOARD: "/admin/dashboard",
     ADMIN_USERS: "/admin/users",
     ADMIN_AI: "/admin/ai",
+    PROFILE: "/profile",
+    VERIFY_EMAIL: "/verify-email/:token",
     NOT_FOUND: "*",
 } as const;
 

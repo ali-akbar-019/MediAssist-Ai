@@ -19,6 +19,7 @@ export interface User {
         relation: string;
     }>;
     role: "user" | "admin";
+    isVerified: boolean;
     createdAt: string;
     updatedAt: string;
 }

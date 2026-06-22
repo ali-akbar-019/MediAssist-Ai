@@ -6,22 +6,28 @@ import {
     logout,
     register,
     updateProfile,
+    verifyEmail,
+    resendVerification,
 } from "../controllers/authController";
 import authMiddleware from "../middleware/authMiddleware";
 import {
-    // === NEW: Profile update validation ===
     body,
     loginValidation,
     registerValidation,
+    profileUpdateValidation,
     validate
 } from "../middleware/validateMiddleware";
 
 const router = Router();
 
-
+console.log("🛠️ Auth Routes initializing...");
 // Public routes
 router.post("/register", validate(registerValidation), register);
+console.log("✅ POST /api/auth/register mounted");
 router.post("/login", validate(loginValidation), login);
+router.get("/verify-email/:token", verifyEmail);
+router.post("/resend-verification", resendVerification);
+console.log("✅ POST /api/auth/resend-verification mounted");
 
 // Private routes
 router.get("/me", authMiddleware, getMe);
@@ -30,33 +36,7 @@ router.get("/me", authMiddleware, getMe);
 router.put(
     "/profile",
     authMiddleware,
-    validate([
-        body("name")
-            .optional()
-            .trim()
-            .isLength({ min: 2, max: 50 })
-            .withMessage("Name must be between 2 and 50 characters"),
-        body("age")
-            .optional()
-            .isInt({ min: 1, max: 120 })
-            .withMessage("Age must be between 1 and 120"),
-        body("gender")
-            .optional()
-            .isIn(["male", "female", "other"])
-            .withMessage("Gender must be male, female, or other"),
-        body("bloodGroup")
-            .optional()
-            .isIn(["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"])
-            .withMessage("Invalid blood group"),
-        body("allergies")
-            .optional()
-            .isArray()
-            .withMessage("Allergies must be an array"),
-        body("chronicConditions")
-            .optional()
-            .isArray()
-            .withMessage("Chronic conditions must be an array"),
-    ]),
+    validate(profileUpdateValidation),
     updateProfile
 );
 

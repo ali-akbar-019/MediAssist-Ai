@@ -21,6 +21,10 @@ import adminRoutes from "./routes/adminRoutes";
 // Connect to MongoDB
 connectDB();
 
+console.log("🚀 Bootstrapping MediAssist AI Backend...");
+console.log(`📡 Environment: ${env.NODE_ENV}`);
+console.log(`🔗 Frontend URL: ${env.FRONTEND_URL}`);
+
 const app = express();
 
 // Security middleware
@@ -71,6 +75,11 @@ app.get("/health", (_req, res) => {
 
 // API Routes
 app.use("/api/auth", authRoutes);
+// === BACKUP: Direct mounting for debugging ===
+import { resendVerification } from "./controllers/authController";
+app.post("/api/auth/resend-verification", resendVerification);
+console.log("🛠️ Backup route /api/auth/resend-verification mounted directly in index.ts");
+
 app.use("/api/symptoms", symptomRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/reports", reportRoutes);
@@ -89,6 +98,7 @@ app.use(errorHandler);
 const server = app.listen(env.PORT, () => {
     console.log(`✅ Server running in ${env.NODE_ENV} mode on port ${env.PORT}`);
     console.log(`🏥 MediAssist AI Backend: http://localhost:${env.PORT}`);
+    console.log(`🌍 CORS Origin (Frontend URL): ${env.FRONTEND_URL}`);
     console.log(`❤️  Health Check: http://localhost:${env.PORT}/health`);
 });
 

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
     Eye,
@@ -27,6 +27,7 @@ import { ROUTES, GENDER_OPTIONS, BLOOD_GROUPS } from "../constants";
 import { cn } from "../lib/utils";
 
 const Register = () => {
+    const navigate = useNavigate();
     const { handleRegister, isLoading, error, clearError } = useAuth();
     const [showPassword, setShowPassword] = useState(false);
     const [step, setStep] = useState<1 | 2>(1);
@@ -81,7 +82,9 @@ const Register = () => {
             bloodGroup: formData.bloodGroup || undefined,
         });
 
-        if (!res.success && res.fieldErrors) {
+        if (res.success) {
+            navigate(ROUTES.VERIFY_NOTICE, { state: { email: formData.email } });
+        } else if (res.fieldErrors) {
             setValidationErrors(res.fieldErrors);
         }
     };
@@ -480,22 +483,27 @@ const Register = () => {
                                         )}
                                     </Button>
                                 </div>
-
                                 {step === 2 && (
-                                    <button
-                                        type="button"
-                                        data-testid="register-skip-profile"
-                                        onClick={() =>
-                                            handleRegister({
-                                                name: formData.name,
-                                                email: formData.email,
-                                                password: formData.password,
-                                            })
-                                        }
-                                        className="w-full text-sm text-medical-muted hover:text-navy-900 transition-colors"
-                                    >
-                                        Skip profile setup for now
-                                    </button>
+                                    <div className="text-center mt-4">
+                                        <button
+                                            type="button"
+                                            onClick={async () => {
+                                                clearError();
+                                                setFormData((prev) => ({ ...prev, age: "", gender: "", bloodGroup: "" }));
+                                                const res = await handleRegister({
+                                                    name: formData.name,
+                                                    email: formData.email,
+                                                    password: formData.password,
+                                                });
+                                                if (res.success) {
+                                                    navigate(ROUTES.VERIFY_NOTICE, { state: { email: formData.email } });
+                                                }
+                                            }}
+                                            className="text-xs text-medical-muted hover:text-emerald-600 font-medium underline underline-offset-4 transition-colors"
+                                        >
+                                            Skip optional info & create account
+                                        </button>
+                                    </div>
                                 )}
                             </form>
 

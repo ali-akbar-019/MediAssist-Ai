@@ -51,6 +51,19 @@ const authMiddleware = async (
             return;
         }
 
+        // Check if email is verified
+        // We allow access for users who are already logged in but not verified only for verification related actions?
+        // Actually, the user said "without email verification other things shouldn't happen"
+        // So we block here if they are not verified.
+        if (!user.isVerified) {
+            res.status(403).json({
+                success: false,
+                isNotVerified: true,
+                message: "Please verify your email address to access this feature.",
+            });
+            return;
+        }
+
         req.user = user;
         next();
     } catch (error) {

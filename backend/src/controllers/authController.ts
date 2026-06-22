@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import User from "../models/User";
 import { generateToken } from "../utils/helpers";
 import { AuthRequest } from "../middleware/authMiddleware";
+import { sendVerificationEmail } from "../services/emailService";
+import crypto from "crypto";
 
 // @desc    Register new user
 // @route   POST /api/auth/register
@@ -37,6 +39,10 @@ export const register = async (req: Request, res: Response): Promise<void> => {
             return;
         }
 
+        // Generate verification token
+        const verificationToken = crypto.randomBytes(32).toString("hex");
+        const verificationTokenExpires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+
         // Create new user
         const user = await User.create({
             name,
@@ -45,30 +51,28 @@ export const register = async (req: Request, res: Response): Promise<void> => {
             age,
             gender,
             bloodGroup,
+            verificationToken,
+            verificationTokenExpires,
+            isVerified: false,
         });
 
-        // Generate token
-        const token = generateToken(user._id);
+        // Send verification email
+        try {
+            await sendVerificationEmail(user.email, verificationToken, user.name);
+        } catch (emailError) {
+            console.error("Failed to send verification email:", emailError);
+            // We still created the user, they can try to resend the email later (if we implement resend)
+        }
 
         res.status(201).json({
             success: true,
-            message: "Account created successfully",
+            message: "Registration successful! Please check your email to verify your account.",
             data: {
-                token,
                 user: {
                     _id: user._id,
                     name: user.name,
                     email: user.email,
-                    age: user.age,
-                    gender: user.gender,
-                    bloodGroup: user.bloodGroup,
-                    allergies: user.allergies,
-                    chronicConditions: user.chronicConditions,
-                    emergencyContact: user.emergencyContact,
-                    emergencyContacts: user.emergencyContacts,
-                    role: user.role,
-                    createdAt: user.createdAt,
-                    updatedAt: user.updatedAt,
+                    isVerified: user.isVerified,
                 },
             },
         });
@@ -129,6 +133,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
                     emergencyContact: user.emergencyContact,
                     emergencyContacts: user.emergencyContacts,
                     role: user.role,
+                    isVerified: user.isVerified,
                     createdAt: user.createdAt,
                     updatedAt: user.updatedAt,
                 },
@@ -342,6 +347,100 @@ export const logout = async (
         res.status(200).json({
             success: true,
             message: "Logged out successfully",
+        });
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(500).json({
+                success: false,
+                message: error.message,
+            });
+        }
+    }
+};
+
+// @desc    Verify email
+// @route   GET /api/auth/verify-email/:token
+// @access  Public
+export const verifyEmail = async (
+    req: Request,
+    res: Response
+): Promise<void> => {
+    try {
+        const { token } = req.params;
+
+        const user = await User.findOne({
+            verificationToken: token,
+            verificationTokenExpires: { $gt: new Date() },
+        });
+
+        if (!user) {
+            res.status(400).json({
+                success: false,
+                message: "Invalid or expired verification token",
+            });
+            return;
+        }
+
+        user.isVerified = true;
+        user.verificationToken = undefined;
+        user.verificationTokenExpires = undefined;
+        await user.save();
+
+        res.status(200).json({
+            success: true,
+            message: "Email verified successfully. You can now log in.",
+        });
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(500).json({
+                success: false,
+                message: error.message,
+            });
+        }
+    }
+};
+
+// @desc    Resend verification email
+// @route   POST /api/auth/resend-verification
+// @access  Public
+export const resendVerification = async (
+    req: Request,
+    res: Response
+): Promise<void> => {
+    try {
+        const { email } = req.body;
+
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            res.status(404).json({
+                success: false,
+                message: "User not found",
+            });
+            return;
+        }
+
+        if (user.isVerified) {
+            res.status(400).json({
+                success: false,
+                message: "Email is already verified",
+            });
+            return;
+        }
+
+        // Generate new token
+        const verificationToken = crypto.randomBytes(32).toString("hex");
+        const verificationTokenExpires = new Date(Date.now() + 24 * 60 * 60 * 1000);
+
+        user.verificationToken = verificationToken;
+        user.verificationTokenExpires = verificationTokenExpires;
+        await user.save();
+
+        await sendVerificationEmail(user.email, verificationToken, user.name);
+
+        res.status(200).json({
+            success: true,
+            message: "Verification email resent successfully",
         });
     } catch (error) {
         if (error instanceof Error) {

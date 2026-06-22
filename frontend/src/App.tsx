@@ -27,6 +27,9 @@ import { Toaster } from "sonner";
 import TimelinePage from "./pages/Timeline";
 import Emergency from "./pages/Emergency";
 import OCR from "./pages/OCR";
+import VerifyEmail from "./pages/VerifyEmail";
+import VerifyNotice from "./pages/VerifyNotice";
+import Profile from "./pages/Profile";
 
 // Admin Pages
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -38,16 +41,21 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, user } = useAuthStore();
   if (!isAuthenticated) {
     return <Navigate to={ROUTES.LOGIN} replace />;
   }
+  
+  if (user && !user.isVerified) {
+    return <Navigate to={ROUTES.VERIFY_NOTICE} replace />;
+  }
+  
   return <>{children}</>;
 };
 
 const PublicRoute = ({ children }: ProtectedRouteProps) => {
-  const { isAuthenticated } = useAuthStore();
-  if (isAuthenticated) {
+  const { isAuthenticated, user } = useAuthStore();
+  if (isAuthenticated && user?.isVerified) {
     return <Navigate to={ROUTES.DASHBOARD} replace />;
   }
   return <>{children}</>;
@@ -55,7 +63,7 @@ const PublicRoute = ({ children }: ProtectedRouteProps) => {
 
 const AdminRoute = ({ children }: ProtectedRouteProps) => {
   const { isAuthenticated, user } = useAuthStore();
-  if (!isAuthenticated || user?.role !== "admin") {
+  if (!isAuthenticated || user?.role !== "admin" || !user.isVerified) {
     return <Navigate to={ROUTES.DASHBOARD} replace />;
   }
   return <>{children}</>;
@@ -89,6 +97,9 @@ function AppContent() {
                 </PublicRoute>
               }
             />
+
+        <Route path={ROUTES.VERIFY_EMAIL} element={<VerifyEmail />} />
+        <Route path={ROUTES.VERIFY_NOTICE} element={<VerifyNotice />} />
 
             {/* Protected Routes */}
             <Route
@@ -152,6 +163,14 @@ function AppContent() {
               element={
                 <ProtectedRoute>
                   <Emergency />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path={ROUTES.PROFILE}
+              element={
+                <ProtectedRoute>
+                  <Profile />
                 </ProtectedRoute>
               }
             />
