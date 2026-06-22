@@ -29,6 +29,7 @@ export const ROUTES = {
     ADMIN_DASHBOARD: "/admin/dashboard",
     ADMIN_USERS: "/admin/users",
     ADMIN_AI: "/admin/ai",
+    ADMIN_CONFIG: "/admin/config",
     PROFILE: "/profile",
     VERIFY_EMAIL: "/verify-email/:token",
     NOT_FOUND: "*",

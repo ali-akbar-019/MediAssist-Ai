@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
-import { Activity } from "lucide-react";
 import { ROUTES } from "./constants";
 
 // Pages
@@ -37,6 +36,8 @@ import Profile from "./pages/Profile";
 // Admin Pages
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import UserManagement from "./pages/admin/UserManagement";
+import AIAnalytics from "./pages/admin/AIAnalytics";
+import ConfigPage from "./pages/admin/ConfigPage";
 import AdminLayout from "./components/layout/AdminLayout";
 
 interface ProtectedRouteProps {
@@ -212,14 +213,17 @@ function AppContent() {
               element={
                 <AdminRoute>
                   <AdminLayout>
-                    <PageTransition>
-                      <div className="p-20 text-center space-y-4">
-                        <div className="w-16 h-16 rounded-3xl bg-slate-50 border border-slate-100 flex items-center justify-center mx-auto text-slate-200">
-                          <Activity size={32} />
-                        </div>
-                        <p className="text-slate-400 font-mono text-xs uppercase tracking-[0.4em]">Extensive AI Analytics Sector Offline</p>
-                      </div>
-                    </PageTransition>
+                    <PageTransition><AIAnalytics /></PageTransition>
+                  </AdminLayout>
+                </AdminRoute>
+              }
+            />
+            <Route
+              path={ROUTES.ADMIN_CONFIG}
+              element={
+                <AdminRoute>
+                  <AdminLayout>
+                    <PageTransition><ConfigPage /></PageTransition>
                   </AdminLayout>
                 </AdminRoute>
               }

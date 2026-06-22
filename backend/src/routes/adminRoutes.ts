@@ -2,7 +2,10 @@ import { Router } from "express";
 import {
     getStats,
     getAllUsers,
-    updateUser
+    updateUser,
+    deleteUser,
+    getActivity,
+    getConfig
 } from "../controllers/adminController";
 import authMiddleware from "../middleware/authMiddleware";
 import adminMiddleware from "../middleware/adminMiddleware";
@@ -33,5 +36,9 @@ router.put(
     validate(adminRoleUpdateValidation),
     updateUser
 );
+
+router.delete("/users/:id", deleteUser);
+router.get("/activity", getActivity);
+router.get("/config", getConfig);
 
 export default router;
