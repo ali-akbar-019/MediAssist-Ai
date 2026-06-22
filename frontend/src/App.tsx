@@ -19,6 +19,9 @@ import NotFound from "./pages/NotFound";
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
 
+// Animations
+import PageTransition from "./components/animations/PageTransition";
+
 // Auth Guard
 import { useAuthStore } from "./store/authStore";
 import { Navigate } from "react-router-dom";
@@ -77,15 +80,15 @@ function AppContent() {
     <div className="min-h-screen flex flex-col bg-medical-white">
       {!isAdminPath && <Navbar />}
       <main className="flex-1">
-        <AnimatePresence mode="wait">
+            <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
             {/* Public Routes */}
-            <Route path={ROUTES.HOME} element={<Home />} />
+            <Route path={ROUTES.HOME} element={<PageTransition><Home /></PageTransition>} />
             <Route
               path={ROUTES.LOGIN}
               element={
                 <PublicRoute>
-                  <Login />
+                  <PageTransition><Login /></PageTransition>
                 </PublicRoute>
               }
             />
@@ -93,20 +96,20 @@ function AppContent() {
               path={ROUTES.REGISTER}
               element={
                 <PublicRoute>
-                  <Register />
+                  <PageTransition><Register /></PageTransition>
                 </PublicRoute>
               }
             />
 
-        <Route path={ROUTES.VERIFY_EMAIL} element={<VerifyEmail />} />
-        <Route path={ROUTES.VERIFY_NOTICE} element={<VerifyNotice />} />
+        <Route path={ROUTES.VERIFY_EMAIL} element={<PageTransition><VerifyEmail /></PageTransition>} />
+        <Route path={ROUTES.VERIFY_NOTICE} element={<PageTransition><VerifyNotice /></PageTransition>} />
 
             {/* Protected Routes */}
             <Route
               path={ROUTES.ANALYZER}
               element={
                 <ProtectedRoute>
-                  <Analyzer />
+                  <PageTransition><Analyzer /></PageTransition>
                 </ProtectedRoute>
               }
             />
@@ -114,7 +117,7 @@ function AppContent() {
               path={ROUTES.CHAT}
               element={
                 <ProtectedRoute>
-                  <Chat />
+                  <PageTransition><Chat /></PageTransition>
                 </ProtectedRoute>
               }
             />
@@ -122,7 +125,7 @@ function AppContent() {
               path={ROUTES.DASHBOARD}
               element={
                 <ProtectedRoute>
-                  <Dashboard />
+                  <PageTransition><Dashboard /></PageTransition>
                 </ProtectedRoute>
               }
             />
@@ -130,7 +133,7 @@ function AppContent() {
               path={ROUTES.MEDICINE}
               element={
                 <ProtectedRoute>
-                  <MedicineInfo />
+                  <PageTransition><MedicineInfo /></PageTransition>
                 </ProtectedRoute>
               }
             />
@@ -138,7 +141,7 @@ function AppContent() {
               path={ROUTES.HOSPITALS}
               element={
                 <ProtectedRoute>
-                  <HospitalFinder />
+                  <PageTransition><HospitalFinder /></PageTransition>
                 </ProtectedRoute>
               }
             />
@@ -146,7 +149,7 @@ function AppContent() {
               path={ROUTES.TIMELINE}
               element={
                 <ProtectedRoute>
-                  <TimelinePage />
+                  <PageTransition><TimelinePage /></PageTransition>
                 </ProtectedRoute>
               }
             />
@@ -154,7 +157,7 @@ function AppContent() {
               path={ROUTES.REPORTS}
               element={
                 <ProtectedRoute>
-                  <Reports />
+                  <PageTransition><Reports /></PageTransition>
                 </ProtectedRoute>
               }
             />
@@ -162,7 +165,7 @@ function AppContent() {
               path={ROUTES.EMERGENCY}
               element={
                 <ProtectedRoute>
-                  <Emergency />
+                  <PageTransition><Emergency /></PageTransition>
                 </ProtectedRoute>
               }
             />
@@ -170,7 +173,7 @@ function AppContent() {
               path={ROUTES.PROFILE}
               element={
                 <ProtectedRoute>
-                  <Profile />
+                  <PageTransition><Profile /></PageTransition>
                 </ProtectedRoute>
               }
             />
@@ -178,7 +181,7 @@ function AppContent() {
               path={ROUTES.OCR}
               element={
                 <ProtectedRoute>
-                  <OCR />
+                  <PageTransition><OCR /></PageTransition>
                 </ProtectedRoute>
               }
             />
@@ -189,7 +192,7 @@ function AppContent() {
               element={
                 <AdminRoute>
                   <AdminLayout>
-                    <AdminDashboard />
+                    <PageTransition><AdminDashboard /></PageTransition>
                   </AdminLayout>
                 </AdminRoute>
               }
@@ -199,7 +202,7 @@ function AppContent() {
               element={
                 <AdminRoute>
                   <AdminLayout>
-                    <UserManagement />
+                    <PageTransition><UserManagement /></PageTransition>
                   </AdminLayout>
                 </AdminRoute>
               }
@@ -209,19 +212,21 @@ function AppContent() {
               element={
                 <AdminRoute>
                   <AdminLayout>
-                    <div className="p-20 text-center space-y-4">
-                      <div className="w-16 h-16 rounded-3xl bg-slate-50 border border-slate-100 flex items-center justify-center mx-auto text-slate-200">
-                        <Activity size={32} />
+                    <PageTransition>
+                      <div className="p-20 text-center space-y-4">
+                        <div className="w-16 h-16 rounded-3xl bg-slate-50 border border-slate-100 flex items-center justify-center mx-auto text-slate-200">
+                          <Activity size={32} />
+                        </div>
+                        <p className="text-slate-400 font-mono text-xs uppercase tracking-[0.4em]">Extensive AI Analytics Sector Offline</p>
                       </div>
-                      <p className="text-slate-400 font-mono text-xs uppercase tracking-[0.4em]">Extensive AI Analytics Sector Offline</p>
-                    </div>
+                    </PageTransition>
                   </AdminLayout>
                 </AdminRoute>
               }
             />
 
             {/* 404 */}
-            <Route path={ROUTES.NOT_FOUND} element={<NotFound />} />
+            <Route path={ROUTES.NOT_FOUND} element={<PageTransition><NotFound /></PageTransition>} />
           </Routes>
         </AnimatePresence>
       </main>

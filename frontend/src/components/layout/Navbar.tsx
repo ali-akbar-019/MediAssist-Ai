@@ -70,6 +70,8 @@ const Navbar = () => {
                         >
                             <motion.div
                                 whileHover={{ scale: 1.05, rotate: 5 }}
+                                whileTap={{ scale: 0.95 }}
+                                transition={{ type: "spring", stiffness: 300, damping: 15 }}
                                 className="w-9 h-9 rounded-xl bg-navy-900 flex items-center justify-center shadow-navy relative overflow-hidden"
                             >
                                 <div className="absolute inset-0 bg-gradient-to-tr from-emerald-500/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -95,7 +97,12 @@ const Navbar = () => {
                             const Icon = iconMap[item.icon as keyof typeof iconMap];
                             const active = isActive(item.href);
                             return (
-                                <Link
+                                <motion.div
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.97 }}
+                                transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                            >
+                            <Link
                                     key={item.href}
                                     to={item.href}
                                     data-testid={`desktop-nav-${item.label.toLowerCase()}`}
@@ -115,12 +122,13 @@ const Navbar = () => {
                                         />
                                     ) : (
                                         <div className="absolute inset-0 bg-transparent rounded-2xl -z-10 group-hover:bg-slate-50/50 transition-colors duration-500" />
-                                    )}
-                                </Link>
+                                        )}
+                                    </Link>
+                                </motion.div>
                             );
                         })}
 
-                        {/* Services Dropdown */}
+                            {/* Services Dropdown */}
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild >
                                 <button data-testid="desktop-nav-services-dropdown" className={cn(
@@ -296,8 +304,10 @@ const Navbar = () => {
                     </div>
 
                     {/* Mobile Menu Button Styling */}
-                    <button
+                    <motion.button
                         onClick={toggleMobileMenu}
+                        whileTap={{ scale: 0.9 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 15 }}
                         className="lg:hidden w-11 h-11 flex items-center justify-center rounded-2xl hover:bg-emerald-50 transition-all border border-transparent hover:border-emerald-100/50"
                     >
                         {isMobileMenuOpen ? (
@@ -305,7 +315,7 @@ const Navbar = () => {
                         ) : (
                             <Menu className="w-6 h-6 text-navy-900" />
                         )}
-                    </button>
+                    </motion.button>
                 </div>
 
                 {/* Mobile Menu - Premium Experience */}
@@ -315,6 +325,7 @@ const Navbar = () => {
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: "auto" }}
                             exit={{ opacity: 0, height: 0 }}
+                            transition={{ type: "spring", stiffness: 200, damping: 25 }}
                             className="lg:hidden border-t border-emerald-100/50 bg-white/40 backdrop-blur-3xl overflow-hidden max-h-[calc(100dvh-6.5rem)]"
                         >
                             <div className="max-h-[calc(100dvh-7.5rem)] overflow-y-auto overscroll-contain p-5 sm:p-8 space-y-6 sm:space-y-8">

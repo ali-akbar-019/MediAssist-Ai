@@ -9,6 +9,8 @@ import {
     Shield,
 } from "lucide-react";
 import { ROUTES, EMERGENCY_NUMBERS } from "../../constants";
+import SmoothReveal from "../animations/SmoothReveal";
+import StaggerContainer, { StaggerItem } from "../animations/StaggerContainer";
 
 const Footer = () => {
 
@@ -37,8 +39,12 @@ const Footer = () => {
 
             <div className="container mx-auto px-6 relative z-10">
                 {/* Emergency Dark Glass Banner */}
-                <div className="max-w-4xl mx-auto mb-20">
-                    <div className="bg-white/5 backdrop-blur-2xl border border-white/10 p-8 rounded-[2.5rem] flex flex-col md:flex-row items-center justify-between gap-8">
+                <SmoothReveal className="max-w-4xl mx-auto mb-20">
+                    <motion.div
+                        whileHover={{ scale: 1.01 }}
+                        transition={{ type: "spring", stiffness: 200, damping: 20 }}
+                        className="bg-white/5 backdrop-blur-2xl border border-white/10 p-8 rounded-[2.5rem] flex flex-col md:flex-row items-center justify-between gap-8"
+                    >
                         <div className="flex items-center gap-4">
                             <div className="w-12 h-12 rounded-2xl bg-red-500/10 flex items-center justify-center border border-red-500/20 group/emergency transition-all duration-300 hover:bg-red-500/20">
                                 <Phone className="w-6 h-6 text-red-500 transition-transform duration-300 group-hover/emergency:scale-110" />
@@ -58,16 +64,22 @@ const Footer = () => {
                                 <span className="text-xl tracking-tight">{EMERGENCY_NUMBERS.PAKISTAN_AMBULANCE}</span>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    </motion.div>
+                </SmoothReveal>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-24 text-center lg:text-left">
+                <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-24 text-center lg:text-left">
                     {/* Brand */}
+                    <StaggerItem>
                     <div className="flex flex-col items-center lg:items-start">
                         <Link to={ROUTES.HOME} className="flex items-center gap-3 mb-8 group">
-                            <div className="w-11 h-11 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-emerald-500/10 transition-all duration-500">
+                            <motion.div
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                                className="w-11 h-11 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-emerald-500/10 transition-all duration-500"
+                            >
                                 <Stethoscope className="w-6 h-6 text-emerald-400" />
-                            </div>
+                            </motion.div>
                             <div className="text-left">
                                 <span className="font-bold text-2xl text-white tracking-tighter block leading-none">
                                     MediAssist<span className="text-emerald-500">AI</span>
@@ -85,8 +97,10 @@ const Footer = () => {
                             <span>Clinical Grade Privacy</span>
                         </div>
                     </div>
+                    </StaggerItem>
 
                     {/* Features */}
+                    <StaggerItem>
                     <div>
                         <h4 className="text-[10px] uppercase tracking-[0.3em] font-black text-emerald-500/40 mb-8 pt-2">
                             The Interface
@@ -96,16 +110,24 @@ const Footer = () => {
                                 <li key={link.href}>
                                     <Link
                                         to={link.href}
-                                        className="text-emerald-100/50 hover:text-emerald-400 text-sm font-medium transition-all hover:pl-2 inline-block"
+                                        className="text-emerald-100/50 hover:text-emerald-400 text-sm font-medium transition-all hover:pl-2 inline-block group"
                                     >
-                                        {link.label}
+                                        <motion.span
+                                            whileHover={{ x: 4 }}
+                                            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                                            className="inline-block"
+                                        >
+                                            {link.label}
+                                        </motion.span>
                                     </Link>
                                 </li>
                             ))}
                         </ul>
                     </div>
+                    </StaggerItem>
 
                     {/* Account */}
+                    <StaggerItem>
                     <div>
                         <h4 className="text-[10px] uppercase tracking-[0.3em] font-black text-emerald-500/40 mb-8 pt-2">
                             Access
@@ -115,16 +137,24 @@ const Footer = () => {
                                 <li key={link.href}>
                                     <Link
                                         to={link.href}
-                                        className="text-emerald-100/50 hover:text-emerald-400 text-sm font-medium transition-all hover:pl-2 inline-block"
+                                        className="text-emerald-100/50 hover:text-emerald-400 text-sm font-medium transition-all hover:pl-2 inline-block group"
                                     >
-                                        {link.label}
+                                        <motion.span
+                                            whileHover={{ x: 4 }}
+                                            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                                            className="inline-block"
+                                        >
+                                            {link.label}
+                                        </motion.span>
                                     </Link>
                                 </li>
                             ))}
                         </ul>
                     </div>
+                    </StaggerItem>
 
                     {/* Contact */}
+                    <StaggerItem>
                     <div>
                         <h4 className="text-[10px] uppercase tracking-[0.3em] font-black text-emerald-500/40 mb-8 pt-2">
                             Concierge
@@ -144,9 +174,11 @@ const Footer = () => {
                             </li>
                         </ul>
                     </div>
-                </div>
+                    </StaggerItem>
+                </StaggerContainer>
 
                 {/* Bottom Bar */}
+                <SmoothReveal>
                 <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-8">
                     {/* Copyright */}
                     <div className="flex items-center gap-4">
@@ -166,11 +198,23 @@ const Footer = () => {
                             <Heart className="w-3.5 h-3.5 text-emerald-500/70 fill-emerald-500/70" />
                         </motion.div>
                         <div className="flex items-center gap-2 text-emerald-100/60">
-                            <span className="hover:text-emerald-400 cursor-default transition-colors">Ali Akbar</span>
+                            <motion.span
+                                whileHover={{ scale: 1.05, color: "#34d399" }}
+                                transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                                className="cursor-default"
+                            >Ali Akbar</motion.span>
                             <span className="opacity-20">/</span>
-                            <span className="hover:text-emerald-400 cursor-default transition-colors">Laiba</span>
+                            <motion.span
+                                whileHover={{ scale: 1.05, color: "#34d399" }}
+                                transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                                className="cursor-default"
+                            >Laiba</motion.span>
                             <span className="opacity-20">/</span>
-                            <span className="hover:text-emerald-400 cursor-default transition-colors">Zainab</span>
+                            <motion.span
+                                whileHover={{ scale: 1.05, color: "#34d399" }}
+                                transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                                className="cursor-default"
+                            >Zainab</motion.span>
                         </div>
                     </div>
 
@@ -178,6 +222,7 @@ const Footer = () => {
                         Not a substitute for professional medical advice. Always consult a physician.
                     </p>
                 </div>
+                </SmoothReveal>
             </div>
         </footer>
     );
