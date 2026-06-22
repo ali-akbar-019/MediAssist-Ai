@@ -4,11 +4,12 @@
  "description": "MediAssist AI - Backend API Server",
  "main": "dist/index.js",
  "scripts": {
-  "dev": "nodemon --exec ts-node src/index.ts",
-  "build": "tsc",
-  "start": "node dist/index.js",
-  "lint": "eslint src/**/*.ts"
- },
+   "dev": "nodemon --exec ts-node src/index.ts",
+   "build": "tsc",
+   "start": "node dist/index.js",
+   "lint": "eslint src/**/*.ts",
+   "create-admin": "ts-node scripts/create-admin.ts"
+  },
  "keywords": [],
  "author": "",
  "license": "ISC",

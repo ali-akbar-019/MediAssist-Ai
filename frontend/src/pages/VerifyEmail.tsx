@@ -4,11 +4,13 @@ import { motion } from "framer-motion";
 import { CheckCircle2, XCircle, Loader2, ArrowRight } from "lucide-react";
 import axios from "axios";
 import { BACKEND_URL, ROUTES } from "../constants";
+import { useAuthStore } from "../store/authStore";
 import { toast } from "sonner";
 
 const VerifyEmail = () => {
     const { token } = useParams<{ token: string }>();
     const navigate = useNavigate();
+    const { updateUser } = useAuthStore();
     const [status, setStatus] = useState<"loading" | "success" | "error">("loading");
     const [message, setMessage] = useState("");
 
@@ -20,6 +22,8 @@ const VerifyEmail = () => {
                     setStatus("success");
                     setMessage(response.data.message);
                     toast.success("Email verified successfully!");
+                    // Sync store: update isVerified so ProtectedRoute doesn't redirect
+                    updateUser({ isVerified: true });
                 }
             } catch (error: any) {
                 setStatus("error");
@@ -31,7 +35,7 @@ const VerifyEmail = () => {
         if (token) {
             verifyToken();
         }
-    }, [token]);
+    }, [token, updateUser]);
 
     return (
         <div className="min-h-[80vh] flex items-center justify-center px-4">

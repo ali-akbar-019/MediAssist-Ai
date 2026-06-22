@@ -5,6 +5,7 @@ import { Button } from "../components/ui/button";
 import { ROUTES, BACKEND_URL } from "../constants";
 import { toast } from "sonner";
 import axios from "axios";
+import api from "../services/api";
 import { useAuthStore } from "../store/authStore";
 import { useState } from "react";
 
@@ -49,7 +50,7 @@ const VerifyNotice = () => {
     const refreshStatus = async () => {
         setIsRefreshing(true);
         try {
-            const res = await axios.get(`${BACKEND_URL}/api/auth/me`);
+            const res = await api.get("/api/auth/me");
             if (res.data.success && res.data.data.user.isVerified) {
                 updateUser({ isVerified: true });
                 toast.success("Email verified!");
