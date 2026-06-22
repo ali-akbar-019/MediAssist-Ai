@@ -104,36 +104,36 @@ const AdminDashboard = () => {
 
     if (isLoading) {
         return (
-            <div className="flex flex-col items-center justify-center h-[60vh] gap-6">
-                <div className="w-16 h-16 border-4 border-emerald-100 border-t-emerald-500 rounded-full animate-spin" />
-                <p className="font-mono text-[10px] font-black text-slate-400 uppercase tracking-widest animate-pulse">Loading dashboard...</p>
+            <div className="flex flex-col items-center justify-center h-[60vh] gap-6" data-testid="admin-loading">
+                <div className="w-16 h-16 border-4 border-emerald-100 border-t-emerald-500 rounded-full animate-spin" data-testid="admin-loading-spinner" />
+                <p className="font-mono text-[10px] font-black text-slate-400 uppercase tracking-widest animate-pulse" data-testid="admin-loading-text">Loading dashboard...</p>
             </div>
         );
     }
 
     if (error) {
         return (
-            <div className="flex flex-col items-center justify-center h-[60vh] gap-6">
+            <div className="flex flex-col items-center justify-center h-[60vh] gap-6" data-testid="admin-error">
                 <p className="font-mono text-sm font-bold text-rose-500">{error}</p>
             </div>
         );
     }
 
     return (
-        <div className="space-y-10 pb-20">
+        <div className="space-y-10 pb-20" data-testid="admin-dashboard">
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-slate-100 pb-10">
                 <div>
-                    <h1 className="text-4xl font-heading font-black text-navy-900 uppercase tracking-tighter">Dashboard</h1>
+                    <h1 className="text-4xl font-heading font-black text-navy-900 uppercase tracking-tighter" data-testid="admin-heading">Dashboard</h1>
                     <div className="flex items-center gap-3 mt-2">
                         <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
-                        <p className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-[0.3em]">System Online</p>
+                        <p className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-[0.3em]" data-testid="admin-status">System Online</p>
                     </div>
                 </div>
                 <div className="flex items-center gap-4">
-                    <div className="px-6 py-3 rounded-2xl bg-white border border-slate-100 flex flex-col items-end shadow-sm">
+                    <div className="px-6 py-3 rounded-2xl bg-white border border-slate-100 flex flex-col items-end shadow-sm" data-testid="admin-latency">
                         <span className="text-[9px] font-mono font-black text-slate-300 uppercase tracking-widest">AI Latency</span>
-                        <span className="text-sm font-mono font-bold text-navy-900">{stats?.ai.avgResponseTime || "—"}</span>
+                        <span className="text-sm font-mono font-bold text-navy-900" data-testid="admin-latency-value">{stats?.ai.avgResponseTime || "—"}</span>
                     </div>
                     <div className="px-6 py-3 rounded-2xl bg-white border border-slate-100 flex flex-col items-end shadow-sm">
                         <span className="text-[9px] font-mono font-black text-slate-300 uppercase tracking-widest">New Users (30d)</span>
@@ -143,13 +143,14 @@ const AdminDashboard = () => {
             </div>
 
             {/* KPI Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" data-testid="admin-kpi-container">
                 {kpiCards.map((card, i) => (
                     <motion.div
                         key={card.label}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: i * 0.1 }}
+                        data-testid={`admin-kpi-${card.label.toLowerCase()}`}
                         className="p-8 rounded-[2.5rem] bg-white border border-slate-100 hover:border-emerald-200 transition-all duration-500 group shadow-[0_10px_40px_rgba(0,0,0,0.01)]"
                     >
                         <div className="flex justify-between items-start mb-6">
@@ -161,8 +162,8 @@ const AdminDashboard = () => {
                             </div>
                             <ArrowUpRight className="text-slate-200 group-hover:text-emerald-500 transition-colors" size={20} />
                         </div>
-                        <h3 className="text-[10px] font-mono font-black text-slate-400 uppercase tracking-widest mb-1">{card.label}</h3>
-                        <p className="text-4xl font-heading font-black text-navy-900 tracking-tighter uppercase leading-none">{card.value}</p>
+                        <h3 className="text-[10px] font-mono font-black text-slate-400 uppercase tracking-widest mb-1" data-testid={`admin-kpi-label-${card.label.toLowerCase()}`}>{card.label}</h3>
+                        <p className="text-4xl font-heading font-black text-navy-900 tracking-tighter uppercase leading-none" data-testid={`admin-kpi-value-${card.label.toLowerCase()}`}>{card.value}</p>
                         <p className="text-[10px] font-mono text-slate-400 uppercase mt-4 tracking-widest flex items-center gap-2">
                             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500/30" />
                             {card.detail}
@@ -174,44 +175,44 @@ const AdminDashboard = () => {
             {/* Two-column console */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* AI Intelligence */}
-                <section className="bg-white rounded-[3rem] border border-slate-100 p-8 flex flex-col shadow-[0_20px_60px_rgba(0,0,0,0.01)]">
+                <section className="bg-white rounded-[3rem] border border-slate-100 p-8 flex flex-col shadow-[0_20px_60px_rgba(0,0,0,0.01)]" data-testid="admin-intelligence">
                     <div className="flex items-center gap-4 mb-10">
                         <div className="w-12 h-12 rounded-2xl bg-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-200/50">
                             <BrainCircuit className="text-white" size={22} />
                         </div>
                         <div>
-                            <h3 className="text-lg font-heading font-black text-navy-900 uppercase tracking-tight">AI Intelligence</h3>
+                            <h3 className="text-lg font-heading font-black text-navy-900 uppercase tracking-tight" data-testid="admin-intelligence-title">AI Intelligence</h3>
                             <p className="text-[9px] font-mono font-bold text-slate-400 uppercase">Analysis Summary</p>
                         </div>
                     </div>
                     <div className="space-y-4 flex-1">
-                        <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100">
+                        <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100" data-testid="admin-intelligence-chart">
                             <p className="text-[9px] font-mono font-black text-slate-400 uppercase tracking-widest mb-1">Total Analyses</p>
                             <p className="text-2xl font-heading font-black text-navy-900">{stats?.ai.totalAnalyses || 0}</p>
                         </div>
-                        <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100">
+                        <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100" data-testid="admin-confidence">
                             <p className="text-[9px] font-mono font-black text-slate-400 uppercase tracking-widest mb-1">Avg Severity</p>
-                            <p className="text-2xl font-heading font-black text-emerald-600">{stats?.ai.avgSeverity || 0}/10</p>
+                            <p className="text-2xl font-heading font-black text-emerald-600" data-testid="admin-confidence-value">{stats?.ai.avgSeverity || 0}/10</p>
                         </div>
-                        <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100">
+                        <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100" data-testid="admin-most-logged">
                             <p className="text-[9px] font-mono font-black text-slate-400 uppercase tracking-widest mb-1">Most Logged Symptom</p>
-                            <p className="text-lg font-heading font-black text-navy-900 uppercase truncate">{stats?.ai.mostLoggedSymptom || "N/A"}</p>
+                            <p className="text-lg font-heading font-black text-navy-900 uppercase truncate" data-testid="admin-most-logged-value">{stats?.ai.mostLoggedSymptom || "N/A"}</p>
                         </div>
                     </div>
                 </section>
 
                 {/* Recent Activity */}
-                <section className="lg:col-span-2 bg-white rounded-[3rem] border border-slate-100 p-8 flex flex-col shadow-[0_20px_60px_rgba(0,0,0,0.01)]">
+                <section className="lg:col-span-2 bg-white rounded-[3rem] border border-slate-100 p-8 flex flex-col shadow-[0_20px_60px_rgba(0,0,0,0.01)]" data-testid="admin-pulse">
                     <div className="flex items-center gap-4 mb-10">
                         <div className="w-12 h-12 rounded-2xl bg-navy-900 flex items-center justify-center shadow-lg">
                             <TrendingUp className="text-blue-400" size={22} />
                         </div>
                         <div>
-                            <h3 className="text-lg font-heading font-black text-navy-900 uppercase tracking-tight">Recent Activity</h3>
+                            <h3 className="text-lg font-heading font-black text-navy-900 uppercase tracking-tight" data-testid="admin-pulse-title">Recent Activity</h3>
                             <p className="text-[9px] font-mono font-bold text-slate-400 uppercase">Live Feed</p>
                         </div>
                     </div>
-                    <div className="flex-1 space-y-4">
+                    <div className="flex-1 space-y-4" data-testid="admin-pulse-events">
                         {activity.length === 0 && (
                             <div className="flex flex-col items-center justify-center h-48 text-slate-300 gap-4">
                                 <Clock size={32} />
@@ -224,24 +225,25 @@ const AdminDashboard = () => {
                             return (
                                 <div
                                     key={i}
+                                    data-testid={`admin-pulse-event-${i}`}
                                     className="flex items-center gap-4 p-4 rounded-2xl hover:bg-slate-50 transition-all group cursor-pointer border border-transparent hover:border-slate-100"
                                 >
                                     <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center shrink-0 shadow-sm", meta.bg, meta.color)}>
                                         <Icon size={18} />
                                     </div>
                                     <div className="flex-1 min-w-0">
-                                        <p className="text-[12px] font-heading font-black text-navy-900 uppercase tracking-tight truncate">
+                                        <p className="text-[12px] font-heading font-black text-navy-900 uppercase tracking-tight truncate" data-testid={`admin-pulse-event-label-${i}`}>
                                             {event.label}
                                         </p>
                                         {event.detail && (
                                             <div className="flex items-center gap-2 text-slate-400">
-                                                <span className="text-[9px] font-mono font-bold uppercase">{event.detail}</span>
+                                                <span className="text-[9px] font-mono font-bold uppercase" data-testid={`admin-pulse-event-detail-${i}`}>{event.detail}</span>
                                             </div>
                                         )}
                                     </div>
                                     <div className="flex items-center gap-2 text-slate-400 shrink-0">
                                         <Clock size={10} />
-                                        <span className="text-[9px] font-mono font-bold uppercase">{timeAgo(event.time)}</span>
+                                        <span className="text-[9px] font-mono font-bold uppercase" data-testid={`admin-pulse-event-time-${i}`}>{timeAgo(event.time)}</span>
                                     </div>
                                 </div>
                             );

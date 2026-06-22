@@ -65,7 +65,7 @@ const VerifyNotice = () => {
     };
 
     return (
-        <div className="medical-mesh min-h-screen flex items-center justify-center px-6 py-20">
+        <div className="medical-mesh min-h-screen flex items-center justify-center px-6 py-20" data-testid="verify-notice-page">
             <div className="max-w-xl w-full relative">
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-emerald-100/30 rounded-full blur-[100px] -z-10 animate-pulse" />
                 
@@ -73,6 +73,7 @@ const VerifyNotice = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="glass-panel rounded-[3rem] p-10 md:p-16 text-center space-y-10 relative overflow-hidden"
+                    data-testid="verify-notice-card"
                 >
                     <div className="relative inline-block">
                         <motion.div
@@ -94,13 +95,13 @@ const VerifyNotice = () => {
                     </div>
 
                     <div className="space-y-4">
-                        <h1 className="text-4xl md:text-5xl font-black text-navy-900 leading-[1.1] tracking-tight">
+                        <h1 className="text-4xl md:text-5xl font-black text-navy-900 leading-[1.1] tracking-tight" data-testid="verify-notice-heading">
                             Verify <br />
                             <span className="gradient-text-luxe">Your Identity.</span>
                         </h1>
                         <p className="text-slate-500 text-lg leading-relaxed max-w-sm mx-auto">
                             We've sent a secure verification link to <br />
-                            <span className="font-bold text-navy-900 underline decoration-emerald-200 underline-offset-4">{email}</span>
+                            <span className="font-bold text-navy-900 underline decoration-emerald-200 underline-offset-4" data-testid="verify-notice-email">{email}</span>
                         </p>
                     </div>
 
@@ -120,6 +121,7 @@ const VerifyNotice = () => {
                             <Button
                                 onClick={refreshStatus}
                                 disabled={isRefreshing}
+                                data-testid="verify-notice-refresh"
                                 className="w-full h-16 bg-navy-900 hover:bg-navy-950 text-white rounded-2xl font-bold text-lg shadow-navy transition-all flex items-center justify-center gap-2 group"
                             >
                                 {isRefreshing ? <RefreshCw className="animate-spin" /> : <RefreshCw className="group-hover:rotate-180 transition-transform duration-500" />}
@@ -135,12 +137,14 @@ const VerifyNotice = () => {
                                 <button
                                     onClick={handleResendEmail}
                                     disabled={isResending}
+                                    data-testid="verify-notice-resend"
                                     className="px-6 py-2 rounded-full border border-medical-border text-xs font-bold text-navy-900 hover:bg-navy-50 transition-colors uppercase tracking-widest disabled:opacity-50"
                                 >
                                     {isResending ? "Resending..." : "Resend Email"}
                                 </button>
                                 <Link
                                     to={ROUTES.LOGIN}
+                                    data-testid="verify-notice-login-link"
                                     className="text-xs font-bold text-emerald-600 hover:text-emerald-700 uppercase tracking-widest underline decoration-emerald-200 underline-offset-4"
                                 >
                                     Login with different account
